@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 
 package entidades;
 
@@ -16,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -36,12 +34,6 @@ public class Reservacion implements Serializable {
     @Column(name="fecha_hora", nullable=false, columnDefinition="TIME")
     private Instant fechaHora;
     
-    @Column(name="nombre_cliente", nullable=false)
-    private String nombreCliente;
-    
-    @Column(name="telefono_cliente", nullable=false)
-    private String telefonoCliente;
-    
     @Column(name="numero_personas", nullable=false)
     private Integer numeroPersonas;
     
@@ -53,6 +45,9 @@ public class Reservacion implements Serializable {
     @JoinColumn(name="mesa_id", nullable=false, referencedColumnName = "id")
     private Mesa mesa;
     
+    @ManyToOne(cascade=CascadeType.DETACH)
+    @JoinColumn(name="cliente_id", nullable=false)
+    private Cliente cliente;
 
     @Override
     public int hashCode() {
@@ -133,42 +128,6 @@ public class Reservacion implements Serializable {
     }
 
     /**
-     * Obtiene el nombre del cliente que realizó la reservación.
-     * 
-     * @return El nombre del cliente.
-     */
-    public String getNombreCliente() {
-        return nombreCliente;
-    }
-
-    /**
-     * Establece el nombre del cliente que realiza la reservación.
-     * 
-     * @param nombreCliente El nombre del cliente a establecer.
-     */
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
-    }
-
-    /**
-     * Obtiene el número de teléfono del cliente.
-     * 
-     * @return El número de teléfono del cliente.
-     */
-    public String getTelefonoCliente() {
-        return telefonoCliente;
-    }
-
-    /**
-     * Establece el número de teléfono del cliente.
-     * 
-     * @param telefonoCliente El número de teléfono a establecer.
-     */
-    public void setTelefonoCliente(String telefonoCliente) {
-        this.telefonoCliente = telefonoCliente;
-    }
-
-    /**
      * Obtiene el número de personas para la reservación.
      * 
      * @return El número de personas de la reservación.
@@ -220,5 +179,21 @@ public class Reservacion implements Serializable {
      */
     public void setMesa(Mesa mesa) {
         this.mesa = mesa;
+    }
+
+    /**
+     * Devuelve el cliente asociado a la reservacion
+     * @return El cliente que pidio la reservacion
+     */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+     * ASigna el cliente a asociar con la reservacion
+     * @param cliente El cliente a asignar
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }
