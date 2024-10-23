@@ -1,11 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
+
 package dao.interfaces;
 
 import entidades.Mesa;
 import entidades.TipoMesa;
+import entidades.UbicacionMesa;
 import excepciones.DAOException;
 import java.util.List;
 
@@ -13,7 +11,7 @@ import java.util.List;
  * Define las operaciones necesarias para las mesas en el restaurante
  * @author neri
  */
-public interface IMesasDAO {
+public interface IMesasDAO extends ITiposMesaDAO {
     
     /**
      * Devuelve todas las mesas registradas en el sistema
@@ -29,6 +27,16 @@ public interface IMesasDAO {
      * @throws DAOException Si ocurre un error en la consulta
      */
     public List<Mesa> obtenerMesasPorTipo(TipoMesa tipo) throws DAOException;
+    
+    /**
+     * Inserta de manera "masiva" el numero dado de mesas con el tipo y
+     * ubicacion especifica.
+     * @param tipo Tipo de mesas a insertar
+     * @param ubicacion Ubicacion de las mesas a insertar
+     * @param cantidad Cantidad de las mesas a insertar
+     * @throws DAOException 
+     */
+    public void insertarMesas(TipoMesa tipo, UbicacionMesa ubicacion, int cantidad) throws DAOException;
     
     /**
      * Elimina una mesa en el sistema por su codigo especificado

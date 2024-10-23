@@ -28,6 +28,8 @@ public class Multa implements Serializable {
     
     @Column(name="porcentaje", nullable=false)
     private Float porcentaje;
+    
+    @Column()
 
 
     @Override

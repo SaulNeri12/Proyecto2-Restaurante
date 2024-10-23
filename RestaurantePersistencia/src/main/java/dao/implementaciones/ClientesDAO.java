@@ -11,6 +11,7 @@ import entidades.Cliente;
 import excepciones.DAOException;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -37,12 +38,18 @@ public class ClientesDAO implements IClientesDAO {
     public void insercionMasivaClientes(List<Cliente> clientes) throws DAOException {
         
         EntityManager entityManager = Conexion.getInstance().crearConexion();
+        EntityTransaction transaction = entityManager.getTransaction();
         
         try {
+            transaction.begin();
+            
             for (Cliente cliente : clientes) {
                 entityManager.persist(cliente);
             }
             entityManager.flush();
+            
+            transaction.commit();
+            
         } catch (Exception e) {
             throw new DAOException("Error al insertar clientes de manera masiva.");
         } finally {

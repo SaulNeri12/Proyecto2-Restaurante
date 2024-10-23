@@ -39,6 +39,7 @@ public class Restaurante implements Serializable {
     @Column(name="hora_cierre", nullable=false, columnDefinition="TIME")
     private LocalTime horaCierre;
    
+    /*
     @OneToMany(
             mappedBy="restaurante", 
             cascade={
@@ -48,7 +49,7 @@ public class Restaurante implements Serializable {
             orphanRemoval=true
     )
     private List<Mesa> mesas;
-
+*/
     
 
     @Override
@@ -183,11 +184,12 @@ public class Restaurante implements Serializable {
         this.horaCierre = horaCierre;
     }
 
+    
     /**
      * Obtiene la lista de mesas del restaurante.
      * 
      * @return La lista de mesas en el restaurante.
-     */
+     
     public List<Mesa> getMesas() {
         return mesas;
     }
@@ -196,8 +198,8 @@ public class Restaurante implements Serializable {
      * Establece la lista de mesas del restaurante.
      * 
      * @param mesas La lista de mesas a establecer.
-     */
+     
     public void setMesas(List<Mesa> mesas) {
         this.mesas = mesas;
-    }
+    }*/
 }

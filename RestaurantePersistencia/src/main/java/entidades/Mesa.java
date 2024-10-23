@@ -3,17 +3,15 @@
 package entidades;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -30,16 +28,16 @@ public class Mesa implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @Column(name="codigo", nullable=false, length=10)
+    @Column(name="codigo", nullable=false, length=15)
     private String codigo;
     
     @ManyToOne
     @JoinColumn(name="tipo_mesa", referencedColumnName = "id")
     private TipoMesa tipoMesa;
     
-    @ManyToOne
-    @JoinColumn(name="restaurante_id")
-    private Restaurante restaurante;
+    @Enumerated(EnumType.STRING)
+    @Column(name="ubicacion", nullable=false)
+    private UbicacionMesa ubicacion;
 
     @Override
     public int hashCode() {
@@ -138,11 +136,18 @@ public class Mesa implements Serializable {
     }
 
     /**
-     * Obtiene el restaurante al que pertenece esta mesa.
-     * 
-     * @return El restaurante asociado a esta mesa.
+     * Obtiene la ubicacion de la mesa en el restaurante
+     * @return La ubicacion de la mesa
      */
-    public Restaurante getRestaurante() {
-        return restaurante;
+    public UbicacionMesa getUbicacion() {
+        return ubicacion;
+    }
+
+    /**
+     * Asigna la ubicacion de la mesa en el restaurante
+     * @param ubicacion Ubicacion de la mesa a asignar
+     */
+    public void setUbicacion(UbicacionMesa ubicacion) {
+        this.ubicacion = ubicacion;
     }
 }

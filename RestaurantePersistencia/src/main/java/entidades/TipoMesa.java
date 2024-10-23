@@ -26,6 +26,9 @@ public class TipoMesa implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name="nombre", nullable=false, length=100, unique=true)
+    private String nombre;
+    
     @Column(name="maximo_personas", nullable=false)
     private Integer maximoPersonas;
     
@@ -35,7 +38,7 @@ public class TipoMesa implements Serializable {
     @Column(name="precio", nullable=false)
     private Float precio;
     
-    @OneToMany(mappedBy = "tipoMesa", cascade = CascadeType.DETACH, orphanRemoval = true)
+    @OneToMany(mappedBy = "tipoMesa", cascade = {CascadeType.REMOVE,CascadeType.PERSIST}, orphanRemoval = true)
     private List<Mesa> mesas;
 
 
@@ -151,5 +154,21 @@ public class TipoMesa implements Serializable {
      */
     public List<Mesa> getMesas() {
         return mesas;
+    }
+
+    /**
+     * Devuelve el nombre descriptivo del tipo de mesa
+     * @return El nombre de la mesa
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * Asigna el nombre descriptivo del tipo de mesa
+     * @param nombre El nombre de la mesa
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }
