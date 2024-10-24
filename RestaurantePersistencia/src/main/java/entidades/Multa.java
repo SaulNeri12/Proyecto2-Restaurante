@@ -23,7 +23,7 @@ public class Multa implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name="descripcion", nullable=false)
+    @Column(name="descripcion", nullable=false, unique=true)
     private String descripcion;
     
     @Column(name="porcentaje", nullable=false)

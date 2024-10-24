@@ -3,7 +3,6 @@ package dao.interfaces;
 
 import entidades.Reservacion;
 import excepciones.DAOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,11 +10,22 @@ import java.util.List;
  * Define las operaciones para el DAO de reservaciones
  * @author neri
  */
-public interface IReservacionesDAO {
-
+public interface IReservacionesDAO extends IMultasDAO{
+       
     /**
-     * TODO: Anadir un metodo para ver las reservaciones de una mesa
+     * Obtiene la lista de reservaciones registradas de una mesa a partir de su codigo
+     * @param codigoMesa Codigo de la mesa a buscar
+     * @return Reservaciones de dicha mesa
+     * @throws DAOException Si ocurre un error en la consulta
      */
+    public List<Reservacion> obtenerReservacionesDeMesa(String codigoMesa) throws DAOException;
+    
+    /**
+     * Cancela la reservacion con el ID dado y le asigna una multa por cancelacion
+     * @param idReservacion ID de la reservacion a cancelar
+     * @throws DAOException Si ocurre un error en la cancelacion
+     */
+    public void cancelarReservacion(Long idReservacion) throws DAOException;
     
     /**
      * Obtiene una lista de todas las reservaciones almacenadas.
