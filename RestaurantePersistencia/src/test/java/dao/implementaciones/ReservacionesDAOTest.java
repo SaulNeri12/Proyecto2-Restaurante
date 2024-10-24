@@ -1,14 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
+
 package dao.implementaciones;
 
 import dao.interfaces.IClientesDAO;
 import dao.interfaces.IMesasDAO;
 import dao.interfaces.IReservacionesDAO;
 import entidades.Cliente;
+import entidades.EstadoReservacion;
 import entidades.Mesa;
+import entidades.Multa;
 import entidades.Reservacion;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -30,7 +29,6 @@ public class ReservacionesDAOTest {
     private IClientesDAO clientes = ClientesDAO.getInstance();
     
     public ReservacionesDAOTest() {
-        
     }
     
     @BeforeAll
@@ -49,6 +47,97 @@ public class ReservacionesDAOTest {
     public void tearDown() {
     }
 
+    /**
+     * Test of obtenerReservacionesTodos method, of class ReservacionesDAO.
+     */
+    @Test
+    public void testAgregarTipoMulta_Multa25Porciento() throws Exception {
+        System.out.println("agregarTipoMulta - 25%");
+        
+        // arrange 
+        Multa m = new Multa();
+        m.setDescripcion("Multa de 25% del total de la reservacion por cancelacion en un lapso entre 1 a 2 dias antes de la misma");
+        m.setPorcentaje(25.0f);
+        
+        // act
+        this.reservaciones.agregarTipoMulta(m);
+       
+        // assert
+    }
+    
+    @Test
+    public void testAgregarTipoMulta_Multa50Porciento() throws Exception {
+        System.out.println("agregarTipoMulta - 50%");
+        
+        // arrange 
+        Multa m = new Multa();
+        m.setDescripcion("Multa de 50% del total de la reservacion por cancelacion menos de un dia antes de la misma");
+        m.setPorcentaje(50.0f);
+        
+        // act
+        this.reservaciones.agregarTipoMulta(m);
+        
+        // assert
+    }
+    
+    @Test
+    public void testAgregarTipoMulta_Multa75Porciento() throws Exception {
+        System.out.println("agregarTipoMulta - 75%");
+        
+        // arrange 
+        Multa m = new Multa();
+        m.setDescripcion("Multa de 75% del total de la reservacion por cancelacion 1 hora antes de la misma [TEST]");
+        m.setPorcentaje(75.0f);
+        
+        // act
+        this.reservaciones.agregarTipoMulta(m);
+        
+        // assert
+    }
+    
+    @Test
+    public void testObtenerTiposMultaTodos() throws Exception {
+        System.out.println("obtenerTiposMultaTodos");
+        
+        // arrange 
+        
+        
+        // act
+        List<Multa> tiposMulta = this.reservaciones.obtenerTiposMultaTodos();
+        
+        // assert
+        assertNotNull(tiposMulta, "La lista no debe ser null");
+        assertTrue(!tiposMulta.isEmpty(), "La lista no debe estar vacia");
+    }
+    
+    @Test
+    public void testObtenerRerservacionConMulta() throws Exception {
+        System.out.println("obtenerReservacionConMulta");
+        
+        // arrange 
+        Long id = 6l;
+        
+        // act
+        Reservacion reservacion = this.reservaciones.obtenerReservacionPorID(id);
+        System.out.println("Multa de la reservacion: " + reservacion.getMulta().getDescripcion());
+        
+        // assert
+        assertNotNull(reservacion.getMulta(), "La multa de esta reservacion no debe ser null");
+    }
+    
+    @Test
+    public void testEliminarTipoMulta() throws Exception {
+        System.out.println("obtenerTiposMultaTodos");
+        
+        // arrange 
+        Long idMulta = 4l;
+        
+        // act
+        this.reservaciones.eliminarTipoMulta(idMulta);
+        
+        // assert
+    }
+    
     /**
      * Test of obtenerReservacionesTodos method, of class ReservacionesDAO.
      */
@@ -75,7 +164,7 @@ public class ReservacionesDAOTest {
         
         // arrange
         LocalDateTime fechaInicio = LocalDateTime.now().minus(Duration.ofDays(5)); // 5 dias atras
-        LocalDateTime fechaFin = LocalDateTime.now().plus(Duration.ofDays(1)); // manana
+        LocalDateTime fechaFin = LocalDateTime.now().plus(Duration.ofDays(20)); // 20 dias
         
         // act
         List<Reservacion> result = this.reservaciones.obtenerReservacionesPorPeriodo(fechaInicio, fechaFin);
@@ -98,7 +187,8 @@ public class ReservacionesDAOTest {
         List<Reservacion> result = this.reservaciones.obtenerReservacionesCliente(telefono);
         
         // assert
-        assertNotNull(!result.isEmpty(), "La lista no debe ser estar vacia");
+        assertNotNull(result, "La lista no debe ser null");
+        assertTrue(!result.isEmpty(), "La lista no debe ser estar vacia");
     }
 
     /**
@@ -109,7 +199,7 @@ public class ReservacionesDAOTest {
         System.out.println("obtenerReservacionPorID");
         
         // arrange
-        Long id = 1l;
+        Long id = 2l;
         
         // act
         Reservacion result = this.reservaciones.obtenerReservacionPorID(id);
@@ -122,15 +212,41 @@ public class ReservacionesDAOTest {
      * Test of agregarReservacion method, of class ReservacionesDAO.
      */
     @Test
-    public void testAgregarReservacion() throws Exception {
-        System.out.println("agregarReservacion");
+    public void testAgregarReservacion_Reciente() throws Exception {
+        System.out.println("agregarReservacion Mas Reciente");
         
         // arrange
         String telefono = "1234567890";
-        LocalDateTime fechaReservacion = LocalDateTime.now()
-                .plus(Duration.ofDays(7)).plus(Duration.ofHours(6));
+        LocalDateTime fechaReservacion = LocalDateTime.now().plus(Duration.ofHours(6));
         
-        Mesa mesa = this.mesas.obtenerMesasTodas().getFirst();
+        Mesa mesa = this.mesas.obtenerMesasTodas().getLast();
+        Cliente cliente = this.clientes.obtenerClientePorTelefono(telefono);
+        
+        // assert
+        assertNotNull(cliente, "El cliente no debe ser null");
+        
+        Reservacion r = new Reservacion();
+        r.setCliente(cliente);
+        r.setMesa(mesa);
+        r.setFechaHora(fechaReservacion);
+        r.setNumeroPersonas(mesa.getTipoMesa().getMaximoPersonas());
+        r.setMontoTotal(mesa.getTipoMesa().getPrecio());
+        
+        // act
+        this.reservaciones.agregarReservacion(r);
+        
+        // assert
+    }
+    
+    @Test
+    public void testAgregarReservacion_OtraPersona() throws Exception {
+        System.out.println("agregarReservacion Mas Reciente");
+        
+        // arrange
+        String telefono = "6444412219";
+        LocalDateTime fechaReservacion = LocalDateTime.now().plus(Duration.ofHours(6));
+        
+        Mesa mesa = this.mesas.obtenerMesasTodas().getLast();
         Cliente cliente = this.clientes.obtenerClientePorTelefono(telefono);
         
         // assert
@@ -183,6 +299,24 @@ public class ReservacionesDAOTest {
         
         // act
         this.reservaciones.eliminarReservacion(id);
+        
+        // assert
+    }
+    
+    
+    @Test
+    public void testCancelarReservacion_SinMulta() throws Exception {
+        System.out.println("eliminarReservacion");
+        
+        // arrange
+        Reservacion res = this.reservaciones.obtenerReservacionesTodos()
+                .stream()
+                .filter(r -> r.getEstado().equals(EstadoReservacion.PENDIENTE))
+                .findFirst()
+                .orElse(null);
+        
+        // act
+        this.reservaciones.cancelarReservacion(res.getId());
         
         // assert
     }
