@@ -18,11 +18,12 @@ import javax.persistence.TypedQuery;
 
 /**
  * Clase concreta que implementa los metodos definidos por IMesasDAO
+ *
  * @author Saul Neri
  */
 public class MesasDAO implements IMesasDAO {
 
-    private static IMesasDAO instancia; 
+    private static IMesasDAO instancia;
 
     private MesasDAO() {
     }
@@ -37,7 +38,7 @@ public class MesasDAO implements IMesasDAO {
     @Override
     public List<Mesa> obtenerMesasTodas() throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
-        
+
         try {
             TypedQuery<Mesa> query = entityManager.createQuery("SELECT m FROM Mesa m", Mesa.class);
             return query.getResultList();
@@ -51,7 +52,7 @@ public class MesasDAO implements IMesasDAO {
     @Override
     public List<Mesa> obtenerMesasPorTipo(TipoMesa tipo) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
-        
+
         try {
             TypedQuery<Mesa> query = entityManager.createQuery("SELECT m FROM Mesa m WHERE m.tipoMesa = :tipo", Mesa.class);
             query.setParameter("tipo", tipo);
@@ -66,19 +67,25 @@ public class MesasDAO implements IMesasDAO {
     @Override
     public void eliminarMesa(String codigo) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
-         
+        EntityTransaction transaction = entityManager.getTransaction();
+
         try {
-            entityManager.getTransaction().begin();
-            
-            Mesa mesa = entityManager.find(Mesa.class, codigo);
+            TypedQuery<Mesa> consulta = entityManager.createQuery("SELECT m FROM Mesa m WHERE m.codigo = :codigo", Mesa.class);
+            consulta.setParameter("codigo", codigo);
+            Mesa mesa = consulta.getSingleResult();
+
             if (mesa != null) {
-                entityManager.merge(mesa);
+                transaction.begin();
+
+                System.out.println("ELIMINACION DE: " + mesa);
                 entityManager.remove(mesa);
+
+                transaction.commit();
             }
-            
-            entityManager.getTransaction().commit();
+
         } catch (Exception e) {
-            entityManager.getTransaction().rollback();
+            transaction.rollback();
+            System.out.println("ERROR EN MESA: " + e.getMessage());
             throw new DAOException("Error al eliminar la mesa");
         } finally {
             entityManager.close();
@@ -89,38 +96,53 @@ public class MesasDAO implements IMesasDAO {
     public void insertarMesas(TipoMesa tipo, UbicacionMesa ubicacion, int cantidad) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
-        
+
         UbicacionMesa ubicacionReal = UbicacionMesa.valueOf(ubicacion.toString());
-        
+
         if (ubicacionReal == null) {
             throw new DAOException("La ubicacion de las mesas dada es incorrecta, ingrese una ubicacion de mesa valida");
         }
-        
+
         if (cantidad < 1) {
             throw new DAOException("La cantidad de mesas a crear debe ser de almenos 1, ingrese una cantidad correcta");
         }
-        
+        transaction.begin();
+
+        int cantidadRestante = cantidad;
+
         try {
-            transaction.begin();
-                   
-            for (int i=0; i < cantidad; i++) {
+            while (cantidadRestante > 0) {
                 Mesa m = new Mesa();
-                int numeroRandom = ThreadLocalRandom.current().nextInt(0, 999);
-                String codigoMesa = String.format("%3s-%d-%03d", ubicacionReal.toString().substring(0,3), tipo.getMaximoPersonas(), numeroRandom);
-                m.setCodigo(codigoMesa);
+                String codigoMesa;
+                boolean codigoValido = false;
+
+                while (!codigoValido) {
+                    int numeroRandom = ThreadLocalRandom.current().nextInt(0, 999);
+                    codigoMesa = String.format("%3s-%d-%03d", ubicacionReal.toString().substring(0, 3), tipo.getMaximoPersonas(), numeroRandom);
+
+                    // Verificar si el código ya existe
+                    if (entityManager.createQuery("SELECT COUNT(m) FROM Mesa m WHERE m.codigo = :codigo", Long.class)
+                            .setParameter("codigo", codigoMesa)
+                            .getSingleResult() == 0) {
+                        codigoValido = true;
+                        m.setCodigo(codigoMesa);
+                    }
+                }
+
                 m.setTipoMesa(tipo);
                 m.setUbicacion(ubicacionReal);
-                
+
                 entityManager.persist(m);
+                
+                cantidadRestante--;
             }
+
             entityManager.flush();
-            
             transaction.commit();
-            
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new DAOException("Error al insertar las mesas");
-            
+
         } finally {
             entityManager.close();
         }
@@ -142,7 +164,7 @@ public class MesasDAO implements IMesasDAO {
 
     @Override
     public void agregarTipoMesa(TipoMesa tipoMesa) throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
@@ -161,15 +183,15 @@ public class MesasDAO implements IMesasDAO {
     @Override
     public void eliminarTipoMesa(Long id) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
-         
+
         try {
             entityManager.getTransaction().begin();
-            
+
             TipoMesa tipoMesa = entityManager.find(TipoMesa.class, id);
             if (tipoMesa != null) {
                 entityManager.remove(tipoMesa);
             }
-            
+
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();

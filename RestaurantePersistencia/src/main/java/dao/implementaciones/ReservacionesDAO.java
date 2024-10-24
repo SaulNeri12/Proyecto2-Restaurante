@@ -6,6 +6,7 @@ import dao.interfaces.IReservacionesDAO;
 import entidades.Reservacion;
 import excepciones.DAOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -44,7 +45,7 @@ public class ReservacionesDAO implements IReservacionesDAO {
     }
 
     @Override
-    public List<Reservacion> obtenerReservacionesPorPeriodo(Instant fechaInicio, Instant fechaFin) throws DAOException {
+    public List<Reservacion> obtenerReservacionesPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
 
         try {
@@ -74,7 +75,7 @@ public class ReservacionesDAO implements IReservacionesDAO {
             query.setParameter("telefono", telefono);
             return query.getResultList();
         } catch (Exception e) {
-            throw new DAOException("Error al obtener reservaciones por cliente");
+            throw new DAOException("Error al obtener reservaciones del cliente");
         } finally {
             entityManager.close(); 
         }
@@ -103,7 +104,10 @@ public class ReservacionesDAO implements IReservacionesDAO {
             entityManager.persist(reservacion);
             transaction.commit();
         } catch (Exception e) {
-            transaction.rollback();
+            if (transaction.isActive()) {
+                transaction.rollback(); 
+            }
+            //System.out.println("ERROR EN AGREGARRESERVACION: " + e.getMessage());
             throw new DAOException("Error al agregar la reservación");
         } finally {
             entityManager.close();
@@ -137,10 +141,13 @@ public class ReservacionesDAO implements IReservacionesDAO {
             Reservacion reservacion = entityManager.find(Reservacion.class, id);
             if (reservacion != null) {
                 entityManager.remove(reservacion);
+            } else {
+                throw new DAOException("No se encontro la reservacion a eliminar");
             }
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
+            System.out.println("ELIMINAR RESERVACION: " + e.getMessage());
             throw new DAOException("Error al eliminar la reservación");
         } finally {
             entityManager.close();

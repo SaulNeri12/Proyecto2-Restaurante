@@ -59,7 +59,7 @@ public class ClientesDAOTest {
         
         Cliente c3 = new Cliente();
         c3.setNombreCompleto("Arely Cruz Perez");
-        c3.setTelefono("6444112210");
+        c3.setTelefono("1234567890");
         
         Cliente c4 = new Cliente();
         c4.setNombreCompleto("Nicole Perez Lopez");
@@ -106,5 +106,23 @@ public class ClientesDAOTest {
         }
         assertNotNull(result, "La lista no debe ser nula");
     }
+    
+    /**
+     * Test of obtenerClientePorTelefono method, of class ClientesDAO.
+     */
+    @Test
+    public void testObtenerClientePorTelefono() throws Exception {
+        System.out.println("obtenerClientePorTelefono");
+        
+        // arrange
+        String telefono = "1234567890";
+        
+        // act
+        Cliente cliente = this.instancia.obtenerClientePorTelefono(telefono);
+        
+        // assert
+        assertNotNull(cliente, "El cliente no debe ser null");
+    }
+    
     
 }

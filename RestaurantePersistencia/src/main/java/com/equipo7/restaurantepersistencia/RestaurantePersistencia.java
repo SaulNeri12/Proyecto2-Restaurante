@@ -20,7 +20,6 @@ public class RestaurantePersistencia {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("restaurantePU");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-// Aquí puedes realizar operaciones con las entidades para asegurarte de que se crea el esquema.
         em.getTransaction().commit();
         em.close();
 

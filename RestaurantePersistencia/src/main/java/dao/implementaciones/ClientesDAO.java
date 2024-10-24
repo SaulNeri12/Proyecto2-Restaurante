@@ -71,4 +71,19 @@ public class ClientesDAO implements IClientesDAO {
             entityManager.close();
         }
     }
+
+    @Override
+    public Cliente obtenerClientePorTelefono(String numeroTelefono) throws DAOException {
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
+        
+        try {
+            return entityManager.createQuery("SELECT c FROM Cliente c WHERE c.telefono = :telefono", Cliente.class)
+                    .setParameter("telefono", numeroTelefono)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new DAOException("Error al obtener la informacion del cliente, por favor intente mas tarde");
+        } finally {
+            entityManager.close();
+        }
+    }
 }

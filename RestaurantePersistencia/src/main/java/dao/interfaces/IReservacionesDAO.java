@@ -4,6 +4,7 @@ package dao.interfaces;
 import entidades.Reservacion;
 import excepciones.DAOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -12,6 +13,10 @@ import java.util.List;
  */
 public interface IReservacionesDAO {
 
+    /**
+     * TODO: Anadir un metodo para ver las reservaciones de una mesa
+     */
+    
     /**
      * Obtiene una lista de todas las reservaciones almacenadas.
      *
@@ -32,7 +37,7 @@ public interface IReservacionesDAO {
      * @throws DAOException Si ocurre un error durante la obtención de los
      * datos.
      */
-    public List<Reservacion> obtenerReservacionesPorPeriodo(Instant fechaInicio, Instant fechaFin) throws DAOException;
+    public List<Reservacion> obtenerReservacionesPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws DAOException;
 
     /**
      * Obtiene una lista de reservaciones asociadas a un cliente específico

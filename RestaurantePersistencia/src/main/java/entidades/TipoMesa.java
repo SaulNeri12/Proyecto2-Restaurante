@@ -23,7 +23,7 @@ public class TipoMesa implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="nombre", nullable=false, length=100, unique=true)
@@ -38,7 +38,7 @@ public class TipoMesa implements Serializable {
     @Column(name="precio", nullable=false)
     private Float precio;
     
-    @OneToMany(mappedBy = "tipoMesa", cascade = {CascadeType.REMOVE,CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "tipoMesa", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     private List<Mesa> mesas;
 
 
