@@ -20,7 +20,7 @@ public class Multa implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name="descripcion", nullable=false)
@@ -28,9 +28,6 @@ public class Multa implements Serializable {
     
     @Column(name="porcentaje", nullable=false)
     private Float porcentaje;
-    
-    @Column()
-
 
     @Override
     public int hashCode() {

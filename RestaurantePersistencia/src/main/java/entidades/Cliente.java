@@ -10,20 +10,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * Representa un cliente en el sistema
  * @author Saul Neri
  */
 @Entity
+@Table(name="cliente")
 public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name="nombre_completo", nullable=false, length=100, unique=true)
+    @Column(name="nombre_completo", nullable=false, length=100)
     private String nombreCompleto;
     
     @Column(name="telefono", nullable=false, length=15, unique=true)
@@ -32,14 +34,11 @@ public class Cliente implements Serializable {
     @OneToMany(
             mappedBy="cliente", 
             cascade={
-                CascadeType.REMOVE,
                 CascadeType.PERSIST
             }, 
             orphanRemoval=true
     )
     private List<Reservacion> reservaciones;
-    
-    
     
     /**
      * Constructor sin argumentos que inicializa un nuevo objeto Cliente.

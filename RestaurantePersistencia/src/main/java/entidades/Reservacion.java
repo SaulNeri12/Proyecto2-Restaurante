@@ -4,6 +4,7 @@ package entidades;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,11 +29,11 @@ public class Reservacion implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="fecha_hora", nullable=false, columnDefinition="TIME")
-    private Instant fechaHora;
+    @Column(name="fecha_hora", nullable=false, columnDefinition="TIMESTAMP")
+    private LocalDateTime fechaHora;
     
     @Column(name="numero_personas", nullable=false)
     private Integer numeroPersonas;
@@ -41,13 +42,20 @@ public class Reservacion implements Serializable {
     @Column(name="estado", nullable=false)
     private EstadoReservacion estado;
     
-    @OneToOne(cascade=CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name="mesa_id", nullable=false, referencedColumnName = "id")
     private Mesa mesa;
     
-    @ManyToOne(cascade=CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name="cliente_id", nullable=false)
     private Cliente cliente;
+    
+    @Column(name="monto_total")
+    private Float montoTotal;
+    
+    @ManyToOne
+    @JoinColumn(name="multa_id")
+    private Multa multa;
 
     @Override
     public int hashCode() {
@@ -79,7 +87,8 @@ public class Reservacion implements Serializable {
      * Este constructor no realiza ninguna acción adicional.
      */
     public Reservacion() {
-        
+        this.estado = EstadoReservacion.PENDIENTE;
+                
     }
     
     /**
@@ -89,6 +98,7 @@ public class Reservacion implements Serializable {
      */
     public Reservacion(Long id) {
         this.id = id;
+        this.estado = EstadoReservacion.PENDIENTE;
     }
     
     /**
@@ -114,7 +124,7 @@ public class Reservacion implements Serializable {
      * 
      * @return La fecha y hora de la reservación.
      */
-    public Instant getFechaHora() {
+    public LocalDateTime getFechaHora() {
         return fechaHora;
     }
 
@@ -123,7 +133,7 @@ public class Reservacion implements Serializable {
      * 
      * @param fechaHora La fecha y hora de la reservación a establecer.
      */
-    public void setFechaHora(Instant fechaHora) {
+    public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
     }
 
@@ -195,5 +205,33 @@ public class Reservacion implements Serializable {
      */
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    /**
+     * @return the montoTotal
+     */
+    public Float getMontoTotal() {
+        return montoTotal;
+    }
+
+    /**
+     * @param montoTotal the montoTotal to set
+     */
+    public void setMontoTotal(Float montoTotal) {
+        this.montoTotal = montoTotal;
+    }
+
+    /**
+     * @return the multa
+     */
+    public Multa getMulta() {
+        return multa;
+    }
+
+    /**
+     * @param multa the multa to set
+     */
+    public void setMulta(Multa multa) {
+        this.multa = multa;
     }
 }

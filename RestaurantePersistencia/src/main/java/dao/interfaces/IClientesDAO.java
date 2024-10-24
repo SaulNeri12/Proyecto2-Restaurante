@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
+
 package dao.interfaces;
 
 import entidades.Cliente;
@@ -26,4 +23,12 @@ public interface IClientesDAO {
      * @throws DAOException Si ocurre un error en la consulta
      */
     public List<Cliente> obtenerClientesTodos() throws DAOException;
+    
+    /**
+     * Obtiene el cliente por su numero de telefono registrado en el sistema
+     * @param numeroTelefono Numero de telefono del cliente
+     * @return Objeto Cliente
+     * @throws DAOException Si ocurre un error en la consulta
+     */
+    public Cliente obtenerClientePorTelefono(String numeroTelefono) throws DAOException;
 }

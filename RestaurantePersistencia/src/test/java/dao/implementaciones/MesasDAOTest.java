@@ -6,6 +6,7 @@ import entidades.Mesa;
 import entidades.TipoMesa;
 import entidades.UbicacionMesa;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,20 +68,86 @@ public class MesasDAOTest {
     @Test
     public void testEliminarMesa() throws Exception {
         System.out.println("eliminarMesa");
-        String codigo = "VEN-8-134";
+        String codigo = "VEN-8-121";
         instancia.eliminarMesa(codigo);
     }
 
     /**
      * Test of insertarMesas method, of class MesasDAO.
-     */
+    */ 
     @Test
-    public void testInsertarMesas() throws Exception {
-        System.out.println("insertarMesas");
-        TipoMesa tipo = instancia.obtenerTiposMesaTodos().getFirst();
-        UbicacionMesa ubicacion = UbicacionMesa.VENTANA;
-        int cantidad = 10;
+    public void testInsertarMesas_TipoPequenia() throws Exception {
+        System.out.println("insertarMesas - mesas pequenas");
+        
+        // arrange
+        TipoMesa tipo = instancia.obtenerTiposMesaTodos()
+                .stream()
+                .filter(t -> t.getNombre().equalsIgnoreCase("pequenia"))
+                .findFirst()
+                .orElse(null);
+        
+        assertNotNull(tipo, "El tipo de mesa no debe ser null");
+        
+        UbicacionMesa ubicacion = UbicacionMesa.TERRAZA;
+        
+        int cantidad = 15;
+        
+        // act
         instancia.insertarMesas(tipo, ubicacion, cantidad);
+        
+        // assert
+    }
+    
+    /**
+     * Test of insertarMesas method, of class MesasDAO.
+    */ 
+    @Test
+    public void testInsertarMesas_TipoMediana() throws Exception {
+        System.out.println("insertarMesas - mesas medianas");
+        
+        // arrange
+        TipoMesa tipo = instancia.obtenerTiposMesaTodos()
+                .stream()
+                .filter(t -> t.getNombre().equalsIgnoreCase("mediana"))
+                .findFirst()
+                .orElse(null);
+        
+        assertNotNull(tipo, "El tipo de mesa no debe ser null");
+        
+        UbicacionMesa ubicacion = UbicacionMesa.GENERAL;
+        
+        int cantidad = 10;
+        
+        // act
+        instancia.insertarMesas(tipo, ubicacion, cantidad);
+        
+        // assert
+    }
+    
+    /**
+     * Test of insertarMesas method, of class MesasDAO.
+    */ 
+    @Test
+    public void testInsertarMesas_TipoGrande() throws Exception {
+        System.out.println("insertarMesas - mesas grandes");
+        
+        // arrange
+        TipoMesa tipo = instancia.obtenerTiposMesaTodos()
+                .stream()
+                .filter(t -> t.getNombre().equalsIgnoreCase("grande"))
+                .findFirst()
+                .orElse(null);
+        
+        assertNotNull(tipo, "El tipo de mesa no debe ser null");
+        
+        UbicacionMesa ubicacion = UbicacionMesa.VENTANA;
+        
+        int cantidad = 10;
+        
+        // act
+        instancia.insertarMesas(tipo, ubicacion, cantidad);
+        
+        // assert
     }
     
     /**
