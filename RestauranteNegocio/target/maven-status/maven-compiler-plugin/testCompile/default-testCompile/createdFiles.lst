@@ -1,0 +1,5 @@
+dto\convertidores\ClienteConvertidorTest.class
+dto\convertidores\MultaConvertidorTest.class
+dto\convertidores\ReservacionConvertidorTest.class
+dto\convertidores\MesaConvertidorTest.class
+dto\convertidores\TipoMesaConvertidorTest.class

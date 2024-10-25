@@ -51,7 +51,11 @@ public class Multa implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Multa[ id=" + id + " ]";
+        return "Multa{" +
+                "id=" + id +
+                ", descripcion='" + descripcion + '\'' +
+                ", porcentaje=" + porcentaje +
+                '}';
     }
     
     /**

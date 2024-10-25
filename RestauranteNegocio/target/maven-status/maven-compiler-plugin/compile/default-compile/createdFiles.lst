@@ -1,1 +1,14 @@
+dto\ReservacionDTO.class
+dto\convertidores\ClienteConvertidor.class
 com\equipo7\restaurantenegocio\RestauranteNegocio.class
+dto\UbicacionMesaDTO.class
+dto\convertidores\MesaConvertidor.class
+dto\convertidores\TipoMesaConvertidor.class
+dto\EstadoReservacionDTO.class
+dto\convertidores\MultaConvertidor.class
+dto\convertidores\Converter.class
+dto\MultaDTO.class
+dto\convertidores\ReservacionConvertidor.class
+dto\ClienteDTO.class
+dto\MesaDTO.class
+dto\TipoMesaDTO.class
