@@ -23,7 +23,7 @@ public class ClientesDAO implements IClientesDAO {
 
     private static IClientesDAO instancia;
 
-    private ClientesDAO() {
+    public ClientesDAO() {
     }
     
     public static IClientesDAO getInstance() {
