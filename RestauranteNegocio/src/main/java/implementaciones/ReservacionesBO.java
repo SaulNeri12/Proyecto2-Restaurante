@@ -4,8 +4,8 @@
  */
 package implementaciones;
 
-
 import dao.interfaces.IReservacionesDAO;
+import dao.implementaciones.ReservacionesDAO;
 import dto.ReservacionDTO;
 import dto.convertidores.ReservacionConvertidor;
 import entidades.Reservacion;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * Implementación de la interfaz IReservacionesBO para manejar la lógica de negocio
- * relacionada con las reservaciones.
+ * relacionada con las reservaciones. Implementa el patrón Singleton.
  * 
  * @author Saul Neri
  */
@@ -26,10 +26,27 @@ public class ReservacionesBO implements IReservacionesBO {
 
     private final IReservacionesDAO reservacionesDAO;
     private final ReservacionConvertidor reservacionConvertidor;
-
-    public ReservacionesBO(IReservacionesDAO reservacionesDAO) {
-        this.reservacionesDAO = reservacionesDAO;
+    
+    // Instancia única de la clase
+    private static ReservacionesBO instance;
+    
+    /**
+     * Constructor privado para implementar Singleton.
+     */
+    private ReservacionesBO() {
+        this.reservacionesDAO = ReservacionesDAO.getInstance();
         this.reservacionConvertidor = new ReservacionConvertidor();
+    }
+    
+    /**
+     * Método para obtener la instancia única de ReservacionesBO.
+     * @return instancia única de ReservacionesBO
+     */
+    public static synchronized ReservacionesBO getInstance() {
+        if (instance == null) {
+            instance = new ReservacionesBO();
+        }
+        return instance;
     }
 
     @Override
@@ -46,11 +63,9 @@ public class ReservacionesBO implements IReservacionesBO {
     public void cancelarReservacion(Long idReservacion) throws ServicioException, NoEncontradoException {
         try {
             reservacionesDAO.cancelarReservacion(idReservacion);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new ServicioException("Error al cancelar la reservación con ID: " + idReservacion);
         }
-       
-        
     }
 
     @Override
@@ -108,21 +123,17 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             Reservacion entidad = reservacionConvertidor.convertFromDto(reservacion);
             reservacionesDAO.actualizarReservacion(entidad);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new ServicioException("Error al actualizar la reservación");
         }
-       
-        
     }
 
     @Override
     public void eliminarReservacion(Long id) throws ServicioException, NoEncontradoException {
         try {
             reservacionesDAO.eliminarReservacion(id);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new ServicioException("Error al eliminar la reservación con ID: " + id);
         }
-        
-        
     }
 }

@@ -5,6 +5,7 @@
 package implementaciones;
 
 import dao.interfaces.IMesasDAO;
+import dao.implementaciones.MesasDAO;
 import dto.MesaDTO;
 import dto.TipoMesaDTO;
 import dto.UbicacionMesaDTO;
@@ -16,25 +17,40 @@ import entidades.UbicacionMesa;
 import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import interfacesBO.IMesasBO;
-
 import java.util.List;
 
 /**
  * Implementación de la interfaz IMesasBO para manejar la lógica de negocio
- * relacionada con las mesas.
+ * relacionada con las mesas. Implementa el patrón Singleton.
  * 
  * @author Saul Neri
  */
 public class MesasBO implements IMesasBO {
-
     private final IMesasDAO mesasDAO;
     private final MesaConvertidor mesaConvertidor;
     private final TipoMesaConvertidor tipoMesaConvertidor;
-
-    public MesasBO(IMesasDAO mesasDAO) {
-        this.mesasDAO = mesasDAO;
+    
+    // Instancia única de la clase
+    private static MesasBO instance;
+    
+    /**
+     * Constructor privado para implementar Singleton.
+     */
+    private MesasBO() {
+        this.mesasDAO = MesasDAO.getInstance();
         this.mesaConvertidor = new MesaConvertidor();
         this.tipoMesaConvertidor = new TipoMesaConvertidor();
+    }
+    
+    /**
+     * Método para obtener la instancia única de MesasBO.
+     * @return instancia única de MesasBO
+     */
+    public static synchronized MesasBO getInstance() {
+        if (instance == null) {
+            instance = new MesasBO();
+        }
+        return instance;
     }
 
     @Override
@@ -73,10 +89,8 @@ public class MesasBO implements IMesasBO {
     public void eliminarMesa(String codigo) throws ServicioException, NoEncontradoException {
         try {
             mesasDAO.eliminarMesa(codigo);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new ServicioException("Error al eliminar la mesa");
         }
-       
-        
     }
 }

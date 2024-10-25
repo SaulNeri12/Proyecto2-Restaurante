@@ -20,20 +20,34 @@ import java.util.stream.Collectors;
 
 /**
  * Clase de negocio que implementa la interfaz IClientesBO para la gestión de clientes en el sistema.
+ * Implementa el patrón Singleton.
  */
 public class ClientesBO implements IClientesBO {
-
     private final IClientesDAO clientesDAO;
     private final ClienteConvertidor clienteConvertidor;
-
+    
+    // Instancia única de la clase
+    private static ClientesBO instance;
+    
     /**
-     * Constructor para inicializar el DAO y el convertidor de Cliente.
+     * Constructor privado para implementar Singleton.
      */
-    public ClientesBO() {
+    private ClientesBO() {
         this.clientesDAO = ClientesDAO.getInstance();
         this.clienteConvertidor = new ClienteConvertidor();
     }
-
+    
+    /**
+     * Método para obtener la instancia única de ClientesBO.
+     * @return instancia única de ClientesBO
+     */
+    public static synchronized ClientesBO getInstance() {
+        if (instance == null) {
+            instance = new ClientesBO();
+        }
+        return instance;
+    }
+    
     @Override
     public void insercionMasivaClientes(List<ClienteDTO> clientes) throws ServicioException {
         try {
