@@ -11,7 +11,7 @@ import dto.UbicacionMesaDTO;
 import entidades.Mesa;
 import entidades.TipoMesa;
 import entidades.UbicacionMesa;
-import java.util.function.Function;
+
 
 /**
  * Hace de convertidor para objetos Mesa en el sistema
@@ -22,6 +22,8 @@ public class MesaConvertidor extends Converter<MesaDTO, Mesa>{
     public MesaConvertidor() {
         super(MesaConvertidor::convertirAEntidad, MesaConvertidor::convertirADTO);
     }
+    
+
     
     public static Mesa convertirAEntidad(MesaDTO dto) {
         Converter<TipoMesaDTO, TipoMesa> tipoMesaConvertidor = new TipoMesaConvertidor();
