@@ -1,69 +1,45 @@
 
-package entidades;
+
+package dto;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  * Representa un cliente en el sistema
  * @author Saul Neri
  */
-@Entity
-@Table(name="cliente")
-public class Cliente implements Serializable {
+public class ClienteDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private Long id;
-    
-    @Column(name="nombre_completo", nullable=false, length=100)
     private String nombreCompleto;
-    
-    @Column(name="telefono", nullable=false, length=15, unique=true)
     private String telefono;
-
-    @OneToMany(
-            mappedBy="cliente", 
-            cascade={
-                CascadeType.PERSIST
-            }, 
-            orphanRemoval=true
-    )
-    private List<Reservacion> reservaciones;
     
     /**
-     * Constructor sin argumentos que inicializa un nuevo objeto Cliente.
+     * Constructor sin argumentos que inicializa un nuevo objeto ClienteDTO.
      */
-    public Cliente() {
+    public ClienteDTO() {
 
     }
 
     /**
-     * Constructor que inicializa un nuevo objeto Cliente con el ID
+     * Constructor que inicializa un nuevo objeto ClienteDTO con el ID
      * especificado.
      *
      * @param id el identificador único del cliente
      */
-    public Cliente(Long id) {
+    public ClienteDTO(Long id) {
         this.id = id;
     }
 
     /**
-     * Constructor que inicializa un nuevo objeto Cliente con el teléfono
+     * Constructor que inicializa un nuevo objeto ClienteDTO con el teléfono
      * especificado.
      *
      * @param telefono el número de teléfono del cliente
      */
-    public Cliente(String telefono) {
+    public ClienteDTO(String telefono) {
         this.telefono = telefono;
     }
 
@@ -121,7 +97,6 @@ public class Cliente implements Serializable {
         this.telefono = telefono;
     }
 
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -132,10 +107,10 @@ public class Cliente implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cliente)) {
+        if (!(object instanceof ClienteDTO)) {
             return false;
         }
-        Cliente other = (Cliente) object;
+        ClienteDTO other = (ClienteDTO) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -144,6 +119,6 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Cliente[ id=" + id + " ]";
+        return "ClienteDTO[ id=" + id + " ]";
     }
 }
