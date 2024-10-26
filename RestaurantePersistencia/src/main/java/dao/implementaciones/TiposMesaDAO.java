@@ -49,13 +49,23 @@ public class TiposMesaDAO implements ITiposMesaDAO {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
+            
+            boolean existe = entityManager.createQuery("SELECT COUNT(t) FROM TipoMesa t WHERE t.nombre LIKE :nombreTipo", Long.class)
+                            .setParameter("nombreTipo", tipoMesa.getNombre())
+                            .getSingleResult() > 0;
+            if (existe) {
+                throw new DAOException("El tipo de mesa a agregar ya esta registrado");
+            }
+            
             transaction.begin();
             entityManager.persist(tipoMesa);
             transaction.commit();
         } catch (Exception e) {
-            //transaction.rollback();
-            System.out.println(e.getMessage());
-            throw new DAOException("Error al agregar el tipo de mesa");
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            
+            throw new DAOException(e.getMessage());
         } finally {
             entityManager.close();
         }
@@ -66,6 +76,14 @@ public class TiposMesaDAO implements ITiposMesaDAO {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
 
         try {
+            
+            boolean noExiste = entityManager.createQuery("SELECT COUNT(t) FROM TipoMesa t WHERE t.id = :id", Long.class)
+                            .setParameter("id", id)
+                            .getSingleResult() == 0;
+            if (noExiste) {
+                throw new DAOException("El tipo de mesa con el ID dado no existe");
+            }
+            
             entityManager.getTransaction().begin();
 
             TipoMesa tipoMesa = entityManager.find(TipoMesa.class, id);
@@ -75,8 +93,11 @@ public class TiposMesaDAO implements ITiposMesaDAO {
 
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DAOException("Error al eliminar el tipo de mesa");
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            
+            throw new DAOException(e.getMessage());
         } finally {
             entityManager.close();
         }

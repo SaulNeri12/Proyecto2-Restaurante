@@ -4,8 +4,6 @@
  */
 package implementaciones;
 
-import dao.implementaciones.ReservacionesDAO;
-import dao.interfaces.IReservacionesDAO;
 import dto.ReservacionDTO;
 import dto.MesaDTO;
 import dto.ClienteDTO;
@@ -22,13 +20,7 @@ import interfacesBO.IReservacionesBO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReservacionesBOTest_SinMocks {
@@ -144,6 +136,24 @@ public class ReservacionesBOTest_SinMocks {
         // assert
         assertNotNull(resultado);
         assertEquals(resultado.getId(), id);
+    }
+    
+    @Test
+    public void testObtenerReservacionPorID_ConMulta() throws Exception {
+        
+        // arrange
+        Long id = 3L;
+        
+        // act
+        ReservacionDTO resultado = reservacionesBO.obtenerReservacionPorID(id);
+
+        // assert
+        assertNotNull(resultado);
+        assertEquals(resultado.getId(), id);
+        assertNotNull(resultado.getMulta(), "La multa no debe ser null");
+        assertNotNull(resultado.getMulta().getId(), "El id de la multa no debe ser null");
+        assertNotNull(resultado.getMulta().getDescripcion(), "La descripcion de la multa no debe ser null");
+        assertNotNull(resultado.getMulta().getPorcentaje(), "El porcentaje de la multa no debe ser null");
     }
 
     @Test
