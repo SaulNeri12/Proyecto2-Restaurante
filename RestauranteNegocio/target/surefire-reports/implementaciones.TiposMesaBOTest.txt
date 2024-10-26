@@ -1,0 +1,24 @@
+-------------------------------------------------------------------------------
+Test set: implementaciones.TiposMesaBOTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.463 s <<< FAILURE! -- in implementaciones.TiposMesaBOTest
+implementaciones.TiposMesaBOTest.testEliminarTipoMesaNoEncontrado -- Time elapsed: 0.012 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Checked exception is invalid for this method!
+Invalid: excepciones.NoEncontradoException: Tipo de mesa no encontrado
+	at implementaciones.TiposMesaBOTest.testEliminarTipoMesaNoEncontrado(TiposMesaBOTest.java:73)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.TiposMesaBOTest.testAgregarTipoMesaServicioException -- Time elapsed: 0.003 s <<< ERROR!
+org.mockito.exceptions.base.MockitoException: 
+
+Checked exception is invalid for this method!
+Invalid: excepciones.ServicioException: Error al agregar tipo de mesa
+	at implementaciones.TiposMesaBOTest.testAgregarTipoMesaServicioException(TiposMesaBOTest.java:91)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

@@ -19,8 +19,24 @@ public class ClienteDTO implements Serializable {
     /**
      * Constructor sin argumentos que inicializa un nuevo objeto ClienteDTO.
      */
-    public ClienteDTO() {
+    
+    
+    
+    public ClienteDTO(Long id, String nombreCompleto, String telefono) {
+        this.id = id;
+        this.nombreCompleto = nombreCompleto;
+        this.telefono = telefono;
 
+    }
+
+    public ClienteDTO(String nombreCompleto, String telefono) {
+        this.nombreCompleto = nombreCompleto;
+        this.telefono = telefono;
+    }
+    
+    
+
+    public ClienteDTO() {
     }
 
     /**
@@ -42,6 +58,8 @@ public class ClienteDTO implements Serializable {
     public ClienteDTO(String telefono) {
         this.telefono = telefono;
     }
+
+    
 
     /**
      * Obtiene el identificador único del cliente.

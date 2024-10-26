@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="dto.convertidores.TipoMesaConvertidorTest" time="0.009" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="implementaciones.ClientesBOTest" time="1.603" tests="5" errors="0" skipped="0" failures="2">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -59,12 +59,51 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testConvertirAEntidad" classname="dto.convertidores.TipoMesaConvertidorTest" time="0.001">
-    <system-out><![CDATA[convertirAEntidad
+  <testcase name="testObtenerClientePorTelefono_NoEncontrado" classname="implementaciones.ClientesBOTest" time="1.101">
+    <failure message="Unexpected exception type thrown, expected: &lt;excepciones.NoEncontradoException&gt; but was: &lt;excepciones.ServicioException&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <excepciones.NoEncontradoException> but was: <excepciones.ServicioException>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:67)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3115)
+	at implementaciones.ClientesBOTest.testObtenerClientePorTelefono_NoEncontrado(ClientesBOTest.java:93)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: Error al obtener el cliente por teléfono.
+	at implementaciones.ClientesBO.obtenerClientePorTelefono(ClientesBO.java:88)
+	at implementaciones.ClientesBOTest.lambda$testObtenerClientePorTelefono_NoEncontrado$1(ClientesBOTest.java:94)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	... 6 more
+]]></failure>
+    <system-out><![CDATA[[EL Info]: 2024-10-25 16:36:12.841--ServerSession(1666544295)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
 ]]></system-out>
   </testcase>
-  <testcase name="testConvertirADTO" classname="dto.convertidores.TipoMesaConvertidorTest" time="0.003">
-    <system-out><![CDATA[convertirADTO
+  <testcase name="testObtenerClientesTodos" classname="implementaciones.ClientesBOTest" time="0.019"/>
+  <testcase name="testInsercionMasivaClientes" classname="implementaciones.ClientesBOTest" time="0.459">
+    <failure message="Unexpected exception thrown: excepciones.ServicioException: Error al insertar clientes de manera masiva." type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Unexpected exception thrown: excepciones.ServicioException: Error al insertar clientes de manera masiva.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:36)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3168)
+	at implementaciones.ClientesBOTest.testInsercionMasivaClientes(ClientesBOTest.java:50)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: Error al insertar clientes de manera masiva.
+	at implementaciones.ClientesBO.insercionMasivaClientes(ClientesBO.java:59)
+	at implementaciones.ClientesBOTest.lambda$testInsercionMasivaClientes$0(ClientesBOTest.java:50)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
+    <system-out><![CDATA[[EL Warning]: 2024-10-25 16:36:14.02--UnitOfWork(922871524)--Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3): org.eclipse.persistence.exceptions.DatabaseException
+Internal Exception: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '6444112233' for key 'cliente.telefono'
+Error Code: 1062
+Call: INSERT INTO cliente (nombre_completo, telefono) VALUES (?, ?)
+	bind => [2 parameters bound]
+Query: InsertObjectQuery(entidades.Cliente[ id=1 ])
 ]]></system-out>
   </testcase>
+  <testcase name="testObtenerClientePorTelefono" classname="implementaciones.ClientesBOTest" time="0.014"/>
+  <testcase name="testGetInstance" classname="implementaciones.ClientesBOTest" time="0.0"/>
 </testsuite>

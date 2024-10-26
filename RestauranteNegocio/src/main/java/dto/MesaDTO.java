@@ -28,6 +28,21 @@ public class MesaDTO implements Serializable {
         
     }
 
+    public MesaDTO(Long id, String codigo, TipoMesaDTO tipoMesa, UbicacionMesaDTO ubicacion) {
+        this.id = id;
+        this.codigo = codigo;
+        this.tipoMesa = tipoMesa;
+        this.ubicacion = ubicacion;
+    }
+
+    public MesaDTO(String codigo, TipoMesaDTO tipoMesa, UbicacionMesaDTO ubicacion) {
+        this.codigo = codigo;
+        this.tipoMesa = tipoMesa;
+        this.ubicacion = ubicacion;
+    }
+    
+    
+
     /**
      * Constructor que inicializa una nueva instancia de MesaDTO con un identificador específico.
      * 
@@ -132,5 +147,6 @@ public class MesaDTO implements Serializable {
     public String toString() {
         return "MesaDTO[ id=" + id + " ]";
     }
+
 }
 

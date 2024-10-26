@@ -5,92 +5,95 @@
 package implementaciones;
 
 import dto.ClienteDTO;
+import excepciones.ServicioException;
+import excepciones.NoEncontradoException;
+import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- *
- * @author caarl
+ * Test para la clase ClientesBO.
  */
 public class ClientesBOTest {
+
+    private ClientesBO clientesBO;
+
     
-    public ClientesBOTest() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
     
     @BeforeEach
     public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
+        clientesBO = ClientesBO.getInstance();
     }
 
     /**
-     * Test of getInstance method, of class ClientesBO.
+     * Test para verificar la obtención de la instancia de ClientesBO.
      */
     @Test
     public void testGetInstance() {
-        System.out.println("getInstance");
-        ClientesBO expResult = null;
-        ClientesBO result = ClientesBO.getInstance();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(clientesBO, "La instancia de ClientesBO no debe ser nula");
     }
 
     /**
-     * Test of insercionMasivaClientes method, of class ClientesBO.
+     * Test para el método insercionMasivaClientes en ClientesBO.
      */
     @Test
-    public void testInsercionMasivaClientes() throws Exception {
-        System.out.println("insercionMasivaClientes");
-        List<ClienteDTO> clientes = null;
-        ClientesBO instance = null;
-        instance.insercionMasivaClientes(clientes);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+public void testInsercionMasivaClientes() throws ServicioException {
+    // Arrange
+    List<ClienteDTO> clientes = Arrays.asList(
+            new ClienteDTO(1L, "Alberto Perez Perez", "6444112233"),
+            new ClienteDTO(2L, "Jorge Perez Soto", "6444112252"),
+            new ClienteDTO(3L, "Arely Cruz Perez", "1234567890")
+    );
+
+    // Act
+    assertDoesNotThrow(() -> clientesBO.insercionMasivaClientes(clientes));
+
+    // Assert - se podría verificar si los datos están en la base de datos.
+}
+
+    /**
+     * Test para obtener todos los clientes.
+     */
+    @Test
+    public void testObtenerClientesTodos() throws ServicioException {
+        // Act
+        List<ClienteDTO> clientes = clientesBO.obtenerClientesTodos();
+
+        // Assert
+        assertNotNull(clientes, "La lista de clientes no debe ser nula");
+        assertTrue(clientes.size() > 0, "Debe haber al menos un cliente en la lista");
     }
 
     /**
-     * Test of obtenerClientesTodos method, of class ClientesBO.
+     * Test para obtener un cliente por su número de teléfono.
      */
     @Test
-    public void testObtenerClientesTodos() throws Exception {
-        System.out.println("obtenerClientesTodos");
-        ClientesBO instance = null;
-        List<ClienteDTO> expResult = null;
-        List<ClienteDTO> result = instance.obtenerClientesTodos();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testObtenerClientePorTelefono() {
+        // Arrange
+        String telefono = "6444112252";
+
+        // Act y Assert
+        try {
+            ClienteDTO cliente = clientesBO.obtenerClientePorTelefono(telefono);
+            assertNotNull(cliente, "El cliente no debe ser null");
+            assertEquals(telefono, cliente.getTelefono(), "El teléfono debe coincidir");
+        } catch (ServicioException e) {
+            fail("No se esperaba excepción: " + e.getMessage());
+        }
     }
 
     /**
-     * Test of obtenerClientePorTelefono method, of class ClientesBO.
+     * Test para el caso de excepción al buscar un cliente que no existe.
      */
     @Test
-    public void testObtenerClientePorTelefono() throws Exception {
-        System.out.println("obtenerClientePorTelefono");
-        String numeroTelefono = "";
-        ClientesBO instance = null;
-        ClienteDTO expResult = null;
-        ClienteDTO result = instance.obtenerClientePorTelefono(numeroTelefono);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testObtenerClientePorTelefono_NoEncontrado() {
+        String telefonoInexistente = "0000000000";
+        
+        Exception exception = assertThrows(NoEncontradoException.class, () -> {
+            clientesBO.obtenerClientePorTelefono(telefonoInexistente);
+        });
+
+        assertTrue(exception.getMessage().contains("Cliente no encontrado"));
     }
-    
 }

@@ -72,23 +72,21 @@ public class ClientesBO implements IClientesBO {
         }
     }
 
-    @Override
-    public ClienteDTO obtenerClientePorTelefono(String numeroTelefono) throws ServicioException {
-        try {
-            Cliente entidadCliente = clientesDAO.obtenerClientePorTelefono(numeroTelefono);
-            if (entidadCliente == null) {
-                throw new NoEncontradoException("Cliente no encontrado con el teléfono: " + numeroTelefono);
-            }
-            return clienteConvertidor.convertFromEntity(entidadCliente);
-        } catch (NoEncontradoException e) {
+   @Override
+public ClienteDTO obtenerClientePorTelefono(String numeroTelefono) throws ServicioException {
+    try {
+        Cliente entidadCliente = clientesDAO.obtenerClientePorTelefono(numeroTelefono);
+        if (entidadCliente == null) {
             try {
-                throw e;
+                throw new NoEncontradoException("Cliente no encontrado con el teléfono: " );
             } catch (NoEncontradoException ex) {
                 Logger.getLogger(ClientesBO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (DAOException e) {
-            throw new ServicioException("Error al obtener el cliente por teléfono.");
         }
-        return null;
+        return clienteConvertidor.convertFromEntity(entidadCliente);
+    } catch (DAOException e) {
+        throw new ServicioException("Error al obtener el cliente por teléfono.");
     }
+}
+
 }

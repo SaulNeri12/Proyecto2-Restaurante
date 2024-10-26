@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="dto.convertidores.TipoMesaConvertidorTest" time="0.009" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="implementaciones.TiposMesaBOTest" time="0.463" tests="5" errors="2" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,8 +15,9 @@
     <property name="user.country" value="MX"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21\bin"/>
-    <property name="sun.java.command" value="C:\Users\caarl\AppData\Local\Temp\surefire6794116245500910042\surefirebooter-20241025163611659_3.jar C:\Users\caarl\AppData\Local\Temp\surefire6794116245500910042 2024-10-25T16-36-11_521-jvmRun1 surefire-20241025163611659_1tmp surefire_0-20241025163611659_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\caarl\AppData\Local\Temp\surefire4249428423516302111\surefirebooter-20241025173325693_3.jar C:\Users\caarl\AppData\Local\Temp\surefire4249428423516302111 2024-10-25T17-33-25_574-jvmRun1 surefire-20241025173325693_1tmp surefire_0-20241025173325693_2tmp"/>
     <property name="jdk.debug" value="release"/>
+    <property name="test" value="implementaciones.TiposMesaBOTest"/>
     <property name="surefire.test.class.path" value="C:\Users\caarl\Documents\GitHub\Proyecto2-Restaurante\RestauranteNegocio\target\test-classes;C:\Users\caarl\Documents\GitHub\Proyecto2-Restaurante\RestauranteNegocio\target\classes;C:\Users\caarl\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\caarl\.m2\repository\net\bytebuddy\byte-buddy\1.11.19\byte-buddy-1.11.19.jar;C:\Users\caarl\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.19\byte-buddy-agent-1.11.19.jar;C:\Users\caarl\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\caarl\.m2\repository\com\mysql\mysql-connector-j\9.0.0\mysql-connector-j-9.0.0.jar;C:\Users\caarl\.m2\repository\com\google\protobuf\protobuf-java\4.26.1\protobuf-java-4.26.1.jar;C:\Users\caarl\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\caarl\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\caarl\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\caarl\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\caarl\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\caarl\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\caarl\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\caarl\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\caarl\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\caarl\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\caarl\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\caarl\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\caarl\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.2\junit-jupiter-engine-5.10.2.jar;C:\Users\caarl\.m2\repository\org\junit\platform\junit-platform-engine\1.10.2\junit-platform-engine-1.10.2.jar;C:\Users\caarl\.m2\repository\com\equipo7\RestaurantePersistencia\1.0\RestaurantePersistencia-1.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\caarl"/>
@@ -30,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\caarl\AppData\Local\Temp\surefire6794116245500910042\surefirebooter-20241025163611659_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\caarl\AppData\Local\Temp\surefire4249428423516302111\surefirebooter-20241025173325693_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.2+13-LTS-58"/>
@@ -59,12 +60,29 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testConvertirAEntidad" classname="dto.convertidores.TipoMesaConvertidorTest" time="0.001">
-    <system-out><![CDATA[convertirAEntidad
-]]></system-out>
+  <testcase name="testEliminarTipoMesaExitoso" classname="implementaciones.TiposMesaBOTest" time="0.397"/>
+  <testcase name="testEliminarTipoMesaNoEncontrado" classname="implementaciones.TiposMesaBOTest" time="0.012">
+    <error message="&#10;Checked exception is invalid for this method!&#10;Invalid: excepciones.NoEncontradoException: Tipo de mesa no encontrado" type="org.mockito.exceptions.base.MockitoException"><![CDATA[org.mockito.exceptions.base.MockitoException: 
+
+Checked exception is invalid for this method!
+Invalid: excepciones.NoEncontradoException: Tipo de mesa no encontrado
+	at implementaciones.TiposMesaBOTest.testEliminarTipoMesaNoEncontrado(TiposMesaBOTest.java:73)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></error>
   </testcase>
-  <testcase name="testConvertirADTO" classname="dto.convertidores.TipoMesaConvertidorTest" time="0.003">
-    <system-out><![CDATA[convertirADTO
-]]></system-out>
+  <testcase name="testAgregarTipoMesa" classname="implementaciones.TiposMesaBOTest" time="0.002"/>
+  <testcase name="testObtenerTiposMesaTodos" classname="implementaciones.TiposMesaBOTest" time="0.005"/>
+  <testcase name="testAgregarTipoMesaServicioException" classname="implementaciones.TiposMesaBOTest" time="0.003">
+    <error message="&#10;Checked exception is invalid for this method!&#10;Invalid: excepciones.ServicioException: Error al agregar tipo de mesa" type="org.mockito.exceptions.base.MockitoException"><![CDATA[org.mockito.exceptions.base.MockitoException: 
+
+Checked exception is invalid for this method!
+Invalid: excepciones.ServicioException: Error al agregar tipo de mesa
+	at implementaciones.TiposMesaBOTest.testAgregarTipoMesaServicioException(TiposMesaBOTest.java:91)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></error>
   </testcase>
 </testsuite>
