@@ -38,5 +38,4 @@ public interface IClientesBO {
      * @throws NoEncontradoException Si no se encuentra el cliente
      */
     public ClienteDTO obtenerClientePorTelefono(String numeroTelefono) throws ServicioException, NoEncontradoException;
-
 }

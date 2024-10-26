@@ -1,0 +1,92 @@
+-------------------------------------------------------------------------------
+Test set: implementaciones.ReservacionesBOTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 11, Skipped: 0, Time elapsed: 0.054 s <<< FAILURE! -- in implementaciones.ReservacionesBOTest
+implementaciones.ReservacionesBOTest.testObtenerReservacionesDeMesa_Error -- Time elapsed: 0.035 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testCancelarReservacion_NoEncontrado -- Time elapsed: 0.002 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testObtenerReservacionesCliente_Exitoso -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testEliminarReservacion_Exitoso -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testCancelarReservacion_Exitoso -- Time elapsed: 0 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testObtenerReservacionPorID_Exitoso -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testObtenerReservacionesDeMesa_Exitoso -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testObtenerReservacionesPorPeriodo_Exitoso -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testActualizarReservacion_Exitoso -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testAgregarReservacion_Exitoso -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+implementaciones.ReservacionesBOTest.testGetInstance -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.function.Function.apply(Object)" because "this.fromDto" is null
+	at dto.convertidores.Converter.convertFromDto(Converter.java:30)
+	at implementaciones.ReservacionesBOTest.setUp(ReservacionesBOTest.java:77)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
