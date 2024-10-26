@@ -64,7 +64,7 @@ public class TiposMesaBO implements ITiposMesaBO {
     }
 
     @Override
-    public void eliminarTipoMesa(Long id) throws ServicioException, NoEncontradoException {
+    public void eliminarTipoMesa(Long id) throws ServicioException {
         try {
             tiposMesaDAO.eliminarTipoMesa(id);
         } catch (DAOException e) {
