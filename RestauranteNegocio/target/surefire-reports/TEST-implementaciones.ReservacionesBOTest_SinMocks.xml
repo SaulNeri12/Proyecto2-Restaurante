@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="implementaciones.ReservacionesBOTest_SinMocks" time="1.051" tests="11" errors="0" skipped="0" failures="5">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\nerix\Documents\NetBeansProjects\Proyecto2-Restaurante\RestauranteNegocio\target\test-classes;C:\Users\nerix\Documents\NetBeansProjects\Proyecto2-Restaurante\RestauranteNegocio\target\classes;C:\Users\nerix\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\nerix\.m2\repository\net\bytebuddy\byte-buddy\1.11.19\byte-buddy-1.11.19.jar;C:\Users\nerix\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.19\byte-buddy-agent-1.11.19.jar;C:\Users\nerix\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\nerix\.m2\repository\com\mysql\mysql-connector-j\9.0.0\mysql-connector-j-9.0.0.jar;C:\Users\nerix\.m2\repository\com\google\protobuf\protobuf-java\4.26.1\protobuf-java-4.26.1.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\nerix\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\nerix\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\nerix\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\nerix\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\nerix\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\nerix\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.2\junit-jupiter-engine-5.10.2.jar;C:\Users\nerix\.m2\repository\org\junit\platform\junit-platform-engine\1.10.2\junit-platform-engine-1.10.2.jar;C:\Users\nerix\.m2\repository\com\equipo7\RestaurantePersistencia\1.0\RestaurantePersistencia-1.0.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="America/Mexico_City"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="user.country" value="MX"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="C:\Users\nerix\Documents\NetBeansJDKs\jdk-21.0.4_windows-x64_bin\jdk-21.0.4\bin"/>
+    <property name="sun.java.command" value="C:\Users\nerix\AppData\Local\Temp\surefire12901730759736064767\surefirebooter-20241026021828328_3.jar C:\Users\nerix\AppData\Local\Temp\surefire12901730759736064767 2024-10-26T02-18-28_234-jvmRun1 surefire-20241026021828328_1tmp surefire_0-20241026021828328_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="test" value="implementaciones.ReservacionesBOTest_SinMocks"/>
+    <property name="surefire.test.class.path" value="C:\Users\nerix\Documents\NetBeansProjects\Proyecto2-Restaurante\RestauranteNegocio\target\test-classes;C:\Users\nerix\Documents\NetBeansProjects\Proyecto2-Restaurante\RestauranteNegocio\target\classes;C:\Users\nerix\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\nerix\.m2\repository\net\bytebuddy\byte-buddy\1.11.19\byte-buddy-1.11.19.jar;C:\Users\nerix\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.19\byte-buddy-agent-1.11.19.jar;C:\Users\nerix\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\nerix\.m2\repository\com\mysql\mysql-connector-j\9.0.0\mysql-connector-j-9.0.0.jar;C:\Users\nerix\.m2\repository\com\google\protobuf\protobuf-java\4.26.1\protobuf-java-4.26.1.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar;C:\Users\nerix\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar;C:\Users\nerix\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.2\junit-jupiter-api-5.10.2.jar;C:\Users\nerix\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\nerix\.m2\repository\org\junit\platform\junit-platform-commons\1.10.2\junit-platform-commons-1.10.2.jar;C:\Users\nerix\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\nerix\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.2\junit-jupiter-params-5.10.2.jar;C:\Users\nerix\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.2\junit-jupiter-engine-5.10.2.jar;C:\Users\nerix\.m2\repository\org\junit\platform\junit-platform-engine\1.10.2\junit-platform-engine-1.10.2.jar;C:\Users\nerix\.m2\repository\com\equipo7\RestaurantePersistencia\1.0\RestaurantePersistencia-1.0.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\nerix"/>
+    <property name="user.language" value="es"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-07-16"/>
+    <property name="java.home" value="C:\Users\nerix\Documents\NetBeansJDKs\jdk-21.0.4_windows-x64_bin\jdk-21.0.4"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\nerix\Documents\NetBeansProjects\Proyecto2-Restaurante\RestauranteNegocio"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\nerix\AppData\Local\Temp\surefire12901730759736064767\surefirebooter-20241026021828328_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.4+8-LTS-274"/>
+    <property name="user.name" value="nerix"/>
+    <property name="stdout.encoding" value="Cp1252"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="maven.ext.class.path" value="C:\Program Files\NetBeans-22\netbeans\java\maven-nblib\netbeans-eventspy.jar"/>
+    <property name="localRepository" value="C:\Users\nerix\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\nerix\AppData\Local\Temp\"/>
+    <property name="java.version" value="21.0.4"/>
+    <property name="user.dir" value="C:\Users\nerix\Documents\NetBeansProjects\Proyecto2-Restaurante\RestauranteNegocio"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Users\nerix\Documents\NetBeansJDKs\jdk-21.0.4_windows-x64_bin\jdk-21.0.4\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Alacritty\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\nerix\AppData\Local\Programs\Python\Python312;C:\ProgramData\chocolatey\bin;C:\Program Files\Apache Software Foundation\Tomcat 10.1\bin;C:\Program Files\Git\cmd;C:\xampp\mysql\bin;C:\Users\nerix\AppData\Local\Programs\Python\Python312\Scripts;C:\mingw64\bin;C:\Program Files\dotnet\;C:\Program Files\CMake\bin;C:\mysql\bin;C:\Program Files\MySQL\MySQL Server 8.4\bin;C:\Program Files\apache-maven\apache-maven-3.9.9\bin;C:\Users\nerix\AppData\Local\Programs\Python\Launcher\;C:\Users\nerix\AppData\Local\Microsoft\WindowsApps;C:\tools\neovim\nvim-win64\bin;C:\xampp\mysql\bin;C:\Users\nerix\AppData\Local\Programs\Python\Python312\Scripts;C:\mingw64\bin;C:\Users\nerix\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\nerix\AppData\Local\GitHubDesktop\bin;C:\mysql\bin;C:\Program Files\MySQL\MySQL Server 8.4\bin;C:\Users\nerix\.dotnet\tools;C:\Program Files\apache-maven\apache-maven-3.9.9\bin;;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="Cp1252"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="21.0.4+8-LTS-274"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testObtenerReservacionesDeMesa_MesaInexistente" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.907">
+    <system-out><![CDATA[[EL Info]: 2024-10-26 02:18:29.181--ServerSession(1771421544)--EclipseLink, version: Eclipse Persistence Services - 2.7.12.v20230209-e5c4074ef3
+]]></system-out>
+  </testcase>
+  <testcase name="testCancelarReservacion_NoEncontrado" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.005"/>
+  <testcase name="testObtenerReservacionesCliente_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.026"/>
+  <testcase name="testEliminarReservacion_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.009">
+    <failure message="Unexpected exception thrown: excepciones.ServicioException: No se encontro la reservacion a eliminar" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Unexpected exception thrown: excepciones.ServicioException: No se encontro la reservacion a eliminar
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:36)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3168)
+	at implementaciones.ReservacionesBOTest_SinMocks.testEliminarReservacion_Exitoso(ReservacionesBOTest_SinMocks.java:168)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: No se encontro la reservacion a eliminar
+	at implementaciones.ReservacionesBO.eliminarReservacion(ReservacionesBO.java:137)
+	at implementaciones.ReservacionesBOTest_SinMocks.lambda$testEliminarReservacion_Exitoso$5(ReservacionesBOTest_SinMocks.java:168)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
+  </testcase>
+  <testcase name="testCancelarReservacion_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.002">
+    <failure message="Unexpected exception thrown: excepciones.ServicioException: La reservacion ya fue cancelada con anterioridad" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Unexpected exception thrown: excepciones.ServicioException: La reservacion ya fue cancelada con anterioridad
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:36)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3168)
+	at implementaciones.ReservacionesBOTest_SinMocks.testCancelarReservacion_Exitoso(ReservacionesBOTest_SinMocks.java:69)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: La reservacion ya fue cancelada con anterioridad
+	at implementaciones.ReservacionesBO.cancelarReservacion(ReservacionesBO.java:68)
+	at implementaciones.ReservacionesBOTest_SinMocks.lambda$testCancelarReservacion_Exitoso$1(ReservacionesBOTest_SinMocks.java:69)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
+  </testcase>
+  <testcase name="testObtenerReservacionPorID_ConMulta" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.001"/>
+  <testcase name="testObtenerReservacionPorID_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.001"/>
+  <testcase name="testObtenerReservacionesDeMesa_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.004">
+    <failure message="La lista no debe estar vacia ==&gt; expected: &lt;false&gt; but was: &lt;true&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: La lista no debe estar vacia ==> expected: <false> but was: <true>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertFalse.failNotFalse(AssertFalse.java:63)
+	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:36)
+	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:239)
+	at implementaciones.ReservacionesBOTest_SinMocks.testObtenerReservacionesDeMesa_Exitoso(ReservacionesBOTest_SinMocks.java:48)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></failure>
+  </testcase>
+  <testcase name="testObtenerReservacionesPorPeriodo_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.009"/>
+  <testcase name="testActualizarReservacion_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.029">
+    <failure message="Unexpected exception thrown: excepciones.ServicioException: La reservacion que se desea actualizar ya concluyo o fue cancelada" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Unexpected exception thrown: excepciones.ServicioException: La reservacion que se desea actualizar ya concluyo o fue cancelada
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:36)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3168)
+	at implementaciones.ReservacionesBOTest_SinMocks.testActualizarReservacion_Exitoso(ReservacionesBOTest_SinMocks.java:124)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: La reservacion que se desea actualizar ya concluyo o fue cancelada
+	at implementaciones.ReservacionesBO.actualizarReservacion(ReservacionesBO.java:128)
+	at implementaciones.ReservacionesBOTest_SinMocks.lambda$testActualizarReservacion_Exitoso$4(ReservacionesBOTest_SinMocks.java:124)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
+  </testcase>
+  <testcase name="testAgregarReservacion_Exitoso" classname="implementaciones.ReservacionesBOTest_SinMocks" time="0.02">
+    <failure message="Unexpected exception thrown: excepciones.ServicioException: No se puede realizar la reservacion debido a que el cliente cuenta con una reservacion activa" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Unexpected exception thrown: excepciones.ServicioException: No se puede realizar la reservacion debido a que el cliente cuenta con una reservacion activa
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:36)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3168)
+	at implementaciones.ReservacionesBOTest_SinMocks.testAgregarReservacion_Exitoso(ReservacionesBOTest_SinMocks.java:107)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: No se puede realizar la reservacion debido a que el cliente cuenta con una reservacion activa
+	at implementaciones.ReservacionesBO.agregarReservacion(ReservacionesBO.java:118)
+	at implementaciones.ReservacionesBOTest_SinMocks.lambda$testAgregarReservacion_Exitoso$3(ReservacionesBOTest_SinMocks.java:107)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
+  </testcase>
+</testsuite>
