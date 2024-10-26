@@ -4,18 +4,60 @@
  */
 package guis;
 
+
+
+import dto.MesaDTO;
+import dto.TipoMesaDTO;
+import dto.UbicacionMesaDTO;
+import implementaciones.MesasBO;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author caarl
  */
 public class frmAdminMesas extends javax.swing.JFrame {
 
-    /**
-     * Creates new form frmAdminMesas
-     */
+   private final MesasBO mesasBO;
+   
+   
     public frmAdminMesas() {
-        initComponents();
+       initComponents();
+        mesasBO = new MesasBO();
+        txtRegistrarMesas.addActionListener(this::txtRegistrarMesasActionPerformed);
+        actualizarTablaMesas();
     }
+    
+    private void actualizarTablaMesas() {
+        try {
+            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
+            
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("ID");
+            modelo.addColumn("Número de Mesa");
+            modelo.addColumn("Tipo");
+            modelo.addColumn("Ubicación");
+
+            for (MesaDTO mesa : mesas) {
+                Object[] fila = {
+                    mesa.getId(),
+                    mesa.getCodigo(),
+                    mesa.getTipoMesa(),
+                    mesa.getUbicacion()
+                };
+                modelo.addRow(fila);
+            }
+
+            tblMesas.setModel(modelo);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar la tabla: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+   
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,15 +71,15 @@ public class frmAdminMesas extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNumMesas = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbxTipoMesa = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbxUbicacionMesa = new javax.swing.JComboBox<>();
         Cancelar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        txtRegistrarMesas = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblMesas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,21 +89,31 @@ public class frmAdminMesas extends javax.swing.JFrame {
 
         jLabel2.setText("Cantidad");
 
-        jTextField1.setText("Num-. Mesas");
+        txtNumMesas.setText("Num-. Mesas");
+        txtNumMesas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNumMesasActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Tipo");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbxTipoMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setText("Ubicacion");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         Cancelar.setText("Cancelar");
 
-        jButton2.setText("Registrar");
+        txtRegistrarMesas.setText("Registrar");
+        txtRegistrarMesas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRegistrarMesasActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblMesas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -72,7 +124,7 @@ public class frmAdminMesas extends javax.swing.JFrame {
                 "Codigo", "Tipo de mesa", "Capacidad", "Ubicacion"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblMesas);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,16 +140,16 @@ public class frmAdminMesas extends javax.swing.JFrame {
                                 .addGap(20, 20, 20)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbxUbicacionMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbxTipoMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNumMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(Cancelar)
                         .addGap(26, 26, 26)
-                        .addComponent(jButton2)))
+                        .addComponent(txtRegistrarMesas)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -110,19 +162,19 @@ public class frmAdminMesas extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNumMesas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbxTipoMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbxUbicacionMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Cancelar)
-                    .addComponent(jButton2))
+                    .addComponent(txtRegistrarMesas))
                 .addGap(16, 16, 16))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(7, Short.MAX_VALUE)
@@ -149,6 +201,38 @@ public class frmAdminMesas extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtRegistrarMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRegistrarMesasActionPerformed
+    try {
+        int numeroMesas = Integer.parseInt(txtNumMesas.getText());
+        
+        // Obtener el TipoMesaDTO desde el combo box
+        TipoMesaDTO tipoMesa = (TipoMesaDTO) cbxTipoMesa.getSelectedItem();
+        
+        // Obtener la ubicación seleccionada y convertirla a UbicacionMesaDTO
+        UbicacionMesaDTO ubicacionMesa = UbicacionMesaDTO.valueOf((String) cbxUbicacionMesa.getSelectedItem());
+
+        // Crear instancia de MesasBO y llamar al método de inserción de mesas
+        MesasBO mesasBO = MesasBO.getInstance();
+        mesasBO.insertarMesas(tipoMesa, ubicacionMesa, numeroMesas);
+
+        // Mensaje de confirmación
+        JOptionPane.showMessageDialog(this, "Mesa registrada exitosamente.");
+        
+        // Actualizar tabla u otros componentes si es necesario
+        actualizarTablaMesas();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Ingrese un número válido de mesas.", "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al registrar la mesa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    }//GEN-LAST:event_txtRegistrarMesasActionPerformed
+
+    private void txtNumMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumMesasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumMesasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,16 +271,16 @@ public class frmAdminMesas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> cbxTipoMesa;
+    private javax.swing.JComboBox<String> cbxUbicacionMesa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblMesas;
+    private javax.swing.JTextField txtNumMesas;
+    private javax.swing.JButton txtRegistrarMesas;
     // End of variables declaration//GEN-END:variables
 }

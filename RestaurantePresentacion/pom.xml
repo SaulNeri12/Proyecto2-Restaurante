@@ -6,6 +6,11 @@
     <version>1.0</version>
     <packaging>jar</packaging>
     <dependencies>
+        <dependency>
+    <groupId>com.equipo7</groupId>
+    <artifactId>RestauranteNegocio</artifactId>
+    <version>1.0</version>
+</dependency>
         <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
             <groupId>com.mysql</groupId>
