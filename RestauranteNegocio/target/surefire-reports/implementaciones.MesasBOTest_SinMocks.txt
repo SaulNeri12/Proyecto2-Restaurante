@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: implementaciones.MesasBOTest_SinMocks
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.063 s <<< FAILURE! -- in implementaciones.MesasBOTest_SinMocks
+implementaciones.MesasBOTest_SinMocks.testEliminarMesa -- Time elapsed: 0.009 s <<< ERROR!
+excepciones.ServicioException: No se encontro la mesa a eliminar
+	at implementaciones.MesasBO.eliminarMesa(MesasBO.java:96)
+	at implementaciones.MesasBOTest_SinMocks.testEliminarMesa(MesasBOTest_SinMocks.java:137)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

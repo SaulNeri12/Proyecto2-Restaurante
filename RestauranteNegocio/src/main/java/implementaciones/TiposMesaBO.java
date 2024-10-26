@@ -6,6 +6,7 @@
 package implementaciones;
 
 
+import dao.implementaciones.TiposMesaDAO;
 import dao.interfaces.ITiposMesaDAO;
 import dto.TipoMesaDTO;
 import dto.convertidores.TipoMesaConvertidor;
@@ -24,12 +25,22 @@ import java.util.List;
  */
 public class TiposMesaBO implements ITiposMesaBO {
 
+    private static TiposMesaBO instance;
+    
     private final ITiposMesaDAO tiposMesaDAO;
     private final TipoMesaConvertidor tipoMesaConvertidor;
 
-    public TiposMesaBO(ITiposMesaDAO tiposMesaDAO) {
-        this.tiposMesaDAO = tiposMesaDAO;
+    private TiposMesaBO() {
+        this.tiposMesaDAO = TiposMesaDAO.getInstance();
         this.tipoMesaConvertidor = new TipoMesaConvertidor();
+    }
+    
+    public static TiposMesaBO getInstance() {
+        if (instance == null) {
+            instance = new TiposMesaBO();
+        }
+        
+        return instance;
     }
 
     @Override
