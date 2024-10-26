@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="dto.convertidores.TipoMesaConvertidorTest" time="0.009" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="ReservacionesBOTest" time="0.042" tests="10" errors="1" skipped="0" failures="4">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -59,12 +59,90 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testConvertirAEntidad" classname="dto.convertidores.TipoMesaConvertidorTest" time="0.001">
-    <system-out><![CDATA[convertirAEntidad
-]]></system-out>
+  <testcase name="testEliminarReservacion" classname="ReservacionesBOTest" time="0.008">
+    <failure message="No debería lanzar excepción al eliminar una reservación. ==&gt; Unexpected exception thrown: excepciones.ServicioException: Error al eliminar la reservación con ID: 2" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: No debería lanzar excepción al eliminar una reservación. ==> Unexpected exception thrown: excepciones.ServicioException: Error al eliminar la reservación con ID: 2
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:40)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3187)
+	at ReservacionesBOTest.testEliminarReservacion(ReservacionesBOTest.java:95)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: Error al eliminar la reservación con ID: 2
+	at implementaciones.ReservacionesBO.eliminarReservacion(ReservacionesBO.java:136)
+	at ReservacionesBOTest.lambda$testEliminarReservacion$3(ReservacionesBOTest.java:95)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
   </testcase>
-  <testcase name="testConvertirADTO" classname="dto.convertidores.TipoMesaConvertidorTest" time="0.003">
-    <system-out><![CDATA[convertirADTO
-]]></system-out>
+  <testcase name="testObtenerReservacionesTodos" classname="ReservacionesBOTest" time="0.003"/>
+  <testcase name="testCancelarReservacion" classname="ReservacionesBOTest" time="0.003">
+    <failure message="No debería lanzar excepción al cancelar una reservación. ==&gt; Unexpected exception thrown: excepciones.ServicioException: Error al cancelar la reservación con ID: 1" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: No debería lanzar excepción al cancelar una reservación. ==> Unexpected exception thrown: excepciones.ServicioException: Error al cancelar la reservación con ID: 1
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:40)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3187)
+	at ReservacionesBOTest.testCancelarReservacion(ReservacionesBOTest.java:41)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: Error al cancelar la reservación con ID: 1
+	at implementaciones.ReservacionesBO.cancelarReservacion(ReservacionesBO.java:67)
+	at ReservacionesBOTest.lambda$testCancelarReservacion$0(ReservacionesBOTest.java:41)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
   </testcase>
+  <testcase name="testObtenerReservacionesPorPeriodo" classname="ReservacionesBOTest" time="0.009"/>
+  <testcase name="testObtenerReservacionPorID" classname="ReservacionesBOTest" time="0.002">
+    <error message="Error al obtener reservación con ID: 1" type="excepciones.ServicioException"><![CDATA[excepciones.ServicioException: Error al obtener reservación con ID: 1
+	at implementaciones.ReservacionesBO.obtenerReservacionPorID(ReservacionesBO.java:107)
+	at ReservacionesBOTest.testObtenerReservacionPorID(ReservacionesBOTest.java:69)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+]]></error>
+  </testcase>
+  <testcase name="testAgregarReservacion" classname="ReservacionesBOTest" time="0.002">
+    <failure message="No debería lanzar excepción al agregar una reservación. ==&gt; Unexpected exception thrown: excepciones.ServicioException: Error al agregar la reservación" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: No debería lanzar excepción al agregar una reservación. ==> Unexpected exception thrown: excepciones.ServicioException: Error al agregar la reservación
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:40)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3187)
+	at ReservacionesBOTest.testAgregarReservacion(ReservacionesBOTest.java:80)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: Error al agregar la reservación
+	at implementaciones.ReservacionesBO.agregarReservacion(ReservacionesBO.java:117)
+	at ReservacionesBOTest.lambda$testAgregarReservacion$1(ReservacionesBOTest.java:80)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
+  </testcase>
+  <testcase name="testObtenerReservacionesCliente" classname="ReservacionesBOTest" time="0.003"/>
+  <testcase name="testObtenerReservacionesDeMesa" classname="ReservacionesBOTest" time="0.004"/>
+  <testcase name="testActualizarReservacion" classname="ReservacionesBOTest" time="0.002">
+    <failure message="No debería lanzar excepción al actualizar una reservación. ==&gt; Unexpected exception thrown: excepciones.ServicioException: Error al actualizar la reservación" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: No debería lanzar excepción al actualizar una reservación. ==> Unexpected exception thrown: excepciones.ServicioException: Error al actualizar la reservación
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:53)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:40)
+	at org.junit.jupiter.api.Assertions.assertDoesNotThrow(Assertions.java:3187)
+	at ReservacionesBOTest.testActualizarReservacion(ReservacionesBOTest.java:88)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: excepciones.ServicioException: Error al actualizar la reservación
+	at implementaciones.ReservacionesBO.actualizarReservacion(ReservacionesBO.java:127)
+	at ReservacionesBOTest.lambda$testActualizarReservacion$2(ReservacionesBOTest.java:88)
+	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
+	... 6 more
+]]></failure>
+  </testcase>
+  <testcase name="testGetInstance" classname="ReservacionesBOTest" time="0.001"/>
 </testsuite>

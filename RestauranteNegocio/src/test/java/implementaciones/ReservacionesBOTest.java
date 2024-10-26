@@ -4,179 +4,206 @@
  */
 package implementaciones;
 
+import dao.interfaces.IReservacionesDAO;
 import dto.ReservacionDTO;
-import java.time.LocalDateTime;
-import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
+import dto.MesaDTO;
+import dto.ClienteDTO;
+import dto.EstadoReservacionDTO;
+import entidades.Reservacion;
+import excepciones.NoEncontradoException;
+import excepciones.ServicioException;
+import dto.convertidores.ReservacionConvertidor;
+import excepciones.DAOException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- *
- * @author caarl
- */
 public class ReservacionesBOTest {
-    
-    public ReservacionesBOTest() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
+
+    @Mock
+    private IReservacionesDAO reservacionesDAO;
+
+    @Mock
+    private ReservacionConvertidor reservacionConvertidor;
+
+    @InjectMocks
+    private ReservacionesBO reservacionesBO;
+
+    private ReservacionDTO reservacionDTO;
+    private Reservacion reservacionEntity;
+
     @BeforeEach
     public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
+        MockitoAnnotations.openMocks(this);
+
+        // Datos de prueba de mesa
+        MesaDTO mesa = new MesaDTO();
+        mesa.setId(1L);
+        mesa.setCodigo("MESA01");
+
+        // Datos de prueba de cliente
+        ClienteDTO cliente = new ClienteDTO();
+        cliente.setId(1L);
+        cliente.setTelefono("1234567890");
+
+        // Datos de prueba de reservación
+        reservacionDTO = new ReservacionDTO();
+        reservacionDTO.setId(1L);
+        reservacionDTO.setFechaHora(LocalDateTime.now().plusDays(1));
+        reservacionDTO.setNumeroPersonas(4);
+        reservacionDTO.setEstado(EstadoReservacionDTO.PENDIENTE);
+        reservacionDTO.setMesa(mesa);
+        reservacionDTO.setCliente(cliente);
+        reservacionDTO.setMontoTotal(100.0f);
+
+        // Crear entidad correspondiente
+        reservacionEntity = new Reservacion();
+        reservacionEntity.setId(reservacionDTO.getId());
+        reservacionEntity.setFechaHora(reservacionDTO.getFechaHora());
+        reservacionEntity.setNumeroPersonas(reservacionDTO.getNumeroPersonas());
+        reservacionEntity.setMontoTotal(reservacionDTO.getMontoTotal());
+        // Configura otros campos necesarios aquí
+
+        // Configurar el convertidor mock
+        when(reservacionConvertidor.convertFromDto(reservacionDTO))
+            .thenReturn(reservacionEntity);
+        when(reservacionConvertidor.convertFromEntity(reservacionEntity))
+            .thenReturn(reservacionDTO);
+        when(reservacionConvertidor.createFromEntities(anyList()))
+            .thenReturn(Arrays.asList(reservacionDTO));
     }
 
-    /**
-     * Test of getInstance method, of class ReservacionesBO.
-     */
     @Test
     public void testGetInstance() {
-        System.out.println("getInstance");
-        ReservacionesBO expResult = null;
-        ReservacionesBO result = ReservacionesBO.getInstance();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ReservacionesBO instance1 = ReservacionesBO.getInstance();
+        ReservacionesBO instance2 = ReservacionesBO.getInstance();
+        assertNotNull(instance1);
+        assertSame(instance1, instance2, "Las instancias deberían ser la misma");
     }
 
-    /**
-     * Test of obtenerReservacionesDeMesa method, of class ReservacionesBO.
-     */
     @Test
-    public void testObtenerReservacionesDeMesa() throws Exception {
-        System.out.println("obtenerReservacionesDeMesa");
-        String codigoMesa = "";
-        ReservacionesBO instance = null;
-        List<ReservacionDTO> expResult = null;
-        List<ReservacionDTO> result = instance.obtenerReservacionesDeMesa(codigoMesa);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testObtenerReservacionesDeMesa_Exitoso() throws Exception {
+        String codigoMesa = "MESA01";
+        when(reservacionesDAO.obtenerReservacionesDeMesa(codigoMesa))
+            .thenReturn(Arrays.asList(reservacionEntity));
+
+        List<ReservacionDTO> resultado = reservacionesBO.obtenerReservacionesDeMesa(codigoMesa);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.isEmpty());
+        assertEquals(1, resultado.size());
+        verify(reservacionesDAO).obtenerReservacionesDeMesa(codigoMesa);
     }
 
-    /**
-     * Test of cancelarReservacion method, of class ReservacionesBO.
-     */
     @Test
-    public void testCancelarReservacion() throws Exception {
-        System.out.println("cancelarReservacion");
-        Long idReservacion = null;
-        ReservacionesBO instance = null;
-        instance.cancelarReservacion(idReservacion);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testObtenerReservacionesDeMesa_Error() {
+        String codigoMesa = "MESA01";
+        try {
+            when(reservacionesDAO.obtenerReservacionesDeMesa(codigoMesa))
+                    .thenThrow(new RuntimeException("Error de base de datos"));
+        } catch (DAOException ex) {
+            Logger.getLogger(ReservacionesBOTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        assertThrows(ServicioException.class, () -> reservacionesBO.obtenerReservacionesDeMesa(codigoMesa));
     }
 
-    /**
-     * Test of obtenerReservacionesTodos method, of class ReservacionesBO.
-     */
     @Test
-    public void testObtenerReservacionesTodos() throws Exception {
-        System.out.println("obtenerReservacionesTodos");
-        ReservacionesBO instance = null;
-        List<ReservacionDTO> expResult = null;
-        List<ReservacionDTO> result = instance.obtenerReservacionesTodos();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testCancelarReservacion_Exitoso() throws Exception {
+        Long idReservacion = 1L;
+        doNothing().when(reservacionesDAO).cancelarReservacion(idReservacion);
+
+        assertDoesNotThrow(() -> reservacionesBO.cancelarReservacion(idReservacion));
+
+        verify(reservacionesDAO).cancelarReservacion(idReservacion);
     }
 
-    /**
-     * Test of obtenerReservacionesPorPeriodo method, of class ReservacionesBO.
-     */
     @Test
-    public void testObtenerReservacionesPorPeriodo() throws Exception {
-        System.out.println("obtenerReservacionesPorPeriodo");
-        LocalDateTime fechaInicio = null;
-        LocalDateTime fechaFin = null;
-        ReservacionesBO instance = null;
-        List<ReservacionDTO> expResult = null;
-        List<ReservacionDTO> result = instance.obtenerReservacionesPorPeriodo(fechaInicio, fechaFin);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testCancelarReservacion_NoEncontrado() throws DAOException {
+        Long idReservacion = 1L;
+        doThrow(new NoEncontradoException("Reservación no encontrada"))
+            .when(reservacionesDAO).cancelarReservacion(idReservacion);
+
+        assertThrows(NoEncontradoException.class, () -> reservacionesBO.cancelarReservacion(idReservacion));
     }
 
-    /**
-     * Test of obtenerReservacionesCliente method, of class ReservacionesBO.
-     */
     @Test
-    public void testObtenerReservacionesCliente() throws Exception {
-        System.out.println("obtenerReservacionesCliente");
-        String telefono = "";
-        ReservacionesBO instance = null;
-        List<ReservacionDTO> expResult = null;
-        List<ReservacionDTO> result = instance.obtenerReservacionesCliente(telefono);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testAgregarReservacion_Exitoso() throws Exception {
+        doNothing().when(reservacionesDAO).agregarReservacion(any(Reservacion.class));
+
+        assertDoesNotThrow(() -> reservacionesBO.agregarReservacion(reservacionDTO));
+
+        verify(reservacionConvertidor).convertFromDto(reservacionDTO);
+        verify(reservacionesDAO).agregarReservacion(any(Reservacion.class));
     }
 
-    /**
-     * Test of obtenerReservacionPorID method, of class ReservacionesBO.
-     */
     @Test
-    public void testObtenerReservacionPorID() throws Exception {
-        System.out.println("obtenerReservacionPorID");
-        Long id = null;
-        ReservacionesBO instance = null;
-        ReservacionDTO expResult = null;
-        ReservacionDTO result = instance.obtenerReservacionPorID(id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testActualizarReservacion_Exitoso() throws Exception {
+        doNothing().when(reservacionesDAO).actualizarReservacion(any(Reservacion.class));
+
+        assertDoesNotThrow(() -> reservacionesBO.actualizarReservacion(reservacionDTO));
+
+        verify(reservacionConvertidor).convertFromDto(reservacionDTO);
+        verify(reservacionesDAO).actualizarReservacion(any(Reservacion.class));
     }
 
-    /**
-     * Test of agregarReservacion method, of class ReservacionesBO.
-     */
     @Test
-    public void testAgregarReservacion() throws Exception {
-        System.out.println("agregarReservacion");
-        ReservacionDTO reservacion = null;
-        ReservacionesBO instance = null;
-        instance.agregarReservacion(reservacion);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testObtenerReservacionPorID_Exitoso() throws Exception {
+        Long id = 1L;
+        when(reservacionesDAO.obtenerReservacionPorID(id)).thenReturn(reservacionEntity);
+
+        ReservacionDTO resultado = reservacionesBO.obtenerReservacionPorID(id);
+
+        assertNotNull(resultado);
+        assertEquals(reservacionDTO.getId(), resultado.getId());
+        verify(reservacionesDAO).obtenerReservacionPorID(id);
     }
 
-    /**
-     * Test of actualizarReservacion method, of class ReservacionesBO.
-     */
     @Test
-    public void testActualizarReservacion() throws Exception {
-        System.out.println("actualizarReservacion");
-        ReservacionDTO reservacion = null;
-        ReservacionesBO instance = null;
-        instance.actualizarReservacion(reservacion);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testEliminarReservacion_Exitoso() throws Exception {
+        Long id = 1L;
+        doNothing().when(reservacionesDAO).eliminarReservacion(id);
+
+        assertDoesNotThrow(() -> reservacionesBO.eliminarReservacion(id));
+
+        verify(reservacionesDAO).eliminarReservacion(id);
     }
 
-    /**
-     * Test of eliminarReservacion method, of class ReservacionesBO.
-     */
     @Test
-    public void testEliminarReservacion() throws Exception {
-        System.out.println("eliminarReservacion");
-        Long id = null;
-        ReservacionesBO instance = null;
-        instance.eliminarReservacion(id);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testObtenerReservacionesPorPeriodo_Exitoso() throws Exception {
+        LocalDateTime inicio = LocalDateTime.now();
+        LocalDateTime fin = LocalDateTime.now().plusDays(7);
+
+        when(reservacionesDAO.obtenerReservacionesPorPeriodo(inicio, fin))
+            .thenReturn(Arrays.asList(reservacionEntity));
+
+        List<ReservacionDTO> resultado = reservacionesBO.obtenerReservacionesPorPeriodo(inicio, fin);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.isEmpty());
+        verify(reservacionesDAO).obtenerReservacionesPorPeriodo(inicio, fin);
     }
-    
+
+    @Test
+    public void testObtenerReservacionesCliente_Exitoso() throws Exception {
+        String telefono = "1234567890";
+        when(reservacionesDAO.obtenerReservacionesCliente(telefono))
+            .thenReturn(Arrays.asList(reservacionEntity));
+
+        List<ReservacionDTO> resultado = reservacionesBO.obtenerReservacionesCliente(telefono);
+
+        assertNotNull(resultado);
+        assertFalse(resultado.isEmpty());
+        assertEquals(1, resultado.size());
+        verify(reservacionesDAO).obtenerReservacionesCliente(telefono);
+    }
 }

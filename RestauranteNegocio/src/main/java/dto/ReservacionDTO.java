@@ -37,6 +37,29 @@ public class ReservacionDTO implements Serializable {
         this.estado = EstadoReservacionDTO.PENDIENTE; 
     }
 
+    public ReservacionDTO(Long id, LocalDateTime fechaHora, Integer numeroPersonas, EstadoReservacionDTO estado, MesaDTO mesa, ClienteDTO cliente, Float montoTotal, MultaDTO multa) {
+        this.id = id;
+        this.fechaHora = fechaHora;
+        this.numeroPersonas = numeroPersonas;
+        this.estado = estado;
+        this.mesa = mesa;
+        this.cliente = cliente;
+        this.montoTotal = montoTotal;
+        this.multa = multa;
+    }
+
+    public ReservacionDTO(LocalDateTime fechaHora, Integer numeroPersonas, EstadoReservacionDTO estado, MesaDTO mesa, ClienteDTO cliente, Float montoTotal, MultaDTO multa) {
+        this.fechaHora = fechaHora;
+        this.numeroPersonas = numeroPersonas;
+        this.estado = estado;
+        this.mesa = mesa;
+        this.cliente = cliente;
+        this.montoTotal = montoTotal;
+        this.multa = multa;
+    }
+    
+    
+
     /**
      * Constructor que inicializa una nueva instancia de ReservacionDTO con un identificador específico.
      * 
@@ -190,4 +213,6 @@ public class ReservacionDTO implements Serializable {
     public void setMulta(MultaDTO multa) {
         this.multa = multa;
     }
+    
+    
 }
