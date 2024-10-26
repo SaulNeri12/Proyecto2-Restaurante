@@ -75,11 +75,11 @@ public class ReservacionesBOTest {
 
         // Configurar el convertidor mock
         when(reservacionConvertidor.convertFromDto(reservacionDTO))
-            .thenReturn(reservacionEntity);
+                .thenReturn(reservacionEntity);
         when(reservacionConvertidor.convertFromEntity(reservacionEntity))
-            .thenReturn(reservacionDTO);
+                .thenReturn(reservacionDTO);
         when(reservacionConvertidor.createFromEntities(anyList()))
-            .thenReturn(Arrays.asList(reservacionDTO));
+                .thenReturn(Arrays.asList(reservacionDTO));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ReservacionesBOTest {
     public void testObtenerReservacionesDeMesa_Exitoso() throws Exception {
         String codigoMesa = "MESA01";
         when(reservacionesDAO.obtenerReservacionesDeMesa(codigoMesa))
-            .thenReturn(Arrays.asList(reservacionEntity));
+                .thenReturn(Arrays.asList(reservacionEntity));
 
         List<ReservacionDTO> resultado = reservacionesBO.obtenerReservacionesDeMesa(codigoMesa);
 
@@ -131,7 +131,7 @@ public class ReservacionesBOTest {
     public void testCancelarReservacion_NoEncontrado() throws DAOException {
         Long idReservacion = 1L;
         doThrow(new NoEncontradoException("Reservación no encontrada"))
-            .when(reservacionesDAO).cancelarReservacion(idReservacion);
+                .when(reservacionesDAO).cancelarReservacion(idReservacion);
 
         assertThrows(NoEncontradoException.class, () -> reservacionesBO.cancelarReservacion(idReservacion));
     }
@@ -184,7 +184,7 @@ public class ReservacionesBOTest {
         LocalDateTime fin = LocalDateTime.now().plusDays(7);
 
         when(reservacionesDAO.obtenerReservacionesPorPeriodo(inicio, fin))
-            .thenReturn(Arrays.asList(reservacionEntity));
+                .thenReturn(Arrays.asList(reservacionEntity));
 
         List<ReservacionDTO> resultado = reservacionesBO.obtenerReservacionesPorPeriodo(inicio, fin);
 
@@ -197,7 +197,7 @@ public class ReservacionesBOTest {
     public void testObtenerReservacionesCliente_Exitoso() throws Exception {
         String telefono = "1234567890";
         when(reservacionesDAO.obtenerReservacionesCliente(telefono))
-            .thenReturn(Arrays.asList(reservacionEntity));
+                .thenReturn(Arrays.asList(reservacionEntity));
 
         List<ReservacionDTO> resultado = reservacionesBO.obtenerReservacionesCliente(telefono);
 

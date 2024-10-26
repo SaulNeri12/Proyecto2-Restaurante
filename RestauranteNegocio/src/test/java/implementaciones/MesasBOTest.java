@@ -31,7 +31,7 @@ public class MesasBOTest {
     public void testObtenerMesasTodas() throws ServicioException {
         List<MesaDTO> mesasMock = new ArrayList<>();
         mesasMock.add(new MesaDTO(1L));
-        
+
         when(mesasBO.obtenerMesasTodas()).thenReturn(mesasMock);
 
         List<MesaDTO> result = mesasBO.obtenerMesasTodas();
@@ -53,17 +53,16 @@ public class MesasBOTest {
     }
 
     @Test
-public void testInsertarMesas() throws ServicioException {
-    TipoMesaDTO tipo = new TipoMesaDTO();
-    UbicacionMesaDTO ubicacion = UbicacionMesaDTO.GENERAL; // Usa un valor válido de la enumeración
-    int cantidad = 5;
+    public void testInsertarMesas() throws ServicioException {
+        TipoMesaDTO tipo = new TipoMesaDTO();
+        UbicacionMesaDTO ubicacion = UbicacionMesaDTO.GENERAL; // Usa un valor válido de la enumeración
+        int cantidad = 5;
 
-    doNothing().when(mesasBO).insertarMesas(tipo, ubicacion, cantidad);
+        doNothing().when(mesasBO).insertarMesas(tipo, ubicacion, cantidad);
 
-    mesasBO.insertarMesas(tipo, ubicacion, cantidad);
-    verify(mesasBO, times(1)).insertarMesas(tipo, ubicacion, cantidad);
-}
-
+        mesasBO.insertarMesas(tipo, ubicacion, cantidad);
+        verify(mesasBO, times(1)).insertarMesas(tipo, ubicacion, cantidad);
+    }
 
     @Test
     public void testEliminarMesa() throws ServicioException, NoEncontradoException {

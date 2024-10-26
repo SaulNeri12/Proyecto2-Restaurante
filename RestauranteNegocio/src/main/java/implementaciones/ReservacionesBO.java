@@ -9,6 +9,7 @@ import dao.implementaciones.ReservacionesDAO;
 import dto.ReservacionDTO;
 import dto.convertidores.ReservacionConvertidor;
 import entidades.Reservacion;
+import excepciones.DAOException;
 import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import interfacesBO.IReservacionesBO;
@@ -20,7 +21,7 @@ import java.util.List;
  * Implementación de la interfaz IReservacionesBO para manejar la lógica de negocio
  * relacionada con las reservaciones. Implementa el patrón Singleton.
  * 
- * @author Saul Neri
+ * @author caarl
  */
 public class ReservacionesBO implements IReservacionesBO {
 
@@ -54,8 +55,8 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesDeMesa(codigoMesa);
             return reservacionConvertidor.createFromEntities(reservaciones);
-        } catch (Exception e) {
-            throw new ServicioException("Error al obtener reservaciones de la mesa: " + codigoMesa);
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -63,8 +64,8 @@ public class ReservacionesBO implements IReservacionesBO {
     public void cancelarReservacion(Long idReservacion) throws ServicioException, NoEncontradoException {
         try {
             reservacionesDAO.cancelarReservacion(idReservacion);
-        } catch (Exception e) {
-            throw new ServicioException("Error al cancelar la reservación con ID: " + idReservacion);
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -73,8 +74,8 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesTodos();
             return reservacionConvertidor.createFromEntities(reservaciones);
-        } catch (Exception e) {
-            throw new ServicioException("Error al obtener todas las reservaciones");
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -83,8 +84,8 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesPorPeriodo(fechaInicio, fechaFin);
             return reservacionConvertidor.createFromEntities(reservaciones);
-        } catch (Exception e) {
-            throw new ServicioException("Error al obtener reservaciones por periodo");
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -93,8 +94,8 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesCliente(telefono);
             return reservacionConvertidor.createFromEntities(reservaciones);
-        } catch (Exception e) {
-            throw new ServicioException("Error al obtener reservaciones del cliente con teléfono: " + telefono);
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -103,8 +104,8 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             Reservacion reservacion = reservacionesDAO.obtenerReservacionPorID(id);
             return reservacionConvertidor.convertFromEntity(reservacion);
-        } catch (Exception e) {
-            throw new ServicioException("Error al obtener reservación con ID: " + id);
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -113,8 +114,8 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             Reservacion entidad = reservacionConvertidor.convertFromDto(reservacion);
             reservacionesDAO.agregarReservacion(entidad);
-        } catch (Exception e) {
-            throw new ServicioException("Error al agregar la reservación");
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -123,8 +124,8 @@ public class ReservacionesBO implements IReservacionesBO {
         try {
             Reservacion entidad = reservacionConvertidor.convertFromDto(reservacion);
             reservacionesDAO.actualizarReservacion(entidad);
-        } catch (Exception e) {
-            throw new ServicioException("Error al actualizar la reservación");
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -132,8 +133,8 @@ public class ReservacionesBO implements IReservacionesBO {
     public void eliminarReservacion(Long id) throws ServicioException, NoEncontradoException {
         try {
             reservacionesDAO.eliminarReservacion(id);
-        } catch (Exception e) {
-            throw new ServicioException("Error al eliminar la reservación con ID: " + id);
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 }
