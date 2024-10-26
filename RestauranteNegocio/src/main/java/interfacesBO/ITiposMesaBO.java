@@ -33,8 +33,7 @@ public interface ITiposMesaBO {
      *
      * @param id ID del tipo de mesa a eliminar
      * @throws ServicioException Si ocurre un error en la eliminación del tipo
-     * @throws NoEncontradoException Cuando no se encuentra el tipo de mesa
      */
-    public void eliminarTipoMesa(Long id) throws ServicioException, NoEncontradoException;
+    public void eliminarTipoMesa(Long id) throws ServicioException;
 
 }
