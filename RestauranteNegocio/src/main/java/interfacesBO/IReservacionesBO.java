@@ -30,9 +30,8 @@ public interface IReservacionesBO {
      *
      * @param idReservacion ID de la reservacion a cancelar
      * @throws ServicioException Si ocurre un error en la cancelacion
-     * @throws NoEncontradoException Cuando no se encontro la reservacion
      */
-    public void cancelarReservacion(Long idReservacion) throws ServicioException, NoEncontradoException;
+    public void cancelarReservacion(Long idReservacion) throws ServicioException;
 
     /**
      * Obtiene una lista de todas las reservaciones almacenadas.

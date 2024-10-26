@@ -2,11 +2,14 @@
 package dao.implementaciones;
 
 import conexion.Conexion;
+import dao.interfaces.IMesasDAO;
 import dao.interfaces.IMultasDAO;
 import dao.interfaces.IReservacionesDAO;
 import entidades.EstadoReservacion;
+import entidades.Mesa;
 import entidades.Multa;
 import entidades.Reservacion;
+import entidades.TipoMesa;
 import excepciones.DAOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,6 +25,8 @@ import javax.persistence.TypedQuery;
 public class ReservacionesDAO implements IReservacionesDAO {
 
     private static IReservacionesDAO instancia;
+    
+    private IMesasDAO mesasDAO = MesasDAO.getInstance();
 
     private ReservacionesDAO() {
     }
@@ -51,12 +56,19 @@ public class ReservacionesDAO implements IReservacionesDAO {
     public List<Reservacion> obtenerReservacionesDeMesa(String codigoMesa) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
         
-        try { 
+        try {
+            boolean existeMesa = entityManager.createQuery("SELECT COUNT(m) FROM Mesa m WHERE m.codigo = :codigoMesa", Long.class)
+                    .setParameter("codigoMesa", codigoMesa).getSingleResult() > 0;
+           
+            if (!existeMesa) {
+                throw new DAOException("La mesa con el codigo indicado no existe");
+            }
+            
             return entityManager.createQuery("SELECT r FROM Reservacion r WHERE r.mesa.codigo = :codigoMesa", Reservacion.class)
                     .setParameter("codigoMesa", codigoMesa)
                     .getResultList();
         } catch (Exception e) {
-            throw new DAOException("No se pudo cancelar la reservacion debido a un error, porfavor intente mas tarde");
+            throw new DAOException(e.getMessage());
         } finally {
             entityManager.close();
         }
@@ -139,6 +151,23 @@ public class ReservacionesDAO implements IReservacionesDAO {
                 throw new DAOException("La mesa que se intenta reservar ya se encuentra ocupada");
             }
             
+            if (reservacion.getNumeroPersonas() == null) {
+                throw new DAOException("No se ingreso el numero de personas para la reservacion");
+            }
+            
+            Integer cantidadPersonas = reservacion.getNumeroPersonas();
+            TipoMesa tipoMesa = reservacion.getMesa().getTipoMesa();
+            
+            if (cantidadPersonas > tipoMesa.getMaximoPersonas()) {
+                throw new DAOException(String.format("El numero de personas de la reservacion excede el maximo por mesa [maximo: %d]", tipoMesa.getMaximoPersonas()));
+            }
+            
+            if (cantidadPersonas < tipoMesa.getMinimoPersonas()) {
+                throw new DAOException(String.format("El numero de personas de la reservacion no rebasa el minimo por mesa [minimo: %d]", tipoMesa.getMinimoPersonas()));
+            }
+            
+            reservacion.setMontoTotal(reservacion.getMesa().getTipoMesa().getPrecio());
+            
             transaction.begin();
             entityManager.persist(reservacion);
             transaction.commit();
@@ -160,12 +189,37 @@ public class ReservacionesDAO implements IReservacionesDAO {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
+            Reservacion reservacionExistente = entityManager.find(Reservacion.class, reservacion.getId());
+            if (reservacionExistente == null) {
+                throw new DAOException("La reservacion que se desea actualizar no existe en el sistema");
+            }
+            
+            boolean finalizada = reservacionExistente.getEstado().equals(EstadoReservacion.FINALIZADA) || reservacionExistente.getEstado().equals(EstadoReservacion.CANCELADA);
+            if (finalizada) {
+                throw new DAOException("La reservacion que se desea actualizar ya concluyo o fue cancelada");
+            }
+            
+            Integer cantidadPersonas = reservacion.getNumeroPersonas();
+            TipoMesa tipoMesa = reservacion.getMesa().getTipoMesa();
+            
+            if (cantidadPersonas > tipoMesa.getMaximoPersonas()) {
+                throw new DAOException(String.format("El numero de personas de la reservacion excede el maximo por mesa [maximo: %d]", tipoMesa.getMaximoPersonas()));
+            }
+            
+            if (cantidadPersonas < tipoMesa.getMinimoPersonas()) {
+                throw new DAOException(String.format("El numero de personas de la reservacion no rebasa el minimo por mesa [minimo: %d]", tipoMesa.getMinimoPersonas()));
+            }
+            
+            reservacion.setMontoTotal(reservacion.getMesa().getTipoMesa().getPrecio());
+            
             transaction.begin();
             entityManager.merge(reservacion);
             transaction.commit();
         } catch (Exception e) {
-            transaction.rollback();
-            throw new DAOException("Error al actualizar la reservación");
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new DAOException(e.getMessage());
         } finally {
             entityManager.close(); 
         }

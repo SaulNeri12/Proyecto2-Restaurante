@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
@@ -77,7 +78,7 @@ public class MesasDAO implements IMesasDAO {
             if (mesa == null) {
                 throw new DAOException("No se encontro la mesa con el codigo dado");
             }
-            
+
             transaction.begin();
 
             //System.out.println("ELIMINACION DE: " + mesa);
@@ -85,12 +86,16 @@ public class MesasDAO implements IMesasDAO {
 
             transaction.commit();
 
+        } catch (NoResultException e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new DAOException("No se encontro la mesa a eliminar");
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            //System.out.println("ERROR EN MESA: " + e.getMessage());
-            throw new DAOException("Error al eliminar la mesa");
+            throw new DAOException("No se pudo eliminar la mesa debido a un error, porfavor intente mas tarde");
         } finally {
             entityManager.close();
         }
