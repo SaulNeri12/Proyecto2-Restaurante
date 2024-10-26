@@ -2,7 +2,9 @@ implementaciones\ClientesBOTest.class
 dto\convertidores\ClienteConvertidorTest.class
 dto\convertidores\MultaConvertidorTest.class
 dto\convertidores\ReservacionConvertidorTest.class
+implementaciones\ClientesBOTest_SinMocks.class
 dto\convertidores\MesaConvertidorTest.class
+implementaciones\MesasBOTest_SinMocks.class
 implementaciones\ReservacionesBOTest.class
 implementaciones\TiposMesaBOTest.class
 dto\convertidores\TipoMesaConvertidorTest.class

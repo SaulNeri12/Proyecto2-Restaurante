@@ -2,6 +2,7 @@
 package dao.implementaciones;
 
 import dao.interfaces.IMesasDAO;
+import dao.interfaces.ITiposMesaDAO;
 import entidades.Mesa;
 import entidades.TipoMesa;
 import entidades.UbicacionMesa;
@@ -15,11 +16,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- *
+ * Pruebas unitarias para el modulo MesasDAO
  * @author neri
  */
 public class MesasDAOTest {
-    private IMesasDAO instancia;
+    private IMesasDAO instancia = MesasDAO.getInstance(); 
+    private ITiposMesaDAO tiposMesa = TiposMesaDAO.getInstance();
     
     public MesasDAOTest() {
         this.instancia = MesasDAO.getInstance();
@@ -57,7 +59,7 @@ public class MesasDAOTest {
     @Test
     public void testObtenerMesasPorTipo() throws Exception {
         System.out.println("obtenerMesasPorTipo");
-        TipoMesa tipo = instancia.obtenerTiposMesaTodos().getFirst();
+        TipoMesa tipo = tiposMesa.obtenerTiposMesaTodos().getFirst();
         List<Mesa> result = instancia.obtenerMesasPorTipo(tipo);
         assertNotNull(result, "La lista de mesas no debe ser nula");
     }
@@ -80,7 +82,7 @@ public class MesasDAOTest {
         System.out.println("insertarMesas - mesas pequenas");
         
         // arrange
-        TipoMesa tipo = instancia.obtenerTiposMesaTodos()
+        TipoMesa tipo = tiposMesa.obtenerTiposMesaTodos()
                 .stream()
                 .filter(t -> t.getNombre().equalsIgnoreCase("pequenia"))
                 .findFirst()
@@ -106,7 +108,7 @@ public class MesasDAOTest {
         System.out.println("insertarMesas - mesas medianas");
         
         // arrange
-        TipoMesa tipo = instancia.obtenerTiposMesaTodos()
+        TipoMesa tipo = tiposMesa.obtenerTiposMesaTodos()
                 .stream()
                 .filter(t -> t.getNombre().equalsIgnoreCase("mediana"))
                 .findFirst()
@@ -132,7 +134,7 @@ public class MesasDAOTest {
         System.out.println("insertarMesas - mesas grandes");
         
         // arrange
-        TipoMesa tipo = instancia.obtenerTiposMesaTodos()
+        TipoMesa tipo = tiposMesa.obtenerTiposMesaTodos()
                 .stream()
                 .filter(t -> t.getNombre().equalsIgnoreCase("grande"))
                 .findFirst()
@@ -158,7 +160,7 @@ public class MesasDAOTest {
         System.out.println("insertarMesas");
         TipoMesa tipo = null;
         try {
-            tipo = instancia.obtenerTiposMesaTodos().getFirst();
+            tipo = tiposMesa.obtenerTiposMesaTodos().getFirst();
         } catch (Exception ex) {
             fail("No se pudo obtener el tipo de mesa");
             return;
@@ -180,7 +182,7 @@ public class MesasDAOTest {
     @Test
     public void testObtenerTiposMesaTodos() throws Exception {
         System.out.println("obtenerTiposMesaTodos");
-        List<TipoMesa> result = instancia.obtenerTiposMesaTodos();
+        List<TipoMesa> result = tiposMesa.obtenerTiposMesaTodos();
         assertNotNull(result, "La lista de tipos de mesa no debe ser null");
     }
 
@@ -196,7 +198,7 @@ public class MesasDAOTest {
         tipoMesa.setMinimoPersonas(1);
         tipoMesa.setPrecio(300.f);
        
-        instancia.agregarTipoMesa(tipoMesa);
+        tiposMesa.agregarTipoMesa(tipoMesa);
     }
         
     /**
@@ -212,7 +214,7 @@ public class MesasDAOTest {
         tipoMesa.setMinimoPersonas(3);
         tipoMesa.setPrecio(500.f);
         
-        instancia.agregarTipoMesa(tipoMesa);
+        tiposMesa.agregarTipoMesa(tipoMesa);
     }
         
     /**
@@ -228,7 +230,7 @@ public class MesasDAOTest {
         tipoMesa.setMinimoPersonas(5);
         tipoMesa.setPrecio(700.f);
         
-        instancia.agregarTipoMesa(tipoMesa);
+        tiposMesa.agregarTipoMesa(tipoMesa);
     }
 
     /**
@@ -238,6 +240,6 @@ public class MesasDAOTest {
     public void testEliminarTipoMesa() throws Exception {
         System.out.println("eliminarTipoMesa");
         Long id = 2l;
-        instancia.eliminarTipoMesa(id);
+        tiposMesa.eliminarTipoMesa(id);
     }
 }
