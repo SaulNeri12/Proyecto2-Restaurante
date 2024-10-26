@@ -11,7 +11,7 @@ import java.util.List;
  * Define las operaciones necesarias para las mesas en el restaurante
  * @author neri
  */
-public interface IMesasDAO extends ITiposMesaDAO {
+public interface IMesasDAO {
     
     /**
      * Devuelve todas las mesas registradas en el sistema

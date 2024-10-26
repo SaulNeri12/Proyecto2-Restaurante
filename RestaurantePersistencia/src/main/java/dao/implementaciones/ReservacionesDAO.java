@@ -104,7 +104,12 @@ public class ReservacionesDAO implements IReservacionesDAO {
         EntityManager entityManager = Conexion.getInstance().crearConexion(); 
 
         try {
-            return entityManager.find(Reservacion.class, id);
+            Reservacion res = entityManager.find(Reservacion.class, id);
+            if (res == null) {
+                throw new DAOException("No se encontro la reservacion con el ID especificado");
+            }
+            
+            return res;
         } catch (Exception e) {
             throw new DAOException("Error al obtener la reservación por ID");
         } finally {
