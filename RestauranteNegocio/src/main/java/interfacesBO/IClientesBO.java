@@ -2,6 +2,7 @@
 package interfacesBO;
 
 import dto.ClienteDTO;
+import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import java.util.List;
 
@@ -34,7 +35,8 @@ public interface IClientesBO {
      * @param numeroTelefono Número de teléfono del cliente
      * @return Objeto `ClienteDTO`
      * @throws ServicioException Si ocurre un error en la consulta
+     * @throws NoEncontradoException Si no se encuentra el cliente
      */
-    public ClienteDTO obtenerClientePorTelefono(String numeroTelefono) throws ServicioException;
+    public ClienteDTO obtenerClientePorTelefono(String numeroTelefono) throws ServicioException, NoEncontradoException;
 
 }
