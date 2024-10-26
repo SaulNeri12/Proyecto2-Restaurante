@@ -61,7 +61,7 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public void cancelarReservacion(Long idReservacion) throws ServicioException, NoEncontradoException {
+    public void cancelarReservacion(Long idReservacion) throws ServicioException {
         try {
             reservacionesDAO.cancelarReservacion(idReservacion);
         } catch (DAOException e) {
