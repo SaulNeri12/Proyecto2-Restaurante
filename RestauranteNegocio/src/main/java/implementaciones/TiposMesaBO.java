@@ -5,14 +5,12 @@
 
 package implementaciones;
 
-/**
- *
- * @author caarl
- */
+
 import dao.interfaces.ITiposMesaDAO;
 import dto.TipoMesaDTO;
 import dto.convertidores.TipoMesaConvertidor;
 import entidades.TipoMesa;
+import excepciones.DAOException;
 import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import interfacesBO.ITiposMesaBO;
@@ -22,7 +20,7 @@ import java.util.List;
 /**
  * Implementación de la interfaz ITiposMesaBO para manejar la lógica de negocio
  * relacionada con los tipos de mesa.
- * 
+ * @author caarl
  */
 public class TiposMesaBO implements ITiposMesaBO {
 
@@ -39,8 +37,8 @@ public class TiposMesaBO implements ITiposMesaBO {
         try {
             List<TipoMesa> tiposMesa = tiposMesaDAO.obtenerTiposMesaTodos();
             return tipoMesaConvertidor.createFromEntities(tiposMesa);
-        } catch (Exception e) {
-            throw new ServicioException("Error al obtener todos los tipos de mesa");
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -49,8 +47,8 @@ public class TiposMesaBO implements ITiposMesaBO {
         try {
             TipoMesa tipoMesa = tipoMesaConvertidor.convertFromDto(tipoMesaDTO);
             tiposMesaDAO.agregarTipoMesa(tipoMesa);
-        } catch (Exception e) {
-            throw new ServicioException("Error al agregar el tipo de mesa");
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
     }
 
@@ -58,10 +56,8 @@ public class TiposMesaBO implements ITiposMesaBO {
     public void eliminarTipoMesa(Long id) throws ServicioException, NoEncontradoException {
         try {
             tiposMesaDAO.eliminarTipoMesa(id);
-        }catch (Exception e) {
-            throw new ServicioException("Error al eliminar el tipo de mesa con ID: " );
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
         }
-       
-        
     }
 }

@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: implementaciones.ClientesBOTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 1.603 s <<< FAILURE! -- in implementaciones.ClientesBOTest
-implementaciones.ClientesBOTest.testObtenerClientePorTelefono_NoEncontrado -- Time elapsed: 1.101 s <<< FAILURE!
+Tests run: 5, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 1.180 s <<< FAILURE! -- in implementaciones.ClientesBOTest
+implementaciones.ClientesBOTest.testObtenerClientePorTelefono_NoEncontrado -- Time elapsed: 0.840 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: <excepciones.NoEncontradoException> but was: <excepciones.ServicioException>
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:67)
@@ -12,13 +12,13 @@ org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected:
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-Caused by: excepciones.ServicioException: Error al obtener el cliente por teléfono.
-	at implementaciones.ClientesBO.obtenerClientePorTelefono(ClientesBO.java:88)
+Caused by: excepciones.ServicioException: Error al obtener la informacion del cliente, por favor intente mas tarde
+	at implementaciones.ClientesBO.obtenerClientePorTelefono(ClientesBO.java:87)
 	at implementaciones.ClientesBOTest.lambda$testObtenerClientePorTelefono_NoEncontrado$1(ClientesBOTest.java:94)
 	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
 	... 6 more
 
-implementaciones.ClientesBOTest.testInsercionMasivaClientes -- Time elapsed: 0.459 s <<< FAILURE!
+implementaciones.ClientesBOTest.testInsercionMasivaClientes -- Time elapsed: 0.306 s <<< FAILURE!
 org.opentest4j.AssertionFailedError: Unexpected exception thrown: excepciones.ServicioException: Error al insertar clientes de manera masiva.
 	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
 	at org.junit.jupiter.api.AssertDoesNotThrow.createAssertionFailedError(AssertDoesNotThrow.java:84)
@@ -30,7 +30,7 @@ org.opentest4j.AssertionFailedError: Unexpected exception thrown: excepciones.Se
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 Caused by: excepciones.ServicioException: Error al insertar clientes de manera masiva.
-	at implementaciones.ClientesBO.insercionMasivaClientes(ClientesBO.java:59)
+	at implementaciones.ClientesBO.insercionMasivaClientes(ClientesBO.java:62)
 	at implementaciones.ClientesBOTest.lambda$testInsercionMasivaClientes$0(ClientesBOTest.java:50)
 	at org.junit.jupiter.api.AssertDoesNotThrow.assertDoesNotThrow(AssertDoesNotThrow.java:49)
 	... 6 more

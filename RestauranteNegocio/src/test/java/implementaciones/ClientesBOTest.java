@@ -69,7 +69,7 @@ public void testInsercionMasivaClientes() throws ServicioException {
      * Test para obtener un cliente por su número de teléfono.
      */
     @Test
-    public void testObtenerClientePorTelefono() {
+    public void testObtenerClientePorTelefono() throws NoEncontradoException {
         // Arrange
         String telefono = "6444112252";
 
