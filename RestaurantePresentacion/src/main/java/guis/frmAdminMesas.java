@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package guis;
 
 import dto.MesaDTO;
@@ -18,7 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Frame encargado de agregar mesas al sistema
+ * @author Saul Neri
  * @author caarl
  */
 public class frmAdminMesas extends javax.swing.JFrame {
@@ -31,13 +29,16 @@ public class frmAdminMesas extends javax.swing.JFrame {
      */
     public frmAdminMesas() {
         initComponents();
-        
-        btnRegistrarMesas.addActionListener(this::btnRegistrarMesasActionPerformed);
+        this.setTitle("Administrar Mesas");
+        //btnRegistrarMesas.addActionListener(this::btnRegistrarMesasActionPerformed);
         actualizarTablaMesas();
         cargarTiposMesa();
     }
     
     
+    /**
+     * Carga todos los tipos de mesa existentes en el comboBox de tipos de mesa
+     */
     private void cargarTiposMesa() {
         try {
             List<TipoMesaDTO> tiposMesa = this.tiposMesaBO.obtenerTiposMesaTodos();
@@ -56,6 +57,9 @@ public class frmAdminMesas extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Actualiza la tabla de mesas en el sistema
+     */
     private void actualizarTablaMesas() {
         try {
             List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
@@ -238,9 +242,14 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
                 JOptionPane.showMessageDialog(this, "Seleccione una ubicación válida.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener si no hay ubicación seleccionada
             }
+            
+            
+            int opcion = JOptionPane.showConfirmDialog(this, "Desea confirmar la operacion?", "Insertar Mesas", JOptionPane.YES_NO_OPTION);
+            if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
+                return;
+            }
 
             // Insertar mesas
-            MesasBO mesasBO = MesasBO.getInstance();
             mesasBO.insertarMesas(tipoMesa, ubicacionMesa, numeroMesas);
 
             // Mensaje de confirmación
