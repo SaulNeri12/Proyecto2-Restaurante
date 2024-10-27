@@ -28,6 +28,15 @@ public class TipoMesaDTO implements Serializable {
     public TipoMesaDTO() {
         
     }
+    
+    public TipoMesaDTO(Long id, String nombre, Integer maximoPersonas, Integer minimoPersonas, Float precio) {
+    this.id = id;
+    this.nombre = nombre;
+    this.maximoPersonas = maximoPersonas;
+    this.minimoPersonas = minimoPersonas;
+    this.precio = precio;
+}
+
 
     /**
      * Obtiene el identificador único del tipo de mesa.
@@ -140,7 +149,7 @@ public class TipoMesaDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoMesaDTO[ id=" + id + " ]";
+        return nombre;
     }
 }
 
