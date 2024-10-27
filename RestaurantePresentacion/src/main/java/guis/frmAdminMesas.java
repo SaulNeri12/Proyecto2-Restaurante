@@ -7,8 +7,13 @@ package guis;
 import dto.MesaDTO;
 import dto.TipoMesaDTO;
 import dto.UbicacionMesaDTO;
+import excepciones.ServicioException;
 import implementaciones.MesasBO;
+import implementaciones.TiposMesaBO;
+import interfacesBO.IMesasBO;
+import interfacesBO.ITiposMesaBO;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,21 +22,44 @@ import javax.swing.table.DefaultTableModel;
  * @author caarl
  */
 public class frmAdminMesas extends javax.swing.JFrame {
- private final MesasBO mesasBO;
+
+    private final IMesasBO mesasBO = MesasBO.getInstance();
+    private final ITiposMesaBO tiposMesaBO = TiposMesaBO.getInstance();
+
     /**
      * Creates new form frmAdminMesas
      */
     public frmAdminMesas() {
-       initComponents();
-        mesasBO = new MesasBO();
+        initComponents();
+        
         btnRegistrarMesas.addActionListener(this::btnRegistrarMesasActionPerformed);
         actualizarTablaMesas();
+        cargarTiposMesa();
     }
     
+    
+    private void cargarTiposMesa() {
+        try {
+            List<TipoMesaDTO> tiposMesa = this.tiposMesaBO.obtenerTiposMesaTodos();
+            
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
+            model.addAll(tiposMesa);
+            
+            cbxTipoMesa.setModel(model);
+        } catch (ServicioException ex) {
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "No se pudieron cargar los tipos de mesa en el sistema", 
+                    "Tipos de Mesa", 
+                    JOptionPane.ERROR
+            );
+        }
+    }
+
     private void actualizarTablaMesas() {
         try {
             List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
-            
+
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("ID");
             modelo.addColumn("Número de Mesa");
@@ -53,7 +81,6 @@ public class frmAdminMesas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al actualizar la tabla: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -195,38 +222,38 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarMesasActionPerformed
-      try {
-        int numeroMesas = Integer.parseInt(txtNumMesas.getText());
-        
-        // Obtener TipoMesaDTO
-        TipoMesaDTO tipoMesa = (TipoMesaDTO) cbxTipoMesa.getSelectedItem();
-        if (tipoMesa == null) {
-            JOptionPane.showMessageDialog(this, "Seleccione un tipo de mesa válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Detener si no hay tipo de mesa seleccionado
+        try {
+            int numeroMesas = Integer.parseInt(txtNumMesas.getText());
+
+            // Obtener TipoMesaDTO
+            TipoMesaDTO tipoMesa = (TipoMesaDTO) cbxTipoMesa.getSelectedItem();
+            if (tipoMesa == null) {
+                JOptionPane.showMessageDialog(this, "Seleccione un tipo de mesa válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener si no hay tipo de mesa seleccionado
+            }
+
+            // Obtener ubicación
+            UbicacionMesaDTO ubicacionMesa = (UbicacionMesaDTO) cbxUbicacionMesa.getSelectedItem();
+            if (ubicacionMesa == null) {
+                JOptionPane.showMessageDialog(this, "Seleccione una ubicación válida.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener si no hay ubicación seleccionada
+            }
+
+            // Insertar mesas
+            MesasBO mesasBO = MesasBO.getInstance();
+            mesasBO.insertarMesas(tipoMesa, ubicacionMesa, numeroMesas);
+
+            // Mensaje de confirmación
+            JOptionPane.showMessageDialog(this, "Mesa registrada exitosamente.");
+
+            // Actualizar tabla u otros componentes si es necesario
+            actualizarTablaMesas();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido de mesas.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al registrar la mesa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
-        // Obtener ubicación
-        UbicacionMesaDTO ubicacionMesa = (UbicacionMesaDTO) cbxUbicacionMesa.getSelectedItem();
-        if (ubicacionMesa == null) {
-            JOptionPane.showMessageDialog(this, "Seleccione una ubicación válida.", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Detener si no hay ubicación seleccionada
-        }
-
-        // Insertar mesas
-        MesasBO mesasBO = MesasBO.getInstance();
-        mesasBO.insertarMesas(tipoMesa, ubicacionMesa, numeroMesas);
-
-        // Mensaje de confirmación
-        JOptionPane.showMessageDialog(this, "Mesa registrada exitosamente.");
-        
-        // Actualizar tabla u otros componentes si es necesario
-        actualizarTablaMesas();
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Ingrese un número válido de mesas.", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al registrar la mesa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
     }//GEN-LAST:event_btnRegistrarMesasActionPerformed
 
     /**

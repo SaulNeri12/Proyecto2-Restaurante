@@ -38,7 +38,7 @@ public class MesasBO implements IMesasBO {
     /**
      * Constructor privado para implementar Singleton.
      */
-    public MesasBO() {
+    private MesasBO() {
         this.mesasDAO = MesasDAO.getInstance();
         this.mesaConvertidor = new MesaConvertidor();
         this.tipoMesaConvertidor = new TipoMesaConvertidor();
