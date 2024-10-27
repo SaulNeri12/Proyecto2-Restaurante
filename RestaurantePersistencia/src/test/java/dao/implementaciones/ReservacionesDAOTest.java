@@ -286,6 +286,19 @@ public class ReservacionesDAOTest {
         
         // assert
     }
+    
+    @Test
+    public void testObtenerReservacionPorID_VerificarFechaRegistro() throws Exception {
+        // arrange
+        Long id = 2l;
+        
+        // act
+        Reservacion r = this.reservaciones.obtenerReservacionPorID(id);
+        
+        // assert
+        assertNotNull(r, "La reservacion no debe ser null");
+        assertNotNull(r.getFechaHoraRegistro(), "La fecha y hora de registro no debe ser null");
+    }
 
     /**
      * Test of eliminarReservacion method, of class ReservacionesDAO.

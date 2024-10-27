@@ -3,9 +3,7 @@
 package entidades;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 /**
@@ -50,6 +48,9 @@ public class Reservacion implements Serializable {
     @JoinColumn(name="cliente_id", nullable=false)
     private Cliente cliente;
     
+    @Column(name="fecha_hora_registro", nullable=false, updatable=false, columnDefinition="TIMESTAMP")
+    private LocalDateTime fechaHoraRegistro;
+    
     @Column(name="monto_total")
     private Float montoTotal;
     
@@ -80,6 +81,11 @@ public class Reservacion implements Serializable {
     @Override
     public String toString() {
         return "entidades.Reservacion[ id=" + id + " ]";
+    }
+    
+    @PrePersist
+    public void onCreate() {
+        this.setFechaHoraRegistro(LocalDateTime.now());
     }
     
     /**
@@ -200,7 +206,7 @@ public class Reservacion implements Serializable {
     }
 
     /**
-     * ASigna el cliente a asociar con la reservacion
+     * Asigna el cliente a asociar con la reservacion
      * @param cliente El cliente a asignar
      */
     public void setCliente(Cliente cliente) {
@@ -208,20 +214,23 @@ public class Reservacion implements Serializable {
     }
 
     /**
-     * @return the montoTotal
+     * Regresa el monto toal a pagar por la reservacion
+     * @return El monto total
      */
     public Float getMontoTotal() {
         return montoTotal;
     }
 
     /**
-     * @param montoTotal the montoTotal to set
+     * Asigna el monto total a pagar por la reservacion
+     * @param montoTotal Monto total a pagar
      */
     public void setMontoTotal(Float montoTotal) {
         this.montoTotal = montoTotal;
     }
 
     /**
+     * Multa por cancelacion asociada a la reservacion
      * @return the multa
      */
     public Multa getMulta() {
@@ -229,9 +238,26 @@ public class Reservacion implements Serializable {
     }
 
     /**
-     * @param multa the multa to set
+     * Asigna una multa por cancelacion a la reservacion
+     * @param multa Multa a asignar
      */
     public void setMulta(Multa multa) {
         this.multa = multa;
+    }
+
+    /**
+     * Regresa la fecha y hora exacta de cuando se registro la reservacion en el sistema
+     * @return Fecha y hora exacta
+     */
+    public LocalDateTime getFechaHoraRegistro() {
+        return fechaHoraRegistro;
+    }
+
+    /**
+     * Asigna la fecha y hora exacta de cuando se registro la reservacion en el sistema
+     * @param fechaHoraRegistro Fecha y hora a asignar
+     */
+    public void setFechaHoraRegistro(LocalDateTime fechaHoraRegistro) {
+        this.fechaHoraRegistro = fechaHoraRegistro;
     }
 }
