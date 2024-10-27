@@ -114,11 +114,11 @@ public class frmCrearReservacion extends javax.swing.JFrame {
     }
 
     /**
-     * Actualiza la tabla de mesas en el sistema
+     * Actualiza la tabla de mesas disponibles en el sistema
      */
     private void actualizarTablaMesas() {
         try {
-            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
+            List<MesaDTO> mesas = mesasBO.obtenerMesasDisponibles();
 
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("ID");
@@ -175,17 +175,6 @@ public class frmCrearReservacion extends javax.swing.JFrame {
         }
 
         return !(fechaReservacion.isBefore(LocalDate.now()));
-    }
-
-    /**
-     * Carga solamente las mesas disponibles para su reservacion
-     */
-    private void cargarMesasDisponibles() {
-        try {
-            List<MesaDTO> mesasDisponibles = this.mesasBO.obtenerMesasTodas();
-        } catch (ServicioException ex) {
-            // TODO: OptionPane
-        }
     }
 
     /**

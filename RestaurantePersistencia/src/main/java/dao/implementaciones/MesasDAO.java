@@ -156,4 +156,23 @@ public class MesasDAO implements IMesasDAO {
             entityManager.close();
         }
     }
+
+    @Override
+    public List<Mesa> obtenerMesasDisponibles() throws DAOException {
+       
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
+
+        try {
+            String jpql = "SELECT m FROM Mesa m WHERE NOT EXISTS " +
+             "(SELECT r FROM Reservacion r WHERE r.mesa = m AND r.estado LIKE 'PENDIENTE')";
+
+            List<Mesa> mesasDisponibles = entityManager.createQuery(jpql, Mesa.class).getResultList();
+            
+            return mesasDisponibles;
+        } catch (Exception e) {
+            throw new DAOException("Error al obtener mesas por tipo");
+        } finally {
+            entityManager.close();
+        }
+    }
 }

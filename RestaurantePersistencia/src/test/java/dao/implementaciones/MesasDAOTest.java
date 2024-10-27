@@ -49,8 +49,27 @@ public class MesasDAOTest {
     @Test
     public void testObtenerMesasTodas() throws Exception {
         System.out.println("obtenerMesasTodas");
+        
+        // arrange
+        
+        // act
         List<Mesa> result = instancia.obtenerMesasTodas();
+        
+        // assert
         assertNotNull(result, "La lista de mesas no debe ser null");
+    }
+    
+    @Test
+    public void testObtenerMesasDisponibles() throws Exception {
+        System.out.println("obtenerMesasDisponibles");
+        // arrange
+        
+        // act
+        List<Mesa> result = instancia.obtenerMesasDisponibles();
+        
+        // assert
+        assertNotNull(result, "La lista de mesas no debe ser null");
+        assertFalse(result.isEmpty(), "La lista de mesas disponibles no debe estar vacia");
     }
 
     /**

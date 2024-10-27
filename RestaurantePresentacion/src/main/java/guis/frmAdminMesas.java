@@ -1,4 +1,3 @@
-
 package guis;
 
 import dto.MesaDTO;
@@ -16,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  * Frame encargado de agregar mesas al sistema
+ *
  * @author Saul Neri
  * @author caarl
  */
@@ -34,24 +34,23 @@ public class frmAdminMesas extends javax.swing.JFrame {
         actualizarTablaMesas();
         cargarTiposMesa();
     }
-    
-    
+
     /**
      * Carga todos los tipos de mesa existentes en el comboBox de tipos de mesa
      */
     private void cargarTiposMesa() {
         try {
             List<TipoMesaDTO> tiposMesa = this.tiposMesaBO.obtenerTiposMesaTodos();
-            
+
             DefaultComboBoxModel model = new DefaultComboBoxModel();
             model.addAll(tiposMesa);
-            
+
             cbxTipoMesa.setModel(model);
         } catch (ServicioException ex) {
             JOptionPane.showMessageDialog(
-                    this, 
-                    "No se pudieron cargar los tipos de mesa en el sistema", 
-                    "Tipos de Mesa", 
+                    this,
+                    "No se pudieron cargar los tipos de mesa en el sistema",
+                    "Tipos de Mesa",
                     JOptionPane.ERROR
             );
         }
@@ -242,8 +241,7 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
                 JOptionPane.showMessageDialog(this, "Seleccione una ubicación válida.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener si no hay ubicación seleccionada
             }
-            
-            
+
             int opcion = JOptionPane.showConfirmDialog(this, "Desea confirmar la operacion?", "Insertar Mesas", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
                 return;

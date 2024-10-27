@@ -21,6 +21,13 @@ public interface IMesasDAO {
     public List<Mesa> obtenerMesasTodas() throws DAOException;
     
     /**
+     * Devuelve una lista con las mesas disponibles para su reservacion
+     * @return Mesas disponibles
+     * @throws DAOException Si ocurre un error en la consulta
+     */
+    public List<Mesa> obtenerMesasDisponibles() throws DAOException;
+    
+    /**
      * Devuelve todas las mesas del tipo especificado
      * @param tipo Tipo de mesa
      * @return
