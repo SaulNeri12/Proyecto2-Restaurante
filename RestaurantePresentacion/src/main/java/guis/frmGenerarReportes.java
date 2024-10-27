@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+//ola
 package guis;
 
 import dto.ClienteDTO;
@@ -17,8 +18,20 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -185,7 +198,7 @@ public class frmGenerarReportes extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Emoji", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Sitka Subheading", 1, 24)); // NOI18N
         jLabel1.setText("Generador de Reporte");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 3, 14)); // NOI18N
@@ -289,12 +302,12 @@ public class frmGenerarReportes extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addGap(396, 396, 396))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 870, Short.MAX_VALUE)
                         .addContainerGap())))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(253, 253, 253)
+                .addGap(393, 393, 393)
                 .addComponent(jLabel1)
-                .addContainerGap(597, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,7 +364,73 @@ public class frmGenerarReportes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarReActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReActionPerformed
-        // TODO add your handling code here:
+      Document document = new Document(PageSize.A4); // Configuración para un documento tamaño A4
+    String filePath = "ReporteReservaciones.pdf";
+    
+    try {
+        PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        document.open();
+        
+        // Definimos los estilos de fuente para el título, subtítulo y contenido
+        Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+        Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC);
+        Font fontContenido = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
+        
+        // Título del reporte
+        Paragraph titulo = new Paragraph("Reporte de Reservaciones", fontTitulo);
+        titulo.setAlignment(Element.ALIGN_CENTER);
+        document.add(titulo);
+        document.add(new Paragraph(" ")); // Espacio en blanco
+        
+        // Sección de "Filtros aplicados"
+        Paragraph filtrosTitulo = new Paragraph("Filtros aplicados:", fontSubTitulo);
+        filtrosTitulo.setAlignment(Element.ALIGN_LEFT);
+        document.add(filtrosTitulo);
+        
+        // Obtener y agregar valores seleccionados en los combobox
+        String filtroEstado = "Estado: " + (cbxEstado.getSelectedItem() != null ? cbxEstado.getSelectedItem().toString() : "No especificado");
+        String filtroMesa = "Mesa: " + (cbxMesas.getSelectedItem() != null ? cbxMesas.getSelectedItem().toString() : "No especificado");
+        String filtroCliente = "Clientes: " + (cbxClientes.getSelectedItem() != null ? cbxClientes.getSelectedItem().toString() : "No especificado");
+        String filtroMulta = "¿Multa?: " + (cbxMulta.getSelectedItem() != null ? cbxMulta.getSelectedItem().toString() : "No especificado");
+        
+        Paragraph filtrosSeleccionados = new Paragraph(filtroEstado + "\n" + filtroMesa + "\n" + filtroCliente + "\n" + filtroMulta, fontContenido);
+        filtrosSeleccionados.setAlignment(Element.ALIGN_LEFT);
+        document.add(filtrosSeleccionados);
+        document.add(new Paragraph(" ")); // Espacio en blanco antes de la tabla
+        
+        // Tabla de reservaciones
+        PdfPTable table = new PdfPTable(tblResultado.getColumnCount());
+        table.setWidthPercentage(100);
+        
+        // Añadimos los encabezados de la tabla
+        for (int i = 0; i < tblResultado.getColumnCount(); i++) {
+            table.addCell(new Paragraph(tblResultado.getColumnName(i), fontSubTitulo));
+        }
+        
+        // Añadimos las filas de datos a la tabla
+        for (int row = 0; row < tblResultado.getRowCount(); row++) {
+            for (int col = 0; col < tblResultado.getColumnCount(); col++) {
+                Object value = tblResultado.getValueAt(row, col);
+                table.addCell(new Paragraph(value != null ? value.toString() : "", fontContenido));
+            }
+        }
+        
+        document.add(table); // Agregamos la tabla al documento
+        
+    } catch (DocumentException | IOException e) {
+        JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    } finally {
+        document.close();
+    }
+
+    // Mensaje de confirmación y apertura automática del PDF
+    JOptionPane.showMessageDialog(this, "El PDF se ha generado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    try {
+        Desktop.getDesktop().open(new File(filePath));
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(this, "No se pudo abrir el archivo PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnGenerarReActionPerformed
 
     private void cbxEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxEstadoActionPerformed
