@@ -137,6 +137,6 @@ public class ClienteDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ClienteDTO[ id=" + id + " ]";
+        return "%s, %s".formatted(this.nombreCompleto, this.telefono);
     }
 }
