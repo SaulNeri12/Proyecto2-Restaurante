@@ -90,7 +90,7 @@ jLabel3.setText("Tipo");
 // Carga los tipos de mesa en el JComboBox según los datos de la imagen
 cbxTipoMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new TipoMesaDTO[] {
     new TipoMesaDTO(1L, "Grande", 4, 3, 700.0f),
-    new TipoMesaDTO(2L, "Mediana", 4, 3, 500.0f)
+    new TipoMesaDTO(3L, "Mediana", 4, 3, 500.0f)
 }));
 
         jLabel4.setText("Ubicacion");
@@ -216,6 +216,8 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
         MesasBO mesasBO = MesasBO.getInstance();
         mesasBO.insertarMesas(tipoMesa, ubicacionMesa, numeroMesas);
 
+        // Mensaje de confirmación
+        JOptionPane.showMessageDialog(this, "Mesa registrada exitosamente.");
         
         // Actualizar tabla u otros componentes si es necesario
         actualizarTablaMesas();
