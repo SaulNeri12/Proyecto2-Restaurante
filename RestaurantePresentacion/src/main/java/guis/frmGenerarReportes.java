@@ -38,134 +38,130 @@ import javax.swing.JOptionPane;
  * @author caarl
  */
 public class frmGenerarReportes extends javax.swing.JFrame {
- 
+
     private final IReservacionesBO reservacionesBO;
+
     /**
      * Creates new form frmGenerarReportes
      */
     public frmGenerarReportes() {
- initComponents();
-    this.reservacionesBO = ReservacionesBO.getInstance();
-    cargarReservaciones(); 
-    cargarEstados();
-    cargarMesasEnComboBox();
-    cargarClientes();
-    cargarComboMultas();
+        initComponents();
+        this.setTitle("Historial");
+        this.setResizable(false);
+        this.reservacionesBO = ReservacionesBO.getInstance();
+        cargarReservaciones();
+        cargarEstados();
+        cargarMesasEnComboBox();
+        cargarClientes();
+        cargarComboMultas();
     }
-    
+
     private void cargarReservaciones() {
-    try {
-        // Obtenemos todas las reservaciones existentes
-        List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos();
-        // Configuramos el modelo de la tabla si aún no lo tiene
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
-        modeloTabla.setRowCount(0); // Limpiamos la tabla
-        
-        // Llenamos la tabla con las reservaciones obtenidas
-        for (ReservacionDTO reservacion : reservaciones) {
-            modeloTabla.addRow(new Object[]{
-                reservacion.getId(),
-                reservacion.getEstado(),
-                reservacion.getFechaHora(),
-                reservacion.getFechaHoraRegistro(),
-                reservacion.getMontoTotal(),
-                reservacion.getNumeroPersonas(),
-                reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
-                reservacion.getMesa().getCodigo(),
-                (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
-            });
-        }
-    } catch (ServicioException ex) {
-        // Manejo de excepciones
-        Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
-        JOptionPane.showMessageDialog(this, "Error al cargar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
+        try {
+            // Obtenemos todas las reservaciones existentes
+            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos();
+            // Configuramos el modelo de la tabla si aún no lo tiene
+            DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
+            modeloTabla.setRowCount(0); // Limpiamos la tabla
 
-    
-   private void cargarEstados() {
-    cbxEstado.addItem("<None>");
-    for (EstadoReservacionDTO estado : EstadoReservacionDTO.values()) {
-        cbxEstado.addItem(estado.name());
-    }
-
-}
-   
-   private void cargarMesasEnComboBox() {
-    cbxMesas.addItem("<None>");  // Primer elemento como <None>
-    
-    try {
-        MesasBO mesasBO = MesasBO.getInstance();
-        List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
-        
-        for (MesaDTO mesa : mesas) {
-            cbxMesas.addItem(mesa.getCodigo());  // Aquí puedes usar `mesa.getCodigo()` o `mesa.getNombre()`, dependiendo de la información que prefieras mostrar
-        }
-    } catch (ServicioException e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar mesas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
-   
-   private void cargarClientes() {
-      try {
-        cbxClientes.removeAllItems(); // Limpiamos el combobox
-        cbxClientes.addItem("<None>"); // Añadimos la opción inicial
-
-        List<ClienteDTO> clientes = ClientesBO.getInstance().obtenerClientesTodos();
-        for (ClienteDTO cliente : clientes) {
-            cbxClientes.addItem(cliente.getTelefono()); // Agregamos los teléfonos de los clientes
-        }
-    } catch (ServicioException ex) {
-        // Manejo de excepciones
-        Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
-        JOptionPane.showMessageDialog(this, "Error al cargar los clientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
-   
-   private void cargarComboMultas() {
-    cbxMulta.removeAllItems(); // Limpiamos el combobox
-    
-    // Agregar la opción <None>
-    cbxMulta.addItem("<None>"); // Para mostrar todas las reservaciones
-    
-    // Agregar las opciones "Sí" y "No"
-    cbxMulta.addItem("Sí");  // Para mostrar reservaciones con multa
-    cbxMulta.addItem("No");  // Para mostrar reservaciones sin multa
-
-}
-
-
-
-   
-   private void filtrarReservacionesPorEstado(String estado) {
-    try {
-        List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos();
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
-        modeloTabla.setRowCount(0);
-        
-        for (ReservacionDTO reservacion : reservaciones) {
-            if (reservacion.getEstado().name().equals(estado)) {
+            // Llenamos la tabla con las reservaciones obtenidas
+            for (ReservacionDTO reservacion : reservaciones) {
                 modeloTabla.addRow(new Object[]{
                     reservacion.getId(),
-                reservacion.getEstado(),
-                reservacion.getFechaHora(),
-                reservacion.getFechaHoraRegistro(),
-                reservacion.getMontoTotal(),
-                reservacion.getNumeroPersonas(),
-                reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
-                reservacion.getMesa().getCodigo(),
-                (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
-            });
+                    reservacion.getEstado(),
+                    reservacion.getFechaHora(),
+                    reservacion.getFechaHoraRegistro(),
+                    reservacion.getMontoTotal(),
+                    reservacion.getNumeroPersonas(),
+                    reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
+                    reservacion.getMesa().getCodigo(),
+                    (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
+                });
             }
+        } catch (ServicioException ex) {
+            // Manejo de excepciones
+            Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (ServicioException ex) {
-        Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
-        JOptionPane.showMessageDialog(this, "Error al cargar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-}
-   
-   
 
+    private void cargarEstados() {
+        cbxEstado.addItem("<None>");
+        for (EstadoReservacionDTO estado : EstadoReservacionDTO.values()) {
+            cbxEstado.addItem(estado.name());
+        }
+
+    }
+
+    private void cargarMesasEnComboBox() {
+        cbxMesas.addItem("<None>");  // Primer elemento como <None>
+
+        try {
+            MesasBO mesasBO = MesasBO.getInstance();
+            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
+
+            for (MesaDTO mesa : mesas) {
+                cbxMesas.addItem(mesa.getCodigo());  // Aquí puedes usar `mesa.getCodigo()` o `mesa.getNombre()`, dependiendo de la información que prefieras mostrar
+            }
+        } catch (ServicioException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar mesas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void cargarClientes() {
+        try {
+            cbxClientes.removeAllItems(); // Limpiamos el combobox
+            cbxClientes.addItem("<None>"); // Añadimos la opción inicial
+
+            List<ClienteDTO> clientes = ClientesBO.getInstance().obtenerClientesTodos();
+            for (ClienteDTO cliente : clientes) {
+                cbxClientes.addItem(cliente.getTelefono()); // Agregamos los teléfonos de los clientes
+            }
+        } catch (ServicioException ex) {
+            // Manejo de excepciones
+            Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar los clientes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void cargarComboMultas() {
+        cbxMulta.removeAllItems(); // Limpiamos el combobox
+
+        // Agregar la opción <None>
+        cbxMulta.addItem("<None>"); // Para mostrar todas las reservaciones
+
+        // Agregar las opciones "Sí" y "No"
+        cbxMulta.addItem("Sí");  // Para mostrar reservaciones con multa
+        cbxMulta.addItem("No");  // Para mostrar reservaciones sin multa
+
+    }
+
+    private void filtrarReservacionesPorEstado(String estado) {
+        try {
+            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos();
+            DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
+            modeloTabla.setRowCount(0);
+
+            for (ReservacionDTO reservacion : reservaciones) {
+                if (reservacion.getEstado().name().equals(estado)) {
+                    modeloTabla.addRow(new Object[]{
+                        reservacion.getId(),
+                        reservacion.getEstado(),
+                        reservacion.getFechaHora(),
+                        reservacion.getFechaHoraRegistro(),
+                        reservacion.getMontoTotal(),
+                        reservacion.getNumeroPersonas(),
+                        reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
+                        reservacion.getMesa().getCodigo(),
+                        (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
+                    });
+                }
+            }
+        } catch (ServicioException ex) {
+            Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al cargar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -364,202 +360,202 @@ public class frmGenerarReportes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarReActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReActionPerformed
-      Document document = new Document(PageSize.A4); // Configuración para un documento tamaño A4
-    String filePath = "ReporteReservaciones.pdf";
-    
-    try {
-        PdfWriter.getInstance(document, new FileOutputStream(filePath));
-        document.open();
-        
-        // Definimos los estilos de fuente para el título, subtítulo y contenido
-        Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
-        Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC);
-        Font fontContenido = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
-        
-        // Título del reporte
-        Paragraph titulo = new Paragraph("Reporte de Reservaciones", fontTitulo);
-        titulo.setAlignment(Element.ALIGN_CENTER);
-        document.add(titulo);
-        document.add(new Paragraph(" ")); // Espacio en blanco
-        
-        // Sección de "Filtros aplicados"
-        Paragraph filtrosTitulo = new Paragraph("Filtros aplicados:", fontSubTitulo);
-        filtrosTitulo.setAlignment(Element.ALIGN_LEFT);
-        document.add(filtrosTitulo);
-        
-        // Obtener y agregar valores seleccionados en los combobox
-        String filtroEstado = "Estado: " + (cbxEstado.getSelectedItem() != null ? cbxEstado.getSelectedItem().toString() : "No especificado");
-        String filtroMesa = "Mesa: " + (cbxMesas.getSelectedItem() != null ? cbxMesas.getSelectedItem().toString() : "No especificado");
-        String filtroCliente = "Clientes: " + (cbxClientes.getSelectedItem() != null ? cbxClientes.getSelectedItem().toString() : "No especificado");
-        String filtroMulta = "¿Multa?: " + (cbxMulta.getSelectedItem() != null ? cbxMulta.getSelectedItem().toString() : "No especificado");
-        
-        Paragraph filtrosSeleccionados = new Paragraph(filtroEstado + "\n" + filtroMesa + "\n" + filtroCliente + "\n" + filtroMulta, fontContenido);
-        filtrosSeleccionados.setAlignment(Element.ALIGN_LEFT);
-        document.add(filtrosSeleccionados);
-        document.add(new Paragraph(" ")); // Espacio en blanco antes de la tabla
-        
-        // Tabla de reservaciones
-        PdfPTable table = new PdfPTable(tblResultado.getColumnCount());
-        table.setWidthPercentage(100);
-        
-        // Añadimos los encabezados de la tabla
-        for (int i = 0; i < tblResultado.getColumnCount(); i++) {
-            table.addCell(new Paragraph(tblResultado.getColumnName(i), fontSubTitulo));
-        }
-        
-        // Añadimos las filas de datos a la tabla
-        for (int row = 0; row < tblResultado.getRowCount(); row++) {
-            for (int col = 0; col < tblResultado.getColumnCount(); col++) {
-                Object value = tblResultado.getValueAt(row, col);
-                table.addCell(new Paragraph(value != null ? value.toString() : "", fontContenido));
-            }
-        }
-        
-        document.add(table); // Agregamos la tabla al documento
-        
-    } catch (DocumentException | IOException e) {
-        JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    } finally {
-        document.close();
-    }
+        Document document = new Document(PageSize.A4); // Configuración para un documento tamaño A4
+        String filePath = "ReporteReservaciones.pdf";
 
-    // Mensaje de confirmación y apertura automática del PDF
-    JOptionPane.showMessageDialog(this, "El PDF se ha generado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-    try {
-        Desktop.getDesktop().open(new File(filePath));
-    } catch (IOException ex) {
-        JOptionPane.showMessageDialog(this, "No se pudo abrir el archivo PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            // Definimos los estilos de fuente para el título, subtítulo y contenido
+            Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+            Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC);
+            Font fontContenido = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
+
+            // Título del reporte
+            Paragraph titulo = new Paragraph("Reporte de Reservaciones", fontTitulo);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            document.add(titulo);
+            document.add(new Paragraph(" ")); // Espacio en blanco
+
+            // Sección de "Filtros aplicados"
+            Paragraph filtrosTitulo = new Paragraph("Filtros aplicados:", fontSubTitulo);
+            filtrosTitulo.setAlignment(Element.ALIGN_LEFT);
+            document.add(filtrosTitulo);
+
+            // Obtener y agregar valores seleccionados en los combobox
+            String filtroEstado = "Estado: " + (cbxEstado.getSelectedItem() != null ? cbxEstado.getSelectedItem().toString() : "No especificado");
+            String filtroMesa = "Mesa: " + (cbxMesas.getSelectedItem() != null ? cbxMesas.getSelectedItem().toString() : "No especificado");
+            String filtroCliente = "Clientes: " + (cbxClientes.getSelectedItem() != null ? cbxClientes.getSelectedItem().toString() : "No especificado");
+            String filtroMulta = "¿Multa?: " + (cbxMulta.getSelectedItem() != null ? cbxMulta.getSelectedItem().toString() : "No especificado");
+
+            Paragraph filtrosSeleccionados = new Paragraph(filtroEstado + "\n" + filtroMesa + "\n" + filtroCliente + "\n" + filtroMulta, fontContenido);
+            filtrosSeleccionados.setAlignment(Element.ALIGN_LEFT);
+            document.add(filtrosSeleccionados);
+            document.add(new Paragraph(" ")); // Espacio en blanco antes de la tabla
+
+            // Tabla de reservaciones
+            PdfPTable table = new PdfPTable(tblResultado.getColumnCount());
+            table.setWidthPercentage(100);
+
+            // Añadimos los encabezados de la tabla
+            for (int i = 0; i < tblResultado.getColumnCount(); i++) {
+                table.addCell(new Paragraph(tblResultado.getColumnName(i), fontSubTitulo));
+            }
+
+            // Añadimos las filas de datos a la tabla
+            for (int row = 0; row < tblResultado.getRowCount(); row++) {
+                for (int col = 0; col < tblResultado.getColumnCount(); col++) {
+                    Object value = tblResultado.getValueAt(row, col);
+                    table.addCell(new Paragraph(value != null ? value.toString() : "", fontContenido));
+                }
+            }
+
+            document.add(table); // Agregamos la tabla al documento
+
+        } catch (DocumentException | IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } finally {
+            document.close();
+        }
+
+        // Mensaje de confirmación y apertura automática del PDF
+        JOptionPane.showMessageDialog(this, "El PDF se ha generado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            Desktop.getDesktop().open(new File(filePath));
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "No se pudo abrir el archivo PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnGenerarReActionPerformed
 
     private void cbxEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxEstadoActionPerformed
-     String estadoSeleccionado = (String) cbxEstado.getSelectedItem();
-    if (estadoSeleccionado != null && !estadoSeleccionado.equals("<None>")) {
-        filtrarReservacionesPorEstado(estadoSeleccionado);
-    } else {
-        cargarReservaciones(); // Mostrar todas las reservaciones si selecciona "<None>"
-    }
-  
+        String estadoSeleccionado = (String) cbxEstado.getSelectedItem();
+        if (estadoSeleccionado != null && !estadoSeleccionado.equals("<None>")) {
+            filtrarReservacionesPorEstado(estadoSeleccionado);
+        } else {
+            cargarReservaciones(); // Mostrar todas las reservaciones si selecciona "<None>"
+        }
+
     }//GEN-LAST:event_cbxEstadoActionPerformed
 
     private void cbxMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxMesasActionPerformed
-      String mesaSeleccionada = (String) cbxMesas.getSelectedItem();
-        
+        String mesaSeleccionada = (String) cbxMesas.getSelectedItem();
+
         if ("<None>".equals(mesaSeleccionada)) {
             cargarReservaciones();  // Muestra todas las reservaciones si selecciona "<None>"
         } else {
             try {
                 ReservacionesBO reservacionesBO = ReservacionesBO.getInstance();
                 List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(mesaSeleccionada);
-                
+
                 // Lógica para cargar en la tabla `tblResultado`
                 DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
                 modeloTabla.setRowCount(0);  // Limpiamos la tabla
 
                 for (ReservacionDTO reservacion : reservaciones) {
                     modeloTabla.addRow(new Object[]{
-                       reservacion.getId(),
-                reservacion.getEstado(),
-                reservacion.getFechaHora(),
-                reservacion.getFechaHoraRegistro(),
-                reservacion.getMontoTotal(),
-                reservacion.getNumeroPersonas(),
-                reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
-                reservacion.getMesa().getCodigo(),
-                (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
-            });
+                        reservacion.getId(),
+                        reservacion.getEstado(),
+                        reservacion.getFechaHora(),
+                        reservacion.getFechaHoraRegistro(),
+                        reservacion.getMontoTotal(),
+                        reservacion.getNumeroPersonas(),
+                        reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
+                        reservacion.getMesa().getCodigo(),
+                        (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
+                    });
                 }
             } catch (ServicioException e) {
                 JOptionPane.showMessageDialog(this, "Error al obtener reservaciones: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    
+
     }//GEN-LAST:event_cbxMesasActionPerformed
 
     private void cbxMultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxMultaActionPerformed
-       Object selectedItem = cbxMulta.getSelectedItem();
+        Object selectedItem = cbxMulta.getSelectedItem();
 
-    try {
-        List<ReservacionDTO> reservaciones;
+        try {
+            List<ReservacionDTO> reservaciones;
 
-        if ("Sí".equals(selectedItem)) {
-            // Si se selecciona "Sí", obtenemos reservaciones con multa
-             reservaciones = this.reservacionesBO.obtenerReservacionesTodos()
-                .stream()
-                .filter(reservacion -> reservacion.getMulta() != null)
-                .collect(Collectors.toList());
-        } else if ("No".equals(selectedItem)) {
-            // Si se selecciona "No", obtenemos reservaciones sin multa
-            
-             reservaciones = this.reservacionesBO.obtenerReservacionesTodos()
-                .stream()
-                .filter(reservacion -> reservacion.getMulta() == null)
-                .collect(Collectors.toList());
-        } else {
-            // Si se selecciona "<None>", cargamos todas las reservaciones
-            reservaciones = reservacionesBO.obtenerReservacionesTodos();
+            if ("Sí".equals(selectedItem)) {
+                // Si se selecciona "Sí", obtenemos reservaciones con multa
+                reservaciones = this.reservacionesBO.obtenerReservacionesTodos()
+                        .stream()
+                        .filter(reservacion -> reservacion.getMulta() != null)
+                        .collect(Collectors.toList());
+            } else if ("No".equals(selectedItem)) {
+                // Si se selecciona "No", obtenemos reservaciones sin multa
+
+                reservaciones = this.reservacionesBO.obtenerReservacionesTodos()
+                        .stream()
+                        .filter(reservacion -> reservacion.getMulta() == null)
+                        .collect(Collectors.toList());
+            } else {
+                // Si se selecciona "<None>", cargamos todas las reservaciones
+                reservaciones = reservacionesBO.obtenerReservacionesTodos();
+            }
+
+            // Limpiar y cargar la tabla con las reservaciones filtradas
+            DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
+            modeloTabla.setRowCount(0); // Limpiamos la tabla
+
+            for (ReservacionDTO reservacion : reservaciones) {
+                modeloTabla.addRow(new Object[]{
+                    reservacion.getId(),
+                    reservacion.getEstado(),
+                    reservacion.getFechaHora(),
+                    reservacion.getFechaHoraRegistro(),
+                    reservacion.getMontoTotal(),
+                    reservacion.getNumeroPersonas(),
+                    reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
+                    reservacion.getMesa().getCodigo(),
+                    (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
+                });
+            }
+        } catch (ServicioException ex) {
+            Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al filtrar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Limpiar y cargar la tabla con las reservaciones filtradas
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
-        modeloTabla.setRowCount(0); // Limpiamos la tabla
-
-        for (ReservacionDTO reservacion : reservaciones) {
-            modeloTabla.addRow(new Object[]{
-                reservacion.getId(),
-                reservacion.getEstado(),
-                reservacion.getFechaHora(),
-                reservacion.getFechaHoraRegistro(),
-                reservacion.getMontoTotal(),
-                reservacion.getNumeroPersonas(),
-                reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
-                reservacion.getMesa().getCodigo(),
-                (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
-            });
-        }
-    } catch (ServicioException ex) {
-        Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
-        JOptionPane.showMessageDialog(this, "Error al filtrar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
     }//GEN-LAST:event_cbxMultaActionPerformed
 
     private void cbxClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxClientesActionPerformed
-     String telefonoSeleccionado = (String) cbxClientes.getSelectedItem();
+        String telefonoSeleccionado = (String) cbxClientes.getSelectedItem();
 
-    try {
-        List<ReservacionDTO> reservaciones;
+        try {
+            List<ReservacionDTO> reservaciones;
 
-        if (telefonoSeleccionado.equals("<None>")) {
-            // Si no hay un teléfono seleccionado, cargamos todas las reservaciones
-            reservaciones = reservacionesBO.obtenerReservacionesTodos();
-        } else {
-            // Filtramos las reservaciones por el teléfono del cliente
-            reservaciones = reservacionesBO.obtenerReservacionesCliente(telefonoSeleccionado);
+            if (telefonoSeleccionado.equals("<None>")) {
+                // Si no hay un teléfono seleccionado, cargamos todas las reservaciones
+                reservaciones = reservacionesBO.obtenerReservacionesTodos();
+            } else {
+                // Filtramos las reservaciones por el teléfono del cliente
+                reservaciones = reservacionesBO.obtenerReservacionesCliente(telefonoSeleccionado);
+            }
+
+            // Limpiar y cargar la tabla con las reservaciones filtradas
+            DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
+            modeloTabla.setRowCount(0); // Limpiamos la tabla
+
+            for (ReservacionDTO reservacion : reservaciones) {
+                modeloTabla.addRow(new Object[]{
+                    reservacion.getId(),
+                    reservacion.getEstado(),
+                    reservacion.getFechaHora(),
+                    reservacion.getFechaHoraRegistro(),
+                    reservacion.getMontoTotal(),
+                    reservacion.getNumeroPersonas(),
+                    reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
+                    reservacion.getMesa().getCodigo(),
+                    (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
+                });
+            }
+        } catch (ServicioException ex) {
+            // Manejo de excepciones
+            Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al filtrar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Limpiar y cargar la tabla con las reservaciones filtradas
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
-        modeloTabla.setRowCount(0); // Limpiamos la tabla
-
-        for (ReservacionDTO reservacion : reservaciones) {
-            modeloTabla.addRow(new Object[]{
-                reservacion.getId(),
-                reservacion.getEstado(),
-                reservacion.getFechaHora(),
-                reservacion.getFechaHoraRegistro(),
-                reservacion.getMontoTotal(),
-                reservacion.getNumeroPersonas(),
-                reservacion.getCliente().getTelefono(), // Cambiado a número de teléfono
-                reservacion.getMesa().getCodigo(),
-                (reservacion.getMulta() != null) ? reservacion.getMulta().getPorcentaje() : 0 // Manejo de multa
-            });
-        }
-    } catch (ServicioException ex) {
-        // Manejo de excepciones
-        Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
-        JOptionPane.showMessageDialog(this, "Error al filtrar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
     }//GEN-LAST:event_cbxClientesActionPerformed
 
     /**

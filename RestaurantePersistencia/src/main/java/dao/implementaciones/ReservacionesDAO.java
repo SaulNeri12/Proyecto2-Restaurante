@@ -322,10 +322,22 @@ public class ReservacionesDAO implements IReservacionesDAO {
             entityManager.merge(reservacion);
             transaction.commit();
         } catch (Exception e) {
-            transaction.rollback();
-            throw new DAOException("Error al cancelar la reservacion");
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new DAOException("Error al cancelar la reservacion, porfavor intente mas tarde");
         } finally {
             entityManager.close(); 
+        }
+        
+        if (multa != null) {
+            throw new DAOException(
+                    String.format(
+                            "El cliente obtuvo una multa por cancelacion:\nDescripcion: %s\nTotal a pagar por la multa: $%.2f", 
+                            multa.getDescripcion(), 
+                            reservacion.getMontoTotal()
+                    )
+            );
         }
     }
 

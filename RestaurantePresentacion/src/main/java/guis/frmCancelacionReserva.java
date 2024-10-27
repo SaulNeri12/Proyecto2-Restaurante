@@ -13,6 +13,8 @@ import implementaciones.MesasBO;
 import implementaciones.ReservacionesBO;
 import interfacesBO.IMesasBO;
 import interfacesBO.IReservacionesBO;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,17 +30,31 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
     private IReservacionesBO reservacionesBO = ReservacionesBO.getInstance();
     private IMesasBO mesasBO = MesasBO.getInstance();
-    
+
+    private Long idReservacionSeleccionada;
+
     /**
      * Creates new form frmCancelacionReserva
      */
     public frmCancelacionReserva() {
         initComponents();
+        this.setTitle("Cancelar Reservacion");
+        this.setResizable(false);
+        this.tblReservaciones.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = tblReservaciones.getSelectedRow();
+                if (selectedRow != -1) {
+                    idReservacionSeleccionada = (Long) tblReservaciones.getValueAt(selectedRow, 0);
+                    campoReservacionSeleccionada.setText(idReservacionSeleccionada.toString());
+                }
+            }
+        });
         this.cargarReservaciones();
         cargarMesasEnComboBox();
         cargarClientes();
     }
-    
+
     /**
      * Carga los clientes en el sistema dentro del combobox de clientes
      */
@@ -65,7 +81,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         cbxMesas.addItem("<None>");  // Primer elemento como <None>
 
         try {
-            
+
             List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
 
             for (MesaDTO mesa : mesas) {
@@ -75,7 +91,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al cargar mesas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void cargarReservaciones() {
         try {
             // Obtenemos todas las reservaciones existentes
@@ -104,7 +120,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al cargar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -126,6 +142,8 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         cbxClientes = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        campoReservacionSeleccionada = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -140,6 +158,11 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         jButton1.setText("Cancelar");
 
         btnCancelarReservacion.setText("Cancelar Reservacion");
+        btnCancelarReservacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarReservacionActionPerformed(evt);
+            }
+        });
 
         tblReservaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -170,6 +193,8 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
         jLabel6.setText("Clientes");
 
+        jLabel3.setText("ID Reservacion Seleccionada:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -183,12 +208,18 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbxMesas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbxClientes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 139, Short.MAX_VALUE))
-                            .addComponent(cbxMesas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbxClientes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(campoReservacionSeleccionada, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)))))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -202,6 +233,10 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoReservacionSeleccionada, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -269,7 +304,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,7 +323,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
             cargarReservaciones();  // Muestra todas las reservaciones si selecciona "<None>"
         } else {
             try {
-                
+
                 List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(mesaSeleccionada);
 
                 // Lógica para cargar en la tabla `tblResultado`
@@ -352,6 +387,29 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbxClientesActionPerformed
 
+    private void btnCancelarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarReservacionActionPerformed
+
+        if (idReservacionSeleccionada == null) {
+            return;
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(this, "Desea cancelar la reservacion[ID: %d]?".formatted(this.idReservacionSeleccionada), "Cancelar Reservacion", JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
+            return;
+        }
+
+        try {
+            this.reservacionesBO.cancelarReservacion(idReservacionSeleccionada);
+        } catch (ServicioException ex) {
+            JOptionPane.showMessageDialog(
+                    this, 
+                    ex.getMessage(), 
+                    "Cancelar Reservacion", 
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_btnCancelarReservacionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -389,11 +447,13 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelarReservacion;
+    private javax.swing.JLabel campoReservacionSeleccionada;
     private javax.swing.JComboBox<String> cbxClientes;
     private javax.swing.JComboBox<String> cbxMesas;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
