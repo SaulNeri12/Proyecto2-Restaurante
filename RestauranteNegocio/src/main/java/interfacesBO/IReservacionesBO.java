@@ -106,5 +106,10 @@ public interface IReservacionesBO {
      * @throws NoEncontradoException Cuando no se encontro la reservacion
      */
     public void eliminarReservacion(Long id) throws ServicioException, NoEncontradoException;
+    
+    List<ReservacionDTO> obtenerReservacionesConMulta() throws ServicioException;
+
+    List<ReservacionDTO> obtenerReservacionesSinMulta() throws ServicioException;
+
 
 }

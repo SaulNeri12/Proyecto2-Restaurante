@@ -361,6 +361,40 @@ public class ReservacionesDAO implements IReservacionesDAO {
             entityManager.close();
         }
     }
+    
+    @Override
+    public List<Reservacion> obtenerReservacionesConMulta() throws DAOException {
+        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        try {
+            TypedQuery<Reservacion> query = entityManager.createQuery(
+                "SELECT r FROM Reservacion r WHERE r.multa IS NOT NULL", Reservacion.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new DAOException("Error al obtener reservaciones con multa");
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
+    @Override
+    public List<Reservacion> obtenerReservacionesSinMulta() throws DAOException {
+       EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        try {
+            TypedQuery<Reservacion> query = entityManager.createQuery(
+           
+                "SELECT r FROM Reservacion r WHERE r.multa IS NULL", Reservacion.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new DAOException("Error al obtener reservaciones sin multa");
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
 
     @Override
     public void eliminarTipoMulta(Long idMulta) throws DAOException {
@@ -383,5 +417,8 @@ public class ReservacionesDAO implements IReservacionesDAO {
         } finally {
             entityManager.close();
         }
+        
     }
+    
+    
 }

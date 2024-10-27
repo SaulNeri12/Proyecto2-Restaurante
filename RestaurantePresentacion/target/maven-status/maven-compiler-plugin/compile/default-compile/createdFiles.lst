@@ -1,7 +1,10 @@
 guis\frmMenuPrincipal$1.class
 guis\frmCrearReservacion.class
+guis\frmGenerarReportes$4.class
+guis\frmGenerarReportes$3.class
 guis\frmCancelacionReserva.class
 guis\frmCancelacionReserva$1.class
+guis\frmGenerarReportes$2.class
 guis\frmGenerarReportes.class
 guis\frmCrearReservacion$1.class
 guis\frmGenerarReportes$1.class
@@ -9,8 +12,10 @@ guis\frmHistorial.class
 guis\frmMenuPrincipal$4.class
 guis\frmAdminMesas.class
 guis\frmAdminMesas$1.class
+guis\frmGenerarReportes$6.class
 com\equipo7\restaurantepresentacion\RestaurantePresentacion.class
 guis\frmMenuPrincipal.class
+guis\frmGenerarReportes$5.class
 guis\frmMenuPrincipal$2.class
 guis\frmMenuPrincipal$3.class
 guis\frmAdminMesas$2.class

@@ -34,7 +34,7 @@ public class ReservacionesBO implements IReservacionesBO {
     /**
      * Constructor privado para implementar Singleton.
      */
-    private ReservacionesBO() {
+    public ReservacionesBO() {
         this.reservacionesDAO = ReservacionesDAO.getInstance();
         this.reservacionConvertidor = new ReservacionConvertidor();
     }
@@ -137,4 +137,26 @@ public class ReservacionesBO implements IReservacionesBO {
             throw new ServicioException(e.getMessage());
         }
     }
+     
+
+public List<ReservacionDTO> obtenerReservacionesConMulta() throws ServicioException {
+    try {
+        List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesConMulta();
+        return reservacionConvertidor.createFromEntities(reservaciones);
+    } catch (DAOException e) {
+        throw new ServicioException(e.getMessage());
+    }
+}
+
+public List<ReservacionDTO> obtenerReservacionesSinMulta() throws ServicioException {
+    try {
+        List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesSinMulta();
+        return reservacionConvertidor.createFromEntities(reservaciones);
+    } catch (DAOException e) {
+        throw new ServicioException(e.getMessage());
+    }
+}
+
+
+    
 }

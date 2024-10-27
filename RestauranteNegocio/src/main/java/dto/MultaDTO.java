@@ -89,4 +89,10 @@ public class MultaDTO implements Serializable {
     public void setPorcentaje(Float porcentaje) {
         this.porcentaje = porcentaje; 
     }
+    
+    @Override
+public String toString() {
+    return descripcion + " (" + porcentaje + "%)";
+}
+
 }

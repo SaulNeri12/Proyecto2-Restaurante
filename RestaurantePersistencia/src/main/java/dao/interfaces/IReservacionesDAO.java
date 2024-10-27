@@ -98,4 +98,9 @@ public interface IReservacionesDAO extends IMultasDAO{
      * datos.
      */
     public void eliminarReservacion(Long id) throws DAOException;
+    
+    List<Reservacion> obtenerReservacionesConMulta() throws DAOException;
+
+    List<Reservacion> obtenerReservacionesSinMulta() throws DAOException;
+
 }
