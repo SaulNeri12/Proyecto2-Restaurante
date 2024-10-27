@@ -20,7 +20,10 @@ import interfacesBO.IReservacionesBO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReservacionesBOTest_SinMocks {
@@ -186,7 +189,7 @@ public class ReservacionesBOTest_SinMocks {
     public void testObtenerReservacionesCliente_Exitoso() throws Exception {
         // arrange
         String telefono = "6444412219";
-
+        
         // act
         List<ReservacionDTO> resultado = reservacionesBO.obtenerReservacionesCliente(telefono);
 
