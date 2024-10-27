@@ -26,6 +26,13 @@ public interface IMesasBO {
      * @throws ServicioException Si ocurre un error en la consulta
      */
     public List<MesaDTO> obtenerMesasTodas() throws ServicioException;
+    
+    /**
+     * Devuelve una lista con las mesas disponibles para su reservacion
+     * @return Mesas disponibles
+     * @throws ServicioException Si ocurre un error en la consulta
+     */
+    public List<MesaDTO> obtenerMesasDisponibles() throws ServicioException;
 
     /**
      * Devuelve todas las mesas del tipo especificado

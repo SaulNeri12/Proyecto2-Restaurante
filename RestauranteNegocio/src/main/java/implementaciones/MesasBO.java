@@ -96,4 +96,13 @@ public class MesasBO implements IMesasBO {
             throw new ServicioException(e.getMessage());
         }
     }
+
+    @Override
+    public List<MesaDTO> obtenerMesasDisponibles() throws ServicioException {
+        try {
+            return this.mesaConvertidor.createFromEntities(mesasDAO.obtenerMesasDisponibles());
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
+        }
+    }
 }
