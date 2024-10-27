@@ -109,6 +109,7 @@ public class ReservacionConvertidorTest {
         assertEquals(dto.getFechaHora(), result.getFechaHora());
         assertEquals(dto.getMontoTotal(), result.getMontoTotal());
         assertEquals(dto.getNumeroPersonas(), result.getNumeroPersonas());
+        assertEquals(dto.getFechaHoraRegistro(), result.getFechaHoraRegistro());
     }
 
     /**
@@ -161,6 +162,7 @@ public class ReservacionConvertidorTest {
         assertEquals(entidad.getFechaHora(), result.getFechaHora());
         assertEquals(entidad.getMontoTotal(), result.getMontoTotal());
         assertEquals(entidad.getNumeroPersonas(), result.getNumeroPersonas());
+        assertEquals(entidad.getFechaHoraRegistro(), result.getFechaHoraRegistro());
     }
     
 }

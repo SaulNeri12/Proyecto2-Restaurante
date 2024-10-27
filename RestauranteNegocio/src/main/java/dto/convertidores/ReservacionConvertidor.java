@@ -35,6 +35,7 @@ public class ReservacionConvertidor extends Converter<ReservacionDTO, Reservacio
         r.setFechaHora(dto.getFechaHora());
         r.setCliente(clienteConvertidor.convertFromDto(dto.getCliente()));
         r.setMesa(mesaConvertidor.convertFromDto(dto.getMesa()));
+        r.setFechaHoraRegistro(dto.getFechaHoraRegistro());
         
         
         if (dto.getMulta() != null) {
@@ -60,7 +61,7 @@ public class ReservacionConvertidor extends Converter<ReservacionDTO, Reservacio
         r.setFechaHora(entidad.getFechaHora());
         r.setCliente(clienteConvertidor.convertFromEntity(entidad.getCliente()));
         r.setMesa(mesaConvertidor.convertFromEntity(entidad.getMesa()));
-        
+        r.setFechaHoraRegistro(entidad.getFechaHoraRegistro());
         
         if (entidad.getMulta() != null) {
             MultaDTO multa = multaConvertidor.convertFromEntity(entidad.getMulta());

@@ -22,6 +22,7 @@ public class ReservacionDTO implements Serializable {
 
     private Long id;
     private LocalDateTime fechaHora;
+    private LocalDateTime fechaHoraRegistro;
     private Integer numeroPersonas;
     private EstadoReservacionDTO estado;
     private MesaDTO mesa;
@@ -213,6 +214,20 @@ public class ReservacionDTO implements Serializable {
     public void setMulta(MultaDTO multa) {
         this.multa = multa;
     }
-    
-    
+
+/**
+     * Regresa la fecha y hora exacta de cuando se registro la reservacion en el sistema
+     * @return Fecha y hora exacta
+     */
+    public LocalDateTime getFechaHoraRegistro() {
+        return fechaHoraRegistro;
+    }
+
+    /**
+     * Asigna la fecha y hora exacta de cuando se registro la reservacion en el sistema
+     * @param fechaHoraRegistro Fecha y hora a asignar
+     */
+    public void setFechaHoraRegistro(LocalDateTime fechaHoraRegistro) {
+        this.fechaHoraRegistro = fechaHoraRegistro;
+    }
 }
