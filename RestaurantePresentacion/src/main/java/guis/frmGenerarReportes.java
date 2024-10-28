@@ -45,7 +45,7 @@ public class frmGenerarReportes extends javax.swing.JFrame {
      * Creates new form frmGenerarReportes
      */
     public frmGenerarReportes() {
-        this.setLocationRelativeTo(null);
+        
         initComponents();
         this.setTitle("Historial");
         this.setResizable(false);
@@ -55,6 +55,7 @@ public class frmGenerarReportes extends javax.swing.JFrame {
         cargarMesasEnComboBox();
         cargarClientes();
         cargarComboMultas();
+        this.setLocationRelativeTo(null);
     }
 
     private void cargarReservaciones() {

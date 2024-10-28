@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -46,7 +48,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
      * Creates new form frmCrearReservacion
      */
     public frmCrearReservacion() {
-        this.setLocationRelativeTo(null);
+        
         initComponents();
         this.setResizable(false);
         this.campoCantidadPersonas.setModel(new SpinnerNumberModel());
@@ -54,6 +56,8 @@ public class frmCrearReservacion extends javax.swing.JFrame {
         this.cargarClientesDisponibles();
         this.actualizarTablaMesas();
         this.inicializarTabla();
+        this.setLocationRelativeTo(null);
+        this.mostrarCantidadTotalMesas();
     }
 
     private void inicializarTabla() {
@@ -69,7 +73,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                         String codigo = (String) tblMesas.getValueAt(selectedRow, 1);
                         TipoMesaDTO tipoMesa = (TipoMesaDTO) tblMesas.getValueAt(selectedRow, 2);
                         UbicacionMesaDTO ubicacion = (UbicacionMesaDTO) tblMesas.getValueAt(selectedRow, 3);
-                        
+
                         /*
                         TipoMesaDTO tipoMesa = tiposMesaBO.obtenerTiposMesaTodos()
                                 .stream()
@@ -80,7 +84,6 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                         if (tipoMesa == null) {
                             throw new IllegalArgumentException("No se encontro el tipo de mesa \"%s\"".formatted(tipoMesaStr));
                         }*/
-
                         // creamos una mesa
                         mesaSeleccionada = new MesaDTO();
                         mesaSeleccionada.setId(id);
@@ -89,11 +92,11 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                         mesaSeleccionada.setUbicacion(ubicacion);
 
                         campoTotal.setText("$%.2f".formatted(tipoMesa.getPrecio()));
-                        
+
                         campoCodigoMesa.setText(codigo);
                         campoCodigoMesa.repaint();
                         campoCodigoMesa.validate();
-                        
+
                         Integer minPersonas = (Integer) tblMesas.getValueAt(selectedRow, 4); // minimo personas
                         Integer maxPersonas = (Integer) tblMesas.getValueAt(selectedRow, 5); // maximo personas
 
@@ -117,6 +120,15 @@ public class frmCrearReservacion extends javax.swing.JFrame {
         });
     }
 
+    private void mostrarCantidadTotalMesas() {
+        try {
+            Long totalMesas = this.mesasBO.obtenerMesasTodas().stream().count();
+            this.lblCantidadTotalMesas.setText(totalMesas.toString());
+        } catch (ServicioException ex) {
+            Logger.getLogger(frmCrearReservacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Actualiza la tabla de mesas disponibles en el sistema
      */
@@ -234,9 +246,10 @@ public class frmCrearReservacion extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMesas = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         campoTotal = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblCantidadTotalMesas = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -278,7 +291,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -385,13 +398,14 @@ public class frmCrearReservacion extends javax.swing.JFrame {
         jLabel3.setText("Mesas Disponibles");
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
-        jLabel4.setText("Cliente:");
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
         campoTotal.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel12.setText("Total a pagar:");
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel4.setText("Mesas registradas:");
+
+        lblCantidadTotalMesas.setText("jLabel11");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -419,21 +433,18 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                                     .addComponent(jButton2)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(btnCompletarReservacion))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblCantidadTotalMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(campoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21))))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(336, 336, 336)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(336, Short.MAX_VALUE)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(543, Short.MAX_VALUE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(126, 126, 126)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -448,29 +459,23 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(campoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(lblCantidadTotalMesas))
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(campoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCompletarReservacion)
-                            .addComponent(jButton2))))
+                            .addComponent(jButton2)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(221, 221, 221)
-                    .addComponent(jLabel4)
-                    .addContainerGap(227, Short.MAX_VALUE)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(479, Short.MAX_VALUE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(116, 116, 116)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -493,13 +498,17 @@ public class frmCrearReservacion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       // Cerrar el frame actual
-    this.dispose();
-    
-    // Abrir el nuevo frame
-    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
-    nuevoFrame.setVisible(true);
+        this.volver();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void volver() {
+        // Cerrar el frame actual
+        this.dispose();
+
+        // Abrir el nuevo frame
+        frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+        nuevoFrame.setVisible(true);
+    }
 
     private void btnCompletarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompletarReservacionActionPerformed
 
@@ -515,7 +524,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
             if (!fechaValida) {
                 throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
             }
-            
+
             if (this.campoFecha.getDate().isEqual(LocalDate.now()) && this.campoHora.getTime().isBefore(LocalTime.now())) {
                 throw new IllegalArgumentException("La hora de la reservacion no puede ser antes de la hora actual si la reservacion es en el mismo dia");
             }
@@ -524,16 +533,16 @@ public class frmCrearReservacion extends javax.swing.JFrame {
             if (cliente == null) {
                 throw new IllegalArgumentException("Seleccione al cliente a asociar a la reservacion");
             }
-            
+
             if (mesaSeleccionada == null) {
                 throw new IllegalArgumentException("Seleccione la mesa a reservar");
             }
-            
+
             Integer cantidadPersonas = (Integer) this.campoCantidadPersonas.getValue();
             if (cantidadPersonas == null) {
                 throw new IllegalArgumentException("Indique la cantidad de personas");
             }
-            
+
             // creamos la reservacion
             ReservacionDTO res = new ReservacionDTO();
             res.setCliente(cliente);
@@ -541,23 +550,23 @@ public class frmCrearReservacion extends javax.swing.JFrame {
             res.setFechaHora(fechaHora);
             res.setMesa(mesaSeleccionada);
             res.setNumeroPersonas(cantidadPersonas);
-            
+
             int opcion = JOptionPane.showConfirmDialog(this, "Desea completar la reservacion?", "Completar Reservacion", JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
                 return;
             }
-            
+
             this.reservacionesBO.agregarReservacion(res);
-            
+
             JOptionPane.showMessageDialog(
-                    this, 
-                    "Se agrego la reservacion al sistema", 
-                    "Crear Reservacion", 
+                    this,
+                    "Se agrego la reservacion al sistema",
+                    "Crear Reservacion",
                     JOptionPane.INFORMATION_MESSAGE
             );
-            
-            this.dispose();
-            
+
+            this.volver();
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(
                     this,
@@ -568,7 +577,6 @@ public class frmCrearReservacion extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCompletarReservacionActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCompletarReservacion;
@@ -595,6 +603,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCantidadTotalMesas;
     private javax.swing.JTable tblMesas;
     // End of variables declaration//GEN-END:variables
 }

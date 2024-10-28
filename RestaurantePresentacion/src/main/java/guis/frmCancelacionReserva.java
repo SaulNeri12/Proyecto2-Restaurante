@@ -37,7 +37,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
      * Creates new form frmCancelacionReserva
      */
     public frmCancelacionReserva() {
-        this.setLocationRelativeTo(null);
+        
         initComponents();
         this.setTitle("Cancelar Reservacion");
         this.setResizable(false);
@@ -51,6 +51,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
                 }
             }
         });
+        this.setLocationRelativeTo(null);
         this.cargarReservaciones();
         cargarMesasEnComboBox();
         cargarClientes();
