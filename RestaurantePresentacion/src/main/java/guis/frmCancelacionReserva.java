@@ -156,6 +156,11 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         jLabel2.setText("Filtro(s)");
 
         jButton1.setText("Cancelar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnCancelarReservacion.setText("Cancelar Reservacion");
         btnCancelarReservacion.addActionListener(new java.awt.event.ActionListener() {
@@ -410,6 +415,15 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCancelarReservacionActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Cerrar el frame actual
+    this.dispose();
+    
+    // Abrir el nuevo frame
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    nuevoFrame.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -460,7 +474,6 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblReservaciones;
     // End of variables declaration//GEN-END:variables
 }

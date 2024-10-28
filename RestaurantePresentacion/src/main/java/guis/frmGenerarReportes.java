@@ -217,6 +217,11 @@ public class frmGenerarReportes extends javax.swing.JFrame {
         jLabel4.setText("Clientes");
 
         jButton1.setText("Volver");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnGenerarRe.setText("Generar");
         btnGenerarRe.addActionListener(new java.awt.event.ActionListener() {
@@ -557,6 +562,15 @@ public class frmGenerarReportes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al filtrar las reservaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_cbxClientesActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       // Cerrar el frame actual
+    this.dispose();
+    
+    // Abrir el nuevo frame
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    nuevoFrame.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

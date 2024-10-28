@@ -116,7 +116,8 @@ public class frmAdminMesas extends javax.swing.JFrame {
         jLabel2.setText("Cantidad");
 
         txtNumMesas.setText("Num-. Mesas");
-jLabel3.setText("Tipo");
+
+        jLabel3.setText("Tipo");
 // Carga los tipos de mesa en el JComboBox según los datos de la imagen
 cbxTipoMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new TipoMesaDTO[] {
     new TipoMesaDTO(1L, "Grande", 4, 3, 700.0f),
@@ -127,6 +128,11 @@ cbxTipoMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new TipoMesaDTO[] {
 cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDTO.values()));
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         btnRegistrarMesas.setText("Registrar");
         btnRegistrarMesas.addActionListener(new java.awt.event.ActionListener() {
@@ -262,6 +268,15 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
             JOptionPane.showMessageDialog(this, "Error al registrar la mesa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRegistrarMesasActionPerformed
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+       // Cerrar el frame actual
+    this.dispose();
+    
+    // Abrir el nuevo frame
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    nuevoFrame.setVisible(true);
+    }//GEN-LAST:event_CancelarActionPerformed
 
     /**
      * @param args the command line arguments
