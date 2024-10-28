@@ -28,6 +28,7 @@ public class frmAdminMesas extends javax.swing.JFrame {
      * Creates new form frmAdminMesas
      */
     public frmAdminMesas() {
+        this.setLocationRelativeTo(null);
         initComponents();
         this.setTitle("Administrar Mesas");
         //btnRegistrarMesas.addActionListener(this::btnRegistrarMesasActionPerformed);
@@ -116,7 +117,8 @@ public class frmAdminMesas extends javax.swing.JFrame {
         jLabel2.setText("Cantidad");
 
         txtNumMesas.setText("Num-. Mesas");
-jLabel3.setText("Tipo");
+
+        jLabel3.setText("Tipo");
 // Carga los tipos de mesa en el JComboBox según los datos de la imagen
 cbxTipoMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new TipoMesaDTO[] {
     new TipoMesaDTO(1L, "Grande", 4, 3, 700.0f),
@@ -127,6 +129,11 @@ cbxTipoMesa.setModel(new javax.swing.DefaultComboBoxModel<>(new TipoMesaDTO[] {
 cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDTO.values()));
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         btnRegistrarMesas.setText("Registrar");
         btnRegistrarMesas.addActionListener(new java.awt.event.ActionListener() {
@@ -263,41 +270,16 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
         }
     }//GEN-LAST:event_btnRegistrarMesasActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmAdminMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmAdminMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmAdminMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmAdminMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+       // Cerrar el frame actual
+    this.dispose();
+    
+    // Abrir el nuevo frame
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    nuevoFrame.setVisible(true);
+    }//GEN-LAST:event_CancelarActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmAdminMesas().setVisible(true);
-            }
-        });
-    }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelar;
     private javax.swing.JButton btnRegistrarMesas;
