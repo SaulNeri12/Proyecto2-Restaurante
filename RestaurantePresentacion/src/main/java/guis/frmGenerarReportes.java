@@ -27,6 +27,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import excepciones.NoEncontradoException;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -137,6 +138,16 @@ public class frmGenerarReportes extends javax.swing.JFrame {
         cbxMulta.addItem("No");  // Para mostrar reservaciones sin multa
 
     }
+    // Método en el frame para obtener el ID de la reservación seleccionada
+private Long obtenerIdReservacionSeleccionada() {
+    int filaSeleccionada = tblResultado.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        // Asumimos que la primera columna contiene el ID de la reservación
+        return (Long) tblResultado.getValueAt(filaSeleccionada, 0);
+    }
+    return null;
+}
+
 
     private void filtrarReservacionesPorEstado(String estado) {
         try {
@@ -191,6 +202,7 @@ public class frmGenerarReportes extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         cbxMulta = new javax.swing.JComboBox<>();
         cbxClientes = new javax.swing.JComboBox<>();
+        btnFinalizarEstado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -264,6 +276,13 @@ public class frmGenerarReportes extends javax.swing.JFrame {
             }
         });
 
+        btnFinalizarEstado.setText("Finalizar");
+        btnFinalizarEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarEstadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -275,12 +294,7 @@ public class frmGenerarReportes extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jButton1)
-                                .addGap(29, 29, 29)
-                                .addComponent(btnGenerarRe))))
+                            .addComponent(jLabel4)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -297,8 +311,15 @@ public class frmGenerarReportes extends javax.swing.JFrame {
                         .addGap(77, 77, 77)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(cbxMulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addComponent(jButton1)
+                        .addGap(51, 51, 51)
+                        .addComponent(btnGenerarRe))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnFinalizarEstado)
+                            .addComponent(cbxMulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -341,9 +362,13 @@ public class frmGenerarReportes extends javax.swing.JFrame {
                         .addGap(123, 123, 123)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnGenerarRe)
-                            .addComponent(jButton1)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 27, Short.MAX_VALUE))
+                            .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnFinalizarEstado))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -570,12 +595,42 @@ public class frmGenerarReportes extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); 
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnFinalizarEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarEstadoActionPerformed
+        Long idReservacion = obtenerIdReservacionSeleccionada();
+    if (idReservacion != null) {
+        try {
+            // Obtener la reservación desde la capa BO
+            ReservacionDTO reservacion = reservacionesBO.obtenerReservacionPorID(idReservacion);
+
+            // Cambiar el estado de la reservación a FINALIZADA
+            reservacion.setEstado(EstadoReservacionDTO.FINALIZADA);
+
+            try {
+                // Actualizar la reservación en la base de datos
+                reservacionesBO.actualizarReservacion(reservacion);
+            } catch (NoEncontradoException ex) {
+                Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Actualizar la interfaz o mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this, "Reservación finalizada exitosamente.");
+            cargarReservaciones();
+
+        } catch (ServicioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al finalizar la reservación: " + ex.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione una reservación para finalizar.");
+    }
+    }//GEN-LAST:event_btnFinalizarEstadoActionPerformed
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFinalizarEstado;
     private javax.swing.JButton btnGenerarRe;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbxClientes;

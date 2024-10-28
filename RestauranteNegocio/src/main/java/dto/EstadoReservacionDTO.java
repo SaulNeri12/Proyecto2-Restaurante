@@ -8,5 +8,7 @@ package dto;
 public enum EstadoReservacionDTO {
     PENDIENTE,
     FINALIZADA,
-    CANCELADA
+    CANCELADA;
+    
+    
 }
