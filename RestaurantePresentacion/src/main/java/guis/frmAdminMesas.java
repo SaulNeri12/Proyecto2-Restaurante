@@ -28,12 +28,13 @@ public class frmAdminMesas extends javax.swing.JFrame {
      * Creates new form frmAdminMesas
      */
     public frmAdminMesas() {
-        this.setLocationRelativeTo(null);
+        
         initComponents();
         this.setTitle("Administrar Mesas");
         //btnRegistrarMesas.addActionListener(this::btnRegistrarMesasActionPerformed);
         actualizarTablaMesas();
         cargarTiposMesa();
+        this.setLocationRelativeTo(null);
     }
 
     /**
