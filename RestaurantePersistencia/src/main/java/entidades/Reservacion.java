@@ -252,6 +252,7 @@ public class Reservacion implements Serializable {
     public LocalDateTime getFechaHoraRegistro() {
         return fechaHoraRegistro;
     }
+    
 
     /**
      * Asigna la fecha y hora exacta de cuando se registro la reservacion en el sistema
