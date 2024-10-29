@@ -195,6 +195,9 @@ public class MesasDAO implements IMesasDAO {
             String jpql = "SELECT m FROM Mesa m WHERE m.restaurante.id = :idRestaurante AND NOT EXISTS " +
                 "(SELECT r FROM Reservacion r WHERE r.mesa = m AND r.estado LIKE 'PENDIENTE')";
             TypedQuery<Mesa> query = entityManager.createQuery(jpql, Mesa.class);
+            
+            // si la fecha de nueva disp. de la mesa es ANTES de la fecha hora actual, se va a anadir a la lista de resultados
+            
             query.setParameter("idRestaurante", idRestaurante);
             return query.getResultList();
         } catch (Exception e) {
