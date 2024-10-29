@@ -8,49 +8,96 @@ package implementaciones;
 import dao.implementaciones.RestaurantesDAO;
 import dao.interfaces.IRestaurantesDAO;
 import dto.RestauranteDTO;
+import dto.convertidores.RestauranteConvertidor;
+import excepciones.DAOException;
 import excepciones.ServicioException;
+import entidades.Restaurante;
 import interfacesBO.IRestaurantesBO;
+
 import java.util.List;
 
 /**
- * Implementa los metodos de la interfaz IRestaurantesBO para completar su funcionalidad
- * @author Saul Neri
- * @author caarl
+ * Implementación de la interfaz IRestaurantesBO para gestionar la lógica de negocio
+ * relacionada con los restaurantes. Implementa el patrón Singleton para asegurar
+ * que solo exista una instancia de esta clase.
+ * 
+ * @autor Saul Neri
+ * @autor caarl
  */
 public class RestaurantesBO implements IRestaurantesBO {
-    
-    private static IRestaurantesBO instancia;
 
-    private IRestaurantesDAO restaurantesDAO = RestaurantesDAO.getInstance();
+    // DAO para acceder a los datos de restaurantes
+    private final IRestaurantesDAO restaurantesDAO;
     
+    // Convertidor para transformar entidades de Restaurante a DTOs y viceversa
+    private final RestauranteConvertidor restauranteConvertidor;
+    
+    // Instancia única de la clase
+    private static RestaurantesBO instance;
+
+    /**
+     * Constructor privado para implementar el patrón Singleton.
+     * Inicializa el DAO y el convertidor.
+     */
     private RestaurantesBO() {
-        
+        this.restaurantesDAO = RestaurantesDAO.getInstance(); // Obtiene la instancia del DAO
+        this.restauranteConvertidor = new RestauranteConvertidor(); // Crea un nuevo convertidor
     }
 
-    public static IRestaurantesBO getInstance() {
-        if (instancia == null) {
-            instancia = new RestaurantesBO();
+    /**
+     * Método para obtener la instancia única de RestaurantesBO.
+     * Se utiliza sincronización para asegurar que no se creen instancias
+     * simultáneamente en un entorno multihilo.
+     * 
+     * @return instancia única de RestaurantesBO
+     */
+    public static synchronized RestaurantesBO getInstance() {
+        if (instance == null) {
+            instance = new RestaurantesBO(); // Crea una nueva instancia si no existe
         }
-        return instancia;
+        return instance; // Retorna la instancia existente
     }
 
     @Override
     public List<RestauranteDTO> obtenerRestaurantesTodos() throws ServicioException {
-        // TODO: IMPLEMENTAR ESTE
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            // Obtiene la lista de todos los restaurantes a través del DAO
+            List<Restaurante> restaurantes = restaurantesDAO.obtenerRestaurantesTodos();
+            // Convierte la lista de entidades a DTOs antes de devolverla
+            return restauranteConvertidor.createFromEntities(restaurantes); 
+        } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
+            throw new ServicioException(e.getMessage());
+        }
     }
 
     @Override
     public RestauranteDTO obtenerRestaurantePorID(Long id) throws ServicioException {
-        // TODO: IMPLEMENTAR ESTE
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            // Obtiene un restaurante específico por su ID a través del DAO
+            Restaurante restaurante = restaurantesDAO.obtenerRestaurantePorID(id);
+            // Convierte la entidad a DTO antes de devolverla
+            return restauranteConvertidor.convertFromEntity(restaurante); 
+        } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
+            throw new ServicioException(e.getMessage());
+        }
     }
 
     @Override
     public RestauranteDTO obtenerRestaurantePorNumeroTelefono(String numeroTelefono) throws ServicioException {
-        // TODO: IMPLEMENTAR ESTE
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            // Obtiene un restaurante específico por su número de teléfono a través del DAO
+            Restaurante restaurante = restaurantesDAO.obtenerRestaurantePorNumeroTelefono(numeroTelefono);
+            // Convierte la entidad a DTO antes de devolverla
+            return restauranteConvertidor.convertFromEntity(restaurante); 
+        } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
+            throw new ServicioException(e.getMessage());
+        }
     }
+
+
 
     @Override
     public void agregarRestaurante(RestauranteDTO restaurante) throws ServicioException {
