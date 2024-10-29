@@ -1,4 +1,3 @@
-
 package dao.implementaciones;
 
 import conexion.Conexion;
@@ -20,12 +19,13 @@ import javax.persistence.TypedQuery;
 
 /**
  * Clase concreta de la interfaz IReservacionesDAO
+ *
  * @author Saul Neri
  */
 public class ReservacionesDAO implements IReservacionesDAO {
 
     private static IReservacionesDAO instancia;
-    
+
     private IMesasDAO mesasDAO = MesasDAO.getInstance();
 
     private ReservacionesDAO() {
@@ -39,31 +39,35 @@ public class ReservacionesDAO implements IReservacionesDAO {
     }
 
     @Override
-    public List<Reservacion> obtenerReservacionesTodos() throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+    public List<Reservacion> obtenerReservacionesTodos(Long idRestaurante) throws DAOException {
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
 
+        // TODO: IMPLEMENTAR ESTE
+        //      TODO: BUSCAR RESERVACIONES EN RESTAURANTE (SIN FILTRO)
         try {
             TypedQuery<Reservacion> query = entityManager.createQuery("SELECT r FROM Reservacion r", Reservacion.class);
             return query.getResultList();
         } catch (Exception e) {
             throw new DAOException("Error al obtener todas las reservaciones");
         } finally {
-            entityManager.close(); 
+            entityManager.close();
         }
     }
-    
+
     @Override
-    public List<Reservacion> obtenerReservacionesDeMesa(String codigoMesa) throws DAOException {
+    public List<Reservacion> obtenerReservacionesDeMesa(Long idRestaurante, String codigoMesa) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
-        
+
+        // TODO: IMPLEMENTAR ESTE
+        //      TODO: BUSCAR RESERVACIONES EN RESTAURANTE (FILTRO POR CODIGO MESA QUE ESTA <<DENTRO DE RESTAURANTE>>)
         try {
             boolean existeMesa = entityManager.createQuery("SELECT COUNT(m) FROM Mesa m WHERE m.codigo = :codigoMesa", Long.class)
                     .setParameter("codigoMesa", codigoMesa).getSingleResult() > 0;
-           
+
             if (!existeMesa) {
                 throw new DAOException("La mesa con el codigo indicado no existe");
             }
-            
+
             return entityManager.createQuery("SELECT r FROM Reservacion r WHERE r.mesa.codigo = :codigoMesa", Reservacion.class)
                     .setParameter("codigoMesa", codigoMesa)
                     .getResultList();
@@ -75,9 +79,11 @@ public class ReservacionesDAO implements IReservacionesDAO {
     }
 
     @Override
-    public List<Reservacion> obtenerReservacionesPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws DAOException {
+    public List<Reservacion> obtenerReservacionesPorPeriodo(Long idRestaurante, LocalDateTime fechaInicio, LocalDateTime fechaFin) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
 
+        // TODO: IMPLEMENTAR ESTE
+        //      TODO: BUSCAR RESERVACIONES EN RESTAURANTE (FILTRADO DE LA MISMA FORMA)
         try {
             TypedQuery<Reservacion> query = entityManager.createQuery(
                     "SELECT r FROM Reservacion r WHERE r.fechaHora BETWEEN :fechaInicio AND :fechaFin",
@@ -89,14 +95,16 @@ public class ReservacionesDAO implements IReservacionesDAO {
         } catch (Exception e) {
             throw new DAOException("Error al obtener reservaciones por período");
         } finally {
-            entityManager.close(); 
+            entityManager.close();
         }
     }
 
     @Override
-    public List<Reservacion> obtenerReservacionesCliente(String telefono) throws DAOException {
+    public List<Reservacion> obtenerReservacionesCliente(Long idRestaurante, String telefono) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
 
+        // TODO: IMPLEMENTAR ESTE
+        //      TODO: BUSCAR RESERVACIONES EN RESTAURANTE (POR CLIENTE ESE RESTAURANTE)
         try {
             TypedQuery<Reservacion> query = entityManager.createQuery(
                     "SELECT r FROM Reservacion r WHERE r.cliente.telefono = :telefono",
@@ -107,74 +115,86 @@ public class ReservacionesDAO implements IReservacionesDAO {
         } catch (Exception e) {
             throw new DAOException("Error al obtener reservaciones del cliente");
         } finally {
-            entityManager.close(); 
+            entityManager.close();
         }
     }
 
     @Override
     public Reservacion obtenerReservacionPorID(Long id) throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
 
         try {
             Reservacion res = entityManager.find(Reservacion.class, id);
             if (res == null) {
                 throw new DAOException("No se encontro la reservacion con el ID especificado");
             }
-            
+
             return res;
         } catch (Exception e) {
             throw new DAOException("Error al obtener la reservación por ID");
         } finally {
-            entityManager.close(); 
+            entityManager.close();
         }
     }
 
     @Override
     public void agregarReservacion(Reservacion reservacion) throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
+
+        // TODO: HACER QUE NO SE PUEDA TENER MAS DE UNA RESERVACION ACTIVA POR RESTAURANTE 
+        //       (YA HACE QUE NO PUEDA TENER MAS DE UNA ACTIVA PERO ES GLOBAL, NECESITA SER SOLO EN ESE RESTAURANTE)
+        
+        // TODO: HAcer que solo se pueda reservar una mesa disponible
+        
+        // TODO: Hacer que se evalue si la mesa ya esta disponible para reservar..
+        // Si su fecha de disponibilidad ya vencio... Se puede reservar
+        // Sino manda excepcion con mensaje "La mesa estara disponible hasta dd/mm/yyyy a las hh:mmm
+        
+        // TODO: aqui tambien puedes evaluar si la reservacion se sale del horario del restaurante
+        //          (LA HORA MAXIMA PARA HACER UNA RESERVACION DE UNA MESA ES 1 HORA ANTES DEL CIERRE DEL RESTAURANTE)
+        //          SI SE PASA DE ESA HORA ARROJA EXCEPCION INDICANDO EL PORQUE
         
         try {
             boolean reservacionActiva = entityManager.createQuery("SELECT COUNT(r) FROM Reservacion r WHERE r.cliente.id = :idCliente AND r.estado LIKE 'PENDIENTE'", Long.class)
-                            .setParameter("idCliente", reservacion.getCliente().getId())
-                            .getSingleResult() > 0;
-            
+                    .setParameter("idCliente", reservacion.getCliente().getId())
+                    .getSingleResult() > 0;
+
             if (reservacionActiva) {
                 throw new DAOException("No se puede realizar la reservacion debido a que el cliente cuenta con una reservacion activa");
             }
-            
+
             boolean mesaOcupada = entityManager.createQuery("SELECT COUNT(r) FROM Reservacion r WHERE r.mesa.codigo = :codigoMesa AND r.estado LIKE 'PENDIENTE'", Long.class)
-                            .setParameter("codigoMesa", reservacion.getMesa().getCodigo())
-                            .getSingleResult() > 0;
-            
+                    .setParameter("codigoMesa", reservacion.getMesa().getCodigo())
+                    .getSingleResult() > 0;
+
             if (mesaOcupada) {
                 throw new DAOException("La mesa que se intenta reservar ya se encuentra ocupada");
             }
-            
+
             if (reservacion.getNumeroPersonas() == null) {
                 throw new DAOException("No se ingreso el numero de personas para la reservacion");
             }
-            
+
             Integer cantidadPersonas = reservacion.getNumeroPersonas();
             TipoMesa tipoMesa = reservacion.getMesa().getTipoMesa();
-            
+
             if (cantidadPersonas > tipoMesa.getMaximoPersonas()) {
                 throw new DAOException(String.format("El numero de personas de la reservacion excede el maximo por mesa [maximo: %d]", tipoMesa.getMaximoPersonas()));
             }
-            
+
             if (cantidadPersonas < tipoMesa.getMinimoPersonas()) {
                 throw new DAOException(String.format("El numero de personas de la reservacion no rebasa el minimo por mesa [minimo: %d]", tipoMesa.getMinimoPersonas()));
             }
-            
+
             reservacion.setMontoTotal(reservacion.getMesa().getTipoMesa().getPrecio());
-            
+
             transaction.begin();
             entityManager.persist(reservacion);
             transaction.commit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (transaction.isActive()) {
-                transaction.rollback(); 
+                transaction.rollback();
             }
             //System.out.println("ERROR EN AGREGARRESERVACION: " + e.getMessage());
             throw new DAOException(e.getMessage());
@@ -193,25 +213,27 @@ public class ReservacionesDAO implements IReservacionesDAO {
             if (reservacionExistente == null) {
                 throw new DAOException("La reservacion que se desea actualizar no existe en el sistema");
             }
-            
+
             boolean finalizada = reservacionExistente.getEstado().equals(EstadoReservacion.FINALIZADA) || reservacionExistente.getEstado().equals(EstadoReservacion.CANCELADA);
             if (finalizada) {
                 throw new DAOException("La reservacion que se desea actualizar ya concluyo o fue cancelada");
             }
-            
+
             Integer cantidadPersonas = reservacion.getNumeroPersonas();
             TipoMesa tipoMesa = reservacion.getMesa().getTipoMesa();
-            
+
             if (cantidadPersonas > tipoMesa.getMaximoPersonas()) {
                 throw new DAOException(String.format("El numero de personas de la reservacion excede el maximo por mesa [maximo: %d]", tipoMesa.getMaximoPersonas()));
             }
-            
+
             if (cantidadPersonas < tipoMesa.getMinimoPersonas()) {
                 throw new DAOException(String.format("El numero de personas de la reservacion no rebasa el minimo por mesa [minimo: %d]", tipoMesa.getMinimoPersonas()));
             }
             
+            // TODO: HACER QUE LA NUEVA FECHA DE DISPONIBILIDAD PARA LA MESA SEA LA FECHAHORA ACTUAL + 5 HORAS
+
             reservacion.setMontoTotal(reservacion.getMesa().getTipoMesa().getPrecio());
-            
+
             transaction.begin();
             entityManager.merge(reservacion);
             transaction.commit();
@@ -221,13 +243,13 @@ public class ReservacionesDAO implements IReservacionesDAO {
             }
             throw new DAOException(e.getMessage());
         } finally {
-            entityManager.close(); 
+            entityManager.close();
         }
     }
 
     @Override
     public void eliminarReservacion(Long id) throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
@@ -248,37 +270,36 @@ public class ReservacionesDAO implements IReservacionesDAO {
         }
     }
 
-
     @Override
     public void cancelarReservacion(Long idReservacion) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
-        
+
         Reservacion reservacion = entityManager.find(Reservacion.class, idReservacion);
         if (reservacion == null) {
             throw new DAOException("No se encontro la reservacion");
         }
-        
+
         if (reservacion.getEstado().equals(EstadoReservacion.CANCELADA)) {
             throw new DAOException("La reservacion ya fue cancelada con anterioridad");
         }
-        
+
         if (reservacion.getEstado().equals(EstadoReservacion.FINALIZADA)) {
             throw new DAOException("La reservacion que se intenta cancelar ya fue termino");
         }
-        
+
         // se calcula la multa correspondiente al tiempo en el que fue cancelada
         LocalDateTime fechaHoraReservacion = reservacion.getFechaHora();
         LocalDateTime fechaHoraActual = LocalDateTime.now();
-        
+
         Duration diffTemporal = Duration.between(fechaHoraActual, fechaHoraReservacion);
-        
+
         long horasRestantes = diffTemporal.toHours();
-        
+
         // NOTE: DEBUG
         System.out.println("DIFERENCIA TEMPORAL DE CANCELACION: " + horasRestantes + " horas...");
-        
+
         Multa multa = null;
-        
+
         // multa de 25%
         if (horasRestantes > 24 && horasRestantes <= 48) {
             multa = this.obtenerTiposMultaTodos()
@@ -286,37 +307,37 @@ public class ReservacionesDAO implements IReservacionesDAO {
                     .filter(m -> m.getPorcentaje() == 25f)
                     .findFirst()
                     .orElse(null);
-            
+
             if (multa == null) {
                 throw new DAOException("Ocurrio un error al aplicar la multa en la reservacion, porfavor intente mas tarde...");
             }
-        // multa de 50%
+            // multa de 50%
         } else if (horasRestantes <= 24) {
             multa = this.obtenerTiposMultaTodos()
                     .stream()
                     .filter(m -> m.getPorcentaje() == 50f)
                     .findFirst()
                     .orElse(null);
-            
+
             if (multa == null) {
                 throw new DAOException("Ocurrio un error al aplicar la multa en la reservacion, porfavor intente mas tarde...");
             }
         }
-        
+
         // se asigna la multa correspondiente a las horas restantes para la reservacion
         reservacion.setMulta(multa);
-        
+
         if (multa != null) {
             // se calcula el nuevo total para la reservacion
             Float montoTotal = reservacion.getMesa().getTipoMesa().getPrecio() * (multa.getPorcentaje() / 100);
             reservacion.setMontoTotal(montoTotal);
         }
-        
+
         // se cambia el estado de la reservacion
         reservacion.setEstado(EstadoReservacion.CANCELADA);
-        
+
         EntityTransaction transaction = entityManager.getTransaction();
-        
+
         try {
             transaction.begin();
             entityManager.merge(reservacion);
@@ -327,14 +348,14 @@ public class ReservacionesDAO implements IReservacionesDAO {
             }
             throw new DAOException("Error al cancelar la reservacion, porfavor intente mas tarde");
         } finally {
-            entityManager.close(); 
+            entityManager.close();
         }
-        
+
         if (multa != null) {
             throw new DAOException(
                     String.format(
-                            "El cliente obtuvo una multa por cancelacion:\nDescripcion: %s\nTotal a pagar por la multa: $%.2f", 
-                            multa.getDescripcion(), 
+                            "El cliente obtuvo una multa por cancelacion:\nDescripcion: %s\nTotal a pagar por la multa: $%.2f",
+                            multa.getDescripcion(),
                             reservacion.getMontoTotal()
                     )
             );
@@ -356,7 +377,7 @@ public class ReservacionesDAO implements IReservacionesDAO {
 
     @Override
     public void agregarTipoMulta(Multa multa) throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
@@ -365,7 +386,7 @@ public class ReservacionesDAO implements IReservacionesDAO {
             transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {
-                transaction.rollback(); 
+                transaction.rollback();
             }
             //System.out.println("ERROR EN AGREGARRESERVACION: " + e.getMessage());
             throw new DAOException("Error al agregar el tipo de multa al sistema");
@@ -376,7 +397,7 @@ public class ReservacionesDAO implements IReservacionesDAO {
 
     @Override
     public void eliminarTipoMulta(Long idMulta) throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion(); 
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {

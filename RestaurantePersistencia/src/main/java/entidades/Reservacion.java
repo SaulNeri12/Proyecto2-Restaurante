@@ -41,7 +41,7 @@ public class Reservacion implements Serializable {
     private EstadoReservacion estado;
     
     @ManyToOne
-    @JoinColumn(name="mesa_id", nullable=false, referencedColumnName = "id")
+    @JoinColumn(name="mesa_id", nullable=true, referencedColumnName = "id")
     private Mesa mesa;
     
     @ManyToOne

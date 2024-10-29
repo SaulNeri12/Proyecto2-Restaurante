@@ -70,7 +70,7 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public List<ReservacionDTO> obtenerReservacionesTodos() throws ServicioException {
+    public List<ReservacionDTO> obtenerReservacionesTodos(Long idReservacion) throws ServicioException {
         try {
             List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesTodos();
             return reservacionConvertidor.createFromEntities(reservaciones);
@@ -113,6 +113,7 @@ public class ReservacionesBO implements IReservacionesBO {
     public void agregarReservacion(ReservacionDTO reservacion) throws ServicioException {
         try {
             Reservacion entidad = reservacionConvertidor.convertFromDto(reservacion);
+            // TODO: aqui tambien puedes evaluar si la reservacion se sale del horario del restaurante
             reservacionesDAO.agregarReservacion(entidad);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());

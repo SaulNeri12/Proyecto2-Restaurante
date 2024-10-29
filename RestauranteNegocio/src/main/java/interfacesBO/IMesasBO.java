@@ -20,47 +20,52 @@ import java.util.List;
 public interface IMesasBO {
 
     /**
-     * Devuelve todas las mesas registradas en el sistema
+     * Devuelve todas las mesas registradas en el sistema.
      *
-     * @return Lista de `MesaDTO`
-     * @throws ServicioException Si ocurre un error en la consulta
+     * @param idRestaurante ID del restaurante
+     * @return lista de mesas registradas
+     * @throws ServicioException si ocurre un error en la consulta
      */
-    public List<MesaDTO> obtenerMesasTodas() throws ServicioException;
-    
-    /**
-     * Devuelve una lista con las mesas disponibles para su reservacion
-     * @return Mesas disponibles
-     * @throws ServicioException Si ocurre un error en la consulta
-     */
-    public List<MesaDTO> obtenerMesasDisponibles() throws ServicioException;
+    public List<MesaDTO> obtenerMesasTodas(Long idRestaurante) throws ServicioException;
 
     /**
-     * Devuelve todas las mesas del tipo especificado
+     * Devuelve una lista con las mesas disponibles para su reservación.
      *
-     * @param tipo Tipo de mesa
-     * @return Lista de `MesaDTO`
-     * @throws ServicioException Si ocurre un error en la consulta
+     * @param idRestaurante ID del restaurante
+     * @return mesas disponibles
+     * @throws ServicioException si ocurre un error en la consulta
      */
-    public List<MesaDTO> obtenerMesasPorTipo(TipoMesaDTO tipo) throws ServicioException;
+    public List<MesaDTO> obtenerMesasDisponibles(Long idRestaurante) throws ServicioException;
+
+    /**
+     * Devuelve todas las mesas del tipo especificado.
+     *
+     * @param idRestaurante ID del restaurante en cuestión
+     * @param tipo tipo de mesa
+     * @return lista de mesas del tipo especificado
+     * @throws ServicioException si ocurre un error en la consulta
+     */
+    public List<MesaDTO> obtenerMesasPorTipo(Long idRestaurante, TipoMesaDTO tipo) throws ServicioException;
 
     /**
      * Inserta de manera "masiva" el número dado de mesas con el tipo y
-     * ubicación específica.
+     * ubicación especificados.
      *
-     * @param tipo Tipo de mesas a insertar
-     * @param ubicacion Ubicación de las mesas a insertar
-     * @param cantidad Cantidad de las mesas a insertar
-     * @throws ServicioException Si ocurre un error en la inserción
+     * @param idRestaurante ID del restaurante donde se agregarán las mesas
+     * @param tipo tipo de mesas a insertar
+     * @param ubicacion ubicación de las mesas a insertar
+     * @param cantidad cantidad de mesas a insertar
+     * @throws ServicioException si ocurre un error al insertar las mesas
      */
-    public void insertarMesas(TipoMesaDTO tipo, UbicacionMesaDTO ubicacion, int cantidad) throws ServicioException;
+    public void insertarMesas(Long idRestaurante, TipoMesaDTO tipo, UbicacionMesaDTO ubicacion, int cantidad) throws ServicioException;
 
     /**
-     * Elimina una mesa en el sistema por su código especificado
+     * Elimina una mesa en el sistema por su código especificado.
      *
-     * @param codigo Código de la mesa a eliminar
-     * @throws ServicioException Si ocurre un error en la eliminación
-     * @throws NoEncontradoException Si no se encuentra la mesa
+     * @param idRestaurante ID del restaurante donde se eliminará la mesa
+     * @param codigo código de la mesa a eliminar
+     * @throws ServicioException si ocurre un error en la eliminación
      */
-    public void eliminarMesa(String codigo) throws ServicioException, NoEncontradoException;
+    public void eliminarMesa(Long idRestaurante, String codigo) throws ServicioException;
 
 }

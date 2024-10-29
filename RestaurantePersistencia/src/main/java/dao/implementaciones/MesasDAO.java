@@ -37,8 +37,10 @@ public class MesasDAO implements IMesasDAO {
     }
 
     @Override
-    public List<Mesa> obtenerMesasTodas() throws DAOException {
+    public List<Mesa> obtenerMesasTodas(Long idRestaurante) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
+        
+        // TODO: Las mesas se obtendran por restaurante... SELECT m FROM Mesa m WHERE m.restaurante.id = :idRestaurante
 
         try {
             TypedQuery<Mesa> query = entityManager.createQuery("SELECT m FROM Mesa m", Mesa.class);
@@ -51,9 +53,11 @@ public class MesasDAO implements IMesasDAO {
     }
 
     @Override
-    public List<Mesa> obtenerMesasPorTipo(TipoMesa tipo) throws DAOException {
+    public List<Mesa> obtenerMesasPorTipo(Long idRestaurante, TipoMesa tipo) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
 
+        // TODO: HACER QUE BUSQUE LAS MESAS POR TIPO PERO DENTRO DE ESE RESTAURANTE
+        
         try {
             TypedQuery<Mesa> query = entityManager.createQuery("SELECT m FROM Mesa m WHERE m.tipoMesa = :tipo", Mesa.class);
             query.setParameter("tipo", tipo);
@@ -66,10 +70,12 @@ public class MesasDAO implements IMesasDAO {
     }
 
     @Override
-    public void eliminarMesa(String codigo) throws DAOException {
+    public void eliminarMesa(Long idRestaurante, String codigo) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
 
+        // TODO: SOLO ELIMINA LA MESA CON EL CODIGO ESPECIFICADO EN EL RESTAURANTE INDICADO
+        
         try {
             TypedQuery<Mesa> consulta = entityManager.createQuery("SELECT m FROM Mesa m WHERE m.codigo = :codigo", Mesa.class);
             consulta.setParameter("codigo", codigo);
@@ -102,12 +108,14 @@ public class MesasDAO implements IMesasDAO {
     }
 
     @Override
-    public void insertarMesas(TipoMesa tipo, UbicacionMesa ubicacion, int cantidad) throws DAOException {
+    public void insertarMesas(Long idRestaurante, TipoMesa tipo, UbicacionMesa ubicacion, int cantidad) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
         EntityTransaction transaction = entityManager.getTransaction();
 
         UbicacionMesa ubicacionReal = UbicacionMesa.valueOf(ubicacion.toString());
 
+        // TODO: INSERTAR LAS MESAS EN EL RESTAURANTE INDICADO
+        
         if (ubicacionReal == null) {
             throw new DAOException("La ubicacion de las mesas dada es incorrecta, ingrese una ubicacion de mesa valida");
         }
@@ -158,10 +166,12 @@ public class MesasDAO implements IMesasDAO {
     }
 
     @Override
-    public List<Mesa> obtenerMesasDisponibles() throws DAOException {
+    public List<Mesa> obtenerMesasDisponibles(Long idRestaurante) throws DAOException {
        
         EntityManager entityManager = Conexion.getInstance().crearConexion();
 
+        // TODO: OBTENER LAS MESAS DISPONIBLES EN EL RESTAURANTE INDICADO
+        
         try {
             String jpql = "SELECT m FROM Mesa m WHERE NOT EXISTS " +
              "(SELECT r FROM Reservacion r WHERE r.mesa = m AND r.estado LIKE 'PENDIENTE')";
