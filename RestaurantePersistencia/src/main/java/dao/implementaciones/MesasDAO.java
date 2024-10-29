@@ -11,6 +11,8 @@ import entidades.Restaurante;
 import entidades.TipoMesa;
 import entidades.UbicacionMesa;
 import excepciones.DAOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.persistence.EntityManager;
@@ -187,23 +189,43 @@ public class MesasDAO implements IMesasDAO {
     }
 
     @Override
-    public List<Mesa> obtenerMesasDisponibles(Long idRestaurante) throws DAOException {
-        EntityManager entityManager = Conexion.getInstance().crearConexion();
+public List<Mesa> obtenerMesasDisponibles(Long idRestaurante) throws DAOException {
+    EntityManager entityManager = Conexion.getInstance().crearConexion();
 
-        try {
-            // Consulta para obtener mesas disponibles que no tengan reservaciones pendientes
-            String jpql = "SELECT m FROM Mesa m WHERE m.restaurante.id = :idRestaurante AND NOT EXISTS " +
-                "(SELECT r FROM Reservacion r WHERE r.mesa = m AND r.estado LIKE 'PENDIENTE')";
-            TypedQuery<Mesa> query = entityManager.createQuery(jpql, Mesa.class);
-            
-            // si la fecha de nueva disp. de la mesa es ANTES de la fecha hora actual, se va a anadir a la lista de resultados
-            
-            query.setParameter("idRestaurante", idRestaurante);
-            return query.getResultList();
-        } catch (Exception e) {
-            throw new DAOException("Error al obtener mesas disponibles");
-        } finally {
-            entityManager.close(); // Cerrar el EntityManager al final
-        }
+    try {
+        // Consulta para obtener mesas disponibles en el restaurante especificado
+        String jpql = "SELECT m FROM Mesa m WHERE m.restaurante.id = :idRestaurante " +
+                      "AND (m.fechaNuevaDisponibilidad IS NULL OR m.fechaNuevaDisponibilidad <= :fechaActual) " +
+                      "AND NOT EXISTS (SELECT r FROM Reservacion r WHERE r.mesa = m AND r.estado LIKE 'PENDIENTE')";
+
+        TypedQuery<Mesa> query = entityManager.createQuery(jpql, Mesa.class);
+
+        // Parámetros de la consulta
+        LocalDateTime fechaActual = LocalDateTime.now();
+        query.setParameter("idRestaurante", idRestaurante);
+        query.setParameter("fechaActual", fechaActual);
+
+        // Impresión de depuración
+        System.out.println("ID del Restaurante: " + idRestaurante);
+        System.out.println("Fecha actual para comparación: " + fechaActual);
+
+        List<Mesa> mesasDisponibles = query.getResultList();
+        System.out.println("Mesas disponibles encontradas: " + mesasDisponibles.size());
+
+        return mesasDisponibles;
+    } catch (NoResultException e) {
+        // Si no hay resultados, devuelve una lista vacía
+        System.out.println("No se encontraron mesas disponibles.");
+        return new ArrayList<>();
+    } catch (Exception e) {
+        System.out.println("Error en obtenerMesasDisponibles: " + e.getMessage());
+        throw new DAOException("Error al obtener mesas disponibles");
+    } finally {
+        entityManager.close();
     }
+}
+
+
+
+
 }

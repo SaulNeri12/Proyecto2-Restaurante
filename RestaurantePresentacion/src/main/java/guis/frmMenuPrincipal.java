@@ -11,6 +11,7 @@ import dto.UbicacionMesaDTO;
 import excepciones.ServicioException;
 import implementaciones.MesasBO;
 import interfacesBO.IMesasBO;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
@@ -57,10 +58,18 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         List<MesaDTO> mesasDisponibles = null;
         
         try {
+           
             mesasDisponibles = this.mesasBO.obtenerMesasDisponibles(this.restaurante.getId());
+            if(mesasDisponibles==null){
+                mesasDisponibles = new ArrayList<>();
+                
+            }
+        
         } catch (ServicioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Cargar Mesas Disponibles", JOptionPane.ERROR_MESSAGE);
         }
+        
+        
         
         List<MesaDTO> mesasPequeniasDisponibles = mesasDisponibles.stream().filter(m -> m.getTipoMesa().getNombre().equalsIgnoreCase("pequenia")).collect(Collectors.toList());
         List<MesaDTO> mesasMedianasDisponibles = mesasDisponibles.stream().filter(m -> m.getTipoMesa().getNombre().equalsIgnoreCase("mediana")).collect(Collectors.toList());
