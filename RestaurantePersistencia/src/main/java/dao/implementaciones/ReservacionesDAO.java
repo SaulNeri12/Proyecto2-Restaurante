@@ -254,12 +254,15 @@ public class ReservacionesDAO implements IReservacionesDAO {
             if (cantidadPersonas < tipoMesa.getMinimoPersonas()) {
                 throw new DAOException(String.format("El numero de personas de la reservacion no rebasa el minimo por mesa [minimo: %d]", tipoMesa.getMinimoPersonas()));
             }
+            
+            reservacion.getMesa().setFechaNuevaDisponibilidad(LocalDateTime.now().plusHours(5));
 
             // TODO: HACER QUE LA NUEVA FECHA DE DISPONIBILIDAD PARA LA MESA SEA LA FECHAHORA ACTUAL + 5 HORAS
             reservacion.setMontoTotal(reservacion.getMesa().getTipoMesa().getPrecio());
 
             transaction.begin();
             entityManager.merge(reservacion);
+            entityManager.merge(reservacion.getMesa());
             transaction.commit();
         } catch (Exception e) {
             if (transaction.isActive()) {
