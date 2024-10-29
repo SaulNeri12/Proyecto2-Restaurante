@@ -12,6 +12,7 @@ import excepciones.DAOException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
@@ -50,6 +51,8 @@ public class RestaurantesDAO implements IRestaurantesDAO {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
         try {
             return entityManager.find(Restaurante.class, id);
+        } catch (NoResultException e) {
+            throw new DAOException("No se encontro al restaurante con el ID dado [telefono: %d]".formatted(id));
         } catch (Exception e) {
             throw new DAOException("Error al obtener el restaurante por ID");
         } finally {
@@ -65,7 +68,10 @@ public class RestaurantesDAO implements IRestaurantesDAO {
                 "SELECT r FROM Restaurante r WHERE r.telefono = :telefono", Restaurante.class);
             query.setParameter("telefono", numeroTelefono);
             return query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new DAOException("No se encontro al restaurante con el numero de telefono dado [telefono: %s]".formatted(numeroTelefono));
         } catch (Exception e) {
+            System.out.println("ERROR CONSULTA TELEFONO(%s): %s".formatted(e.getClass().getSimpleName(), e.getMessage()));
             throw new DAOException("Error al obtener el restaurante por número de teléfono");
         } finally {
             entityManager.close();

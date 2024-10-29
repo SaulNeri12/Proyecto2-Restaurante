@@ -22,6 +22,5 @@ public class RestaurantePersistencia {
         em.getTransaction().begin();
         em.getTransaction().commit();
         em.close();
-
     }
 }

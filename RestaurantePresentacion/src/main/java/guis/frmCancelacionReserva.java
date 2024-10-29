@@ -7,6 +7,7 @@ package guis;
 import dto.ClienteDTO;
 import dto.MesaDTO;
 import dto.ReservacionDTO;
+import dto.RestauranteDTO;
 import excepciones.ServicioException;
 import implementaciones.ClientesBO;
 import implementaciones.MesasBO;
@@ -32,12 +33,14 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     private IMesasBO mesasBO = MesasBO.getInstance();
 
     private Long idReservacionSeleccionada;
+    private RestauranteDTO restaurante;
 
     /**
      * Creates new form frmCancelacionReserva
+     * @param restaurante Informacion del restaurante en cuestion
      */
-    public frmCancelacionReserva() {
-        
+    public frmCancelacionReserva(RestauranteDTO restaurante) {
+        this.restaurante = restaurante;
         initComponents();
         this.setTitle("Cancelar Reservacion");
         this.setResizable(false);
@@ -67,7 +70,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
             List<ClienteDTO> clientes = ClientesBO.getInstance().obtenerClientesTodos();
             for (ClienteDTO cliente : clientes) {
-                cbxClientes.addItem(cliente.getTelefono()); // Agregamos los teléfonos de los clientes
+                cbxClientes.addItem("%s,%s".formatted(cliente.getNombreCompleto(), cliente.getTelefono())); // Agregamos los teléfonos de los clientes
             }
         } catch (ServicioException ex) {
             // Manejo de excepciones
@@ -84,7 +87,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
         try {
 
-            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
+            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas(this.restaurante.getId());
 
             for (MesaDTO mesa : mesas) {
                 cbxMesas.addItem(mesa.getCodigo());  // Aquí puedes usar `mesa.getCodigo()` o `mesa.getNombre()`, dependiendo de la información que prefieras mostrar
@@ -97,7 +100,11 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     private void cargarReservaciones() {
         try {
             // Obtenemos todas las reservaciones existentes
-            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos().stream().filter(r -> r.getMulta() == null).collect(Collectors.toList());;
+            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId())
+                    .stream()
+                    .filter(r -> r.getMulta() == null)
+                    .collect(Collectors.toList());;
+                    
             // Configuramos el modelo de la tabla si aún no lo tiene
             DefaultTableModel modeloTabla = (DefaultTableModel) tblReservaciones.getModel();
             modeloTabla.setRowCount(0); // Limpiamos la tabla
@@ -331,7 +338,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         } else {
             try {
 
-                List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(mesaSeleccionada);
+                List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(this.restaurante.getId(), mesaSeleccionada);
 
                 // Lógica para cargar en la tabla `tblResultado`
                 DefaultTableModel modeloTabla = (DefaultTableModel) this.tblReservaciones.getModel();
@@ -364,10 +371,16 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
             if (telefonoSeleccionado.equals("<None>")) {
                 // Si no hay un teléfono seleccionado, cargamos todas las reservaciones
-                reservaciones = reservacionesBO.obtenerReservacionesTodos().stream().filter(r -> r.getMulta() == null).collect(Collectors.toList());
+                reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId())
+                        .stream()
+                        .filter(r -> r.getMulta() == null)
+                        .collect(Collectors.toList());
             } else {
                 // Filtramos las reservaciones por el teléfono del cliente
-                reservaciones = reservacionesBO.obtenerReservacionesCliente(telefonoSeleccionado).stream().filter(r -> r.getMulta() == null).collect(Collectors.toList());
+                reservaciones = reservacionesBO.obtenerReservacionesCliente(this.restaurante.getId(), telefonoSeleccionado)
+                        .stream()
+                        .filter(r -> r.getMulta() == null)
+                        .collect(Collectors.toList());
             }
 
             // Limpiar y cargar la tabla con las reservaciones filtradas
@@ -422,7 +435,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -6,17 +6,12 @@ package guis;
 
 import com.github.lgooddatepicker.components.TimePicker;
 import dto.MesaDTO;
+import dto.RestauranteDTO;
 import dto.UbicacionMesaDTO;
 import excepciones.ServicioException;
-import horario.HorarioRestaurante;
 import implementaciones.MesasBO;
 import interfacesBO.IMesasBO;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
@@ -27,13 +22,16 @@ import javax.swing.JOptionPane;
 public class frmMenuPrincipal extends javax.swing.JFrame {
     
     private IMesasBO mesasBO = MesasBO.getInstance();
-    private HorarioRestaurante horario = HorarioRestaurante.getInstance();
+    
+    private RestauranteDTO restaurante;
     
     /**
      * Creates new form frmMenuPrincipal
      */
-    public frmMenuPrincipal() {
+    public frmMenuPrincipal(RestauranteDTO restaurante) {
         initComponents();
+        this.restaurante = restaurante;
+        
         this.setLocationRelativeTo(null);
         this.cargarHorario();
         this.cargarEstadisticas();
@@ -43,8 +41,8 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
      * Carga el horario del restaurante en pantalla
      */
     private void cargarHorario() {
-        this.campoHoraApertura.setTime(horario.getHoraApertura());
-        this.campoHoraCierre.setTime(horario.getHoraCierre());
+        this.campoHoraApertura.setTime(this.restaurante.getHoraApertura());
+        this.campoHoraCierre.setTime(this.restaurante.getHoraCierre());
     }
     
     /**
@@ -54,7 +52,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         List<MesaDTO> mesasDisponibles = null;
         
         try {
-            mesasDisponibles = this.mesasBO.obtenerMesasDisponibles();
+            mesasDisponibles = this.mesasBO.obtenerMesasDisponibles(this.restaurante.getId());
         } catch (ServicioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Cargar Mesas Disponibles", JOptionPane.ERROR_MESSAGE);
         }
@@ -466,7 +464,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmAdminMesas nuevoFrame = new frmAdminMesas(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmAdminMesas nuevoFrame = new frmAdminMesas(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_miAdministrarActionPerformed
 
@@ -475,7 +473,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmGenerarReportes nuevoFrame = new frmGenerarReportes(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmGenerarReportes nuevoFrame = new frmGenerarReportes(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
@@ -484,7 +482,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmCrearReservacion nuevoFrame = new frmCrearReservacion(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmCrearReservacion nuevoFrame = new frmCrearReservacion(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -493,7 +491,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmCancelacionReserva nuevoFrame = new frmCancelacionReserva(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmCancelacionReserva nuevoFrame = new frmCancelacionReserva(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
