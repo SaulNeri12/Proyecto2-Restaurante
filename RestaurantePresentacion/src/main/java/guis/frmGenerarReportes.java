@@ -28,13 +28,10 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import dto.RestauranteDTO;
-import excepciones.NoEncontradoException;
-import interfacesBO.IMesasBO;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -400,72 +397,90 @@ public class frmGenerarReportes extends javax.swing.JFrame {
 
     private void btnGenerarReActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReActionPerformed
         Document document = new Document(PageSize.A4); // Configuración para un documento tamaño A4
-        String filePath = "ReporteReservaciones.pdf";
+    String filePath = "ReporteReservaciones.pdf";
 
-        try {
-            PdfWriter.getInstance(document, new FileOutputStream(filePath));
-            document.open();
+    try {
+        PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        document.open();
 
-            // Definimos los estilos de fuente para el título, subtítulo y contenido
-            Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
-            Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC);
-            Font fontContenido = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
+        // Definimos los estilos de fuente para el título, subtítulo y contenido
+        Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+        Font fontSubTitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC);
+        Font fontContenido = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
 
-            // Título del reporte
-            Paragraph titulo = new Paragraph("Reporte de Reservaciones", fontTitulo);
-            titulo.setAlignment(Element.ALIGN_CENTER);
-            document.add(titulo);
-            document.add(new Paragraph(" ")); // Espacio en blanco
+        // Título del reporte
+        Paragraph titulo = new Paragraph("Reporte de Reservaciones", fontTitulo);
+        titulo.setAlignment(Element.ALIGN_CENTER);
+        document.add(titulo);
+        document.add(new Paragraph(" ")); // Espacio en blanco
 
-            // Sección de "Filtros aplicados"
-            Paragraph filtrosTitulo = new Paragraph("Filtros aplicados:", fontSubTitulo);
-            filtrosTitulo.setAlignment(Element.ALIGN_LEFT);
-            document.add(filtrosTitulo);
+        // Información del restaurante
+        Paragraph infoRestauranteTitulo = new Paragraph("Información del Restaurante", fontSubTitulo);
+        infoRestauranteTitulo.setAlignment(Element.ALIGN_LEFT);
+        document.add(infoRestauranteTitulo);
 
-            // Obtener y agregar valores seleccionados en los combobox
-            String filtroEstado = "Estado: " + (cbxEstado.getSelectedItem() != null ? cbxEstado.getSelectedItem().toString() : "No especificado");
-            String filtroMesa = "Mesa: " + (cbxMesas.getSelectedItem() != null ? cbxMesas.getSelectedItem().toString() : "No especificado");
-            String filtroCliente = "Clientes: " + (cbxClientes.getSelectedItem() != null ? cbxClientes.getSelectedItem().toString() : "No especificado");
-            String filtroMulta = "¿Multa?: " + (cbxMulta.getSelectedItem() != null ? cbxMulta.getSelectedItem().toString() : "No especificado");
+        String nombreRestaurante = "Nombre: " + restaurante.getNombre();
+        String direccionRestaurante = "Dirección: " + restaurante.getDireccion();
+        String telefonoRestaurante = "Teléfono: " + restaurante.getTelefono();
 
-            Paragraph filtrosSeleccionados = new Paragraph(filtroEstado + "\n" + filtroMesa + "\n" + filtroCliente + "\n" + filtroMulta, fontContenido);
-            filtrosSeleccionados.setAlignment(Element.ALIGN_LEFT);
-            document.add(filtrosSeleccionados);
-            document.add(new Paragraph(" ")); // Espacio en blanco antes de la tabla
+        Paragraph infoRestaurante = new Paragraph(
+            nombreRestaurante + "\n" + direccionRestaurante + "\n" + telefonoRestaurante, fontContenido
+        );
+        infoRestaurante.setAlignment(Element.ALIGN_LEFT);
+        document.add(infoRestaurante);
+        document.add(new Paragraph(" ")); // Espacio en blanco
 
-            // Tabla de reservaciones
-            PdfPTable table = new PdfPTable(tblResultado.getColumnCount());
-            table.setWidthPercentage(100);
+        // Sección de "Filtros aplicados"
+        Paragraph filtrosTitulo = new Paragraph("Filtros aplicados:", fontSubTitulo);
+        filtrosTitulo.setAlignment(Element.ALIGN_LEFT);
+        document.add(filtrosTitulo);
 
-            // Añadimos los encabezados de la tabla
-            for (int i = 0; i < tblResultado.getColumnCount(); i++) {
-                table.addCell(new Paragraph(tblResultado.getColumnName(i), fontSubTitulo));
-            }
+        // Obtener y agregar valores seleccionados en los combobox
+        String filtroEstado = "Estado: " + (cbxEstado.getSelectedItem() != null ? cbxEstado.getSelectedItem().toString() : "No especificado");
+        String filtroMesa = "Mesa: " + (cbxMesas.getSelectedItem() != null ? cbxMesas.getSelectedItem().toString() : "No especificado");
+        String filtroCliente = "Clientes: " + (cbxClientes.getSelectedItem() != null ? cbxClientes.getSelectedItem().toString() : "No especificado");
+        String filtroMulta = "¿Multa?: " + (cbxMulta.getSelectedItem() != null ? cbxMulta.getSelectedItem().toString() : "No especificado");
 
-            // Añadimos las filas de datos a la tabla
-            for (int row = 0; row < tblResultado.getRowCount(); row++) {
-                for (int col = 0; col < tblResultado.getColumnCount(); col++) {
-                    Object value = tblResultado.getValueAt(row, col);
-                    table.addCell(new Paragraph(value != null ? value.toString() : "", fontContenido));
-                }
-            }
+        Paragraph filtrosSeleccionados = new Paragraph(
+            filtroEstado + "\n" + filtroMesa + "\n" + filtroCliente + "\n" + filtroMulta, fontContenido
+        );
+        filtrosSeleccionados.setAlignment(Element.ALIGN_LEFT);
+        document.add(filtrosSeleccionados);
+        document.add(new Paragraph(" ")); // Espacio en blanco antes de la tabla
 
-            document.add(table); // Agregamos la tabla al documento
+        // Tabla de reservaciones
+        PdfPTable table = new PdfPTable(tblResultado.getColumnCount());
+        table.setWidthPercentage(100);
 
-        } catch (DocumentException | IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        } finally {
-            document.close();
+        // Añadimos los encabezados de la tabla
+        for (int i = 0; i < tblResultado.getColumnCount(); i++) {
+            table.addCell(new Paragraph(tblResultado.getColumnName(i), fontSubTitulo));
         }
 
-        // Mensaje de confirmación y apertura automática del PDF
-        JOptionPane.showMessageDialog(this, "El PDF se ha generado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        try {
-            Desktop.getDesktop().open(new File(filePath));
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "No se pudo abrir el archivo PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        // Añadimos las filas de datos a la tabla
+        for (int row = 0; row < tblResultado.getRowCount(); row++) {
+            for (int col = 0; col < tblResultado.getColumnCount(); col++) {
+                Object value = tblResultado.getValueAt(row, col);
+                table.addCell(new Paragraph(value != null ? value.toString() : "", fontContenido));
+            }
         }
+
+        document.add(table); // Agregamos la tabla al documento
+
+    } catch (DocumentException | IOException e) {
+        JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    } finally {
+        document.close();
+    }
+
+    // Mensaje de confirmación y apertura automática del PDF
+    JOptionPane.showMessageDialog(this, "El PDF se ha generado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    try {
+        Desktop.getDesktop().open(new File(filePath));
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(this, "No se pudo abrir el archivo PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnGenerarReActionPerformed
 
     private void cbxEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxEstadoActionPerformed
