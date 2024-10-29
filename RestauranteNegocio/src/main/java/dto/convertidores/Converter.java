@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> Tipo de datos DTO (Data Transfer Object) 
  * @param <U> Tipo de datos entidad
- * @autor Saul Neri
+ * @author Saul Neri
  */
 public class Converter<T, U> {
 

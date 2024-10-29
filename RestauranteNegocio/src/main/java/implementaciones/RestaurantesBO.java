@@ -21,8 +21,8 @@ import java.util.List;
  * relacionada con los restaurantes. Implementa el patrón Singleton para asegurar
  * que solo exista una instancia de esta clase.
  * 
- * @autor Saul Neri
- * @autor caarl
+ * @author Saul Neri
+ * @author caarl
  */
 public class RestaurantesBO implements IRestaurantesBO {
 

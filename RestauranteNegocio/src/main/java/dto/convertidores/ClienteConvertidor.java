@@ -13,7 +13,7 @@ import entidades.Cliente;
  * Utiliza referencias a métodos estáticos para realizar las conversiones específicas 
  * de DTO a entidad y viceversa.
  * 
- * @autor Saul Neri
+ * @author Saul Neri
  */
 public class ClienteConvertidor extends Converter<ClienteDTO, Cliente> {
 

@@ -22,7 +22,7 @@ import entidades.UbicacionMesa;
  * 
  * Utiliza convertidores anidados para transformar dependencias de TipoMesa y Restaurante.
  * 
- * @autor Saul Neri
+ * @author Saul Neri
  */
 public class MesaConvertidor extends Converter<MesaDTO, Mesa> {
   
@@ -100,5 +100,4 @@ public class MesaConvertidor extends Converter<MesaDTO, Mesa> {
         
         return mesa;
     }
-
 }

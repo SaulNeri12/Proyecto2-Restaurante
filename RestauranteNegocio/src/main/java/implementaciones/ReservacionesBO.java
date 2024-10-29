@@ -21,8 +21,9 @@ import java.util.List;
  * relacionada con las reservaciones. Implementa el patrón Singleton para asegurar
  * que solo exista una instancia de esta clase.
  * 
- * @autor caarl
+ * @author caarl
  */
+
 public class ReservacionesBO implements IReservacionesBO {
 
     // DAO para acceder a los datos de reservaciones

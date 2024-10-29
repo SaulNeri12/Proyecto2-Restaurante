@@ -13,7 +13,7 @@ import entidades.Multa;
  * Permite la transformación bidireccional entre MultaDTO (Data Transfer Object)
  * y Multa (entidad de base de datos).
  * 
- * @autor Saul Neri
+ * @author Saul Neri
  */
 public class MultaConvertidor extends Converter<MultaDTO, Multa> {
     
