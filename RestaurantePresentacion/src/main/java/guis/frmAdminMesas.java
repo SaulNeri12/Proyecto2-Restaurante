@@ -1,6 +1,7 @@
 package guis;
 
 import dto.MesaDTO;
+import dto.RestauranteDTO;
 import dto.TipoMesaDTO;
 import dto.UbicacionMesaDTO;
 import excepciones.ServicioException;
@@ -24,11 +25,14 @@ public class frmAdminMesas extends javax.swing.JFrame {
     private final IMesasBO mesasBO = MesasBO.getInstance();
     private final ITiposMesaBO tiposMesaBO = TiposMesaBO.getInstance();
 
+    private RestauranteDTO restaurante;
+    
     /**
      * Creates new form frmAdminMesas
+     * @param restaurante Informacion del restaurante en cuestion
      */
-    public frmAdminMesas() {
-        
+    public frmAdminMesas(RestauranteDTO restaurante) {
+        this.restaurante = restaurante;
         initComponents();
         this.setTitle("Administrar Mesas");
         //btnRegistrarMesas.addActionListener(this::btnRegistrarMesasActionPerformed);
@@ -63,7 +67,7 @@ public class frmAdminMesas extends javax.swing.JFrame {
      */
     private void actualizarTablaMesas() {
         try {
-            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
+            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas(this.restaurante.getId());
 
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("ID");
@@ -256,7 +260,7 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
             }
 
             // Insertar mesas
-            mesasBO.insertarMesas(tipoMesa, ubicacionMesa, numeroMesas);
+            mesasBO.insertarMesas(this.restaurante.getId(), tipoMesa, ubicacionMesa, numeroMesas);
 
             // Mensaje de confirmación
             JOptionPane.showMessageDialog(this, "Mesa registrada exitosamente.");
@@ -276,7 +280,7 @@ cbxUbicacionMesa.setModel(new javax.swing.DefaultComboBoxModel<>(UbicacionMesaDT
     this.dispose();
     
     // Abrir el nuevo frame
-    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_CancelarActionPerformed
 

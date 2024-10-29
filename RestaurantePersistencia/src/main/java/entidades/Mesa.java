@@ -1,8 +1,7 @@
-
-
 package entidades;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,28 +15,36 @@ import javax.persistence.Table;
 
 /**
  * Representa una mesa de un restaurante
+ *
  * @author Saul Neri
  */
 @Entity
-@Table(name="mesa")
+@Table(name = "mesa")
 public class Mesa implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name="codigo", nullable=false, length=15, unique=true)
+
+    @Column(name = "codigo", nullable = false, length = 15)
     private String codigo;
-    
+
     @ManyToOne
-    @JoinColumn(name="tipo_mesa", referencedColumnName = "id")
+    @JoinColumn(name = "tipo_mesa", referencedColumnName = "id")
     private TipoMesa tipoMesa;
-    
+
     @Enumerated(EnumType.STRING)
-    @Column(name="ubicacion", nullable=false)
+    @Column(name = "ubicacion", nullable = false)
     private UbicacionMesa ubicacion;
+
+    @Column(name = "fecha_hora_disp", nullable=true, columnDefinition = "TIMESTAMP")
+    private LocalDateTime fechaNuevaDisponibilidad;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurante", referencedColumnName = "id")
+    private Restaurante restaurante;
 
     @Override
     public int hashCode() {
@@ -63,27 +70,28 @@ public class Mesa implements Serializable {
     public String toString() {
         return "entidades.Mesa[ id=" + id + " ]";
     }
-    
+
     /**
-     * Constructor por defecto que inicializa una nueva instancia de Mesa.
-     * Este constructor no realiza ninguna acción adicional.
+     * Constructor por defecto que inicializa una nueva instancia de Mesa. Este
+     * constructor no realiza ninguna acción adicional.
      */
     public Mesa() {
-        
+
     }
-    
+
     /**
-     * Constructor que inicializa una nueva instancia de Mesa con un identificador específico.
-     * 
+     * Constructor que inicializa una nueva instancia de Mesa con un
+     * identificador específico.
+     *
      * @param id El identificador único de la mesa.
      */
     public Mesa(Long id) {
         this.id = id;
     }
-    
+
     /**
      * Obtiene el identificador único de la mesa.
-     * 
+     *
      * @return El identificador único de la mesa.
      */
     public Long getId() {
@@ -92,7 +100,7 @@ public class Mesa implements Serializable {
 
     /**
      * Establece el identificador único de la mesa.
-     * 
+     *
      * @param id El identificador único de la mesa a establecer.
      */
     public void setId(Long id) {
@@ -101,7 +109,7 @@ public class Mesa implements Serializable {
 
     /**
      * Obtiene el código que representa la mesa.
-     * 
+     *
      * @return El código de la mesa.
      */
     public String getCodigo() {
@@ -110,7 +118,7 @@ public class Mesa implements Serializable {
 
     /**
      * Establece el código que representa la mesa.
-     * 
+     *
      * @param codigo El código de la mesa a establecer.
      */
     public void setCodigo(String codigo) {
@@ -119,7 +127,7 @@ public class Mesa implements Serializable {
 
     /**
      * Obtiene el tipo de mesa.
-     * 
+     *
      * @return El tipo de mesa asociado a esta instancia de Mesa.
      */
     public TipoMesa getTipoMesa() {
@@ -128,7 +136,7 @@ public class Mesa implements Serializable {
 
     /**
      * Establece el tipo de mesa.
-     * 
+     *
      * @param tipoMesa El tipo de mesa a establecer.
      */
     public void setTipoMesa(TipoMesa tipoMesa) {
@@ -137,6 +145,7 @@ public class Mesa implements Serializable {
 
     /**
      * Obtiene la ubicacion de la mesa en el restaurante
+     *
      * @return La ubicacion de la mesa
      */
     public UbicacionMesa getUbicacion() {
@@ -145,9 +154,47 @@ public class Mesa implements Serializable {
 
     /**
      * Asigna la ubicacion de la mesa en el restaurante
+     *
      * @param ubicacion Ubicacion de la mesa a asignar
      */
     public void setUbicacion(UbicacionMesa ubicacion) {
         this.ubicacion = ubicacion;
     }
+
+    /**
+     * Obtiene la fecha y hora en la que la mesa estará disponible nuevamente.
+     *
+     * @return la fecha y hora de nueva disponibilidad de la mesa.
+     */
+    public LocalDateTime getFechaNuevaDisponibilidad() {
+        return fechaNuevaDisponibilidad;
+    }
+
+    /**
+     * Establece la fecha y hora en la que la mesa estará disponible nuevamente.
+     *
+     * @param fechaNuevaDisponibilidad la nueva fecha y hora de disponibilidad.
+     */
+    public void setFechaNuevaDisponibilidad(LocalDateTime fechaNuevaDisponibilidad) {
+        this.fechaNuevaDisponibilidad = fechaNuevaDisponibilidad;
+    }
+
+    /**
+     * Obtiene el restaurante asociado a la mesa.
+     *
+     * @return el restaurante al que pertenece esta mesa.
+     */
+    public Restaurante getRestaurante() {
+        return restaurante;
+    }
+
+    /**
+     * Establece el restaurante al que pertenece la mesa.
+     *
+     * @param restaurante el restaurante que se asociará a esta mesa.
+     */
+    public void setRestaurante(Restaurante restaurante) {
+        this.restaurante = restaurante;
+    }
+
 }

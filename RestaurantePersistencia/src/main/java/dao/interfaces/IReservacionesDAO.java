@@ -14,15 +14,16 @@ public interface IReservacionesDAO extends IMultasDAO{
        
     /**
      * Obtiene la lista de reservaciones registradas de una mesa a partir de su codigo
+     * @param idRestaurante ID del restaurante en donde se quiere consultar las reservas
      * @param codigoMesa Codigo de la mesa a buscar
      * @return Reservaciones de dicha mesa
      * @throws DAOException Si ocurre un error en la consulta
      */
-    public List<Reservacion> obtenerReservacionesDeMesa(String codigoMesa) throws DAOException;
+    public List<Reservacion> obtenerReservacionesDeMesa(Long idRestaurante, String codigoMesa) throws DAOException;
     
     /**
      * Cancela la reservacion con el ID dado y le asigna una multa por cancelacion
-     * @param idReservacion ID de la reservacion a cancelar
+     * @param idReservacion ID de la reservacion en cuestion
      * @throws DAOException Si ocurre un error en la cancelacion
      */
     public void cancelarReservacion(Long idReservacion) throws DAOException;
@@ -30,16 +31,18 @@ public interface IReservacionesDAO extends IMultasDAO{
     /**
      * Obtiene una lista de todas las reservaciones almacenadas.
      *
+     * @param idRestaurante ID del restaurante en cuestion
      * @return Una lista de objetos `Reservacion`.
      * @throws DAOException Si ocurre un error durante la obtención de los
      * datos.
      */
-    public List<Reservacion> obtenerReservacionesTodos() throws DAOException;
+    public List<Reservacion> obtenerReservacionesTodos(Long idRestaurante) throws DAOException;
 
     /**
      * Obtiene una lista de reservaciones dentro de un período de tiempo
      * específico.
      *
+     * @param idRestaurante ID del restaurante en cuestion
      * @param fechaInicio La fecha y hora de inicio del período.
      * @param fechaFin La fecha y hora de fin del período.
      * @return Una lista de objetos `Reservacion` que se encuentran en el rango
@@ -47,18 +50,19 @@ public interface IReservacionesDAO extends IMultasDAO{
      * @throws DAOException Si ocurre un error durante la obtención de los
      * datos.
      */
-    public List<Reservacion> obtenerReservacionesPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws DAOException;
+    public List<Reservacion> obtenerReservacionesPorPeriodo(Long idRestaurante, LocalDateTime fechaInicio, LocalDateTime fechaFin) throws DAOException;
 
     /**
      * Obtiene una lista de reservaciones asociadas a un cliente específico
      * basado en su número de teléfono.
      *
+     * @param idRestaurante ID del restaurante en cuestion
      * @param telefono El número de teléfono del cliente.
      * @return Una lista de objetos `Reservacion` pertenecientes al cliente.
      * @throws DAOException Si ocurre un error durante la obtención de los
      * datos.
      */
-    public List<Reservacion> obtenerReservacionesCliente(String telefono) throws DAOException;
+    public List<Reservacion> obtenerReservacionesCliente(Long idRestaurante, String telefono) throws DAOException;
 
     /**
      * Obtiene una reservación específica basada en su identificador único.

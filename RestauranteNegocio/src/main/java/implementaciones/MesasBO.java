@@ -15,93 +15,116 @@ import entidades.Mesa;
 import entidades.TipoMesa;
 import entidades.UbicacionMesa;
 import excepciones.DAOException;
-import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import interfacesBO.IMesasBO;
+
 import java.util.List;
 
 /**
  * Implementación de la interfaz IMesasBO para manejar la lógica de negocio
- * relacionada con las mesas. Implementa el patrón Singleton.
- *
- * @author caarl
+ * relacionada con las mesas. Implementa el patrón Singleton para asegurar
+ * que solo exista una instancia de esta clase.
+ * 
  */
 public class MesasBO implements IMesasBO {
 
+    // DAO para acceder a los datos de las mesas
     private final IMesasDAO mesasDAO;
+    
+    // Convertidor para transformar entidades de Mesa a DTOs y viceversa
     private final MesaConvertidor mesaConvertidor;
+    
+    // Convertidor para transformar entidades de TipoMesa a DTOs y viceversa
     private final TipoMesaConvertidor tipoMesaConvertidor;
 
     // Instancia única de la clase
     private static MesasBO instance;
 
     /**
-     * Constructor privado para implementar Singleton.
+     * Constructor privado para implementar el patrón Singleton.
+     * Inicializa los DAOs y los convertidores necesarios.
      */
     private MesasBO() {
-        this.mesasDAO = MesasDAO.getInstance();
-        this.mesaConvertidor = new MesaConvertidor();
-        this.tipoMesaConvertidor = new TipoMesaConvertidor();
+        this.mesasDAO = MesasDAO.getInstance(); // Obtiene la instancia del DAO
+        this.mesaConvertidor = new MesaConvertidor(); // Crea un nuevo convertidor de Mesa
+        this.tipoMesaConvertidor = new TipoMesaConvertidor(); // Crea un nuevo convertidor de TipoMesa
     }
 
     /**
      * Método para obtener la instancia única de MesasBO.
-     *
+     * Se utiliza sincronización para asegurar que no se creen instancias
+     * simultáneamente en un entorno multihilo.
+     * 
      * @return instancia única de MesasBO
      */
     public static synchronized MesasBO getInstance() {
         if (instance == null) {
-            instance = new MesasBO();
+            instance = new MesasBO(); // Crea una nueva instancia si no existe
         }
-        return instance;
+        return instance; // Retorna la instancia existente
     }
 
     @Override
-    public List<MesaDTO> obtenerMesasTodas() throws ServicioException {
+    public List<MesaDTO> obtenerMesasTodas(Long idRestaurante) throws ServicioException {
         try {
-            List<Mesa> mesas = mesasDAO.obtenerMesasTodas();
+            // Obtiene la lista de todas las mesas a través del DAO
+            List<Mesa> mesas = mesasDAO.obtenerMesasTodas(idRestaurante);
+            // Convierte la lista de entidades a DTOs antes de devolverla
             return mesaConvertidor.createFromEntities(mesas);
         } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
             throw new ServicioException(e.getMessage());
         }
     }
 
     @Override
-    public List<MesaDTO> obtenerMesasPorTipo(TipoMesaDTO tipo) throws ServicioException {
+    public List<MesaDTO> obtenerMesasDisponibles(Long idRestaurante) throws ServicioException {
         try {
-            TipoMesa tipoMesa = tipoMesaConvertidor.convertFromDto(tipo);
-            List<Mesa> mesas = mesasDAO.obtenerMesasPorTipo(tipoMesa);
-            return mesaConvertidor.createFromEntities(mesas);
+            // Obtiene la lista de mesas disponibles a través del DAO
+            return mesaConvertidor.createFromEntities(mesasDAO.obtenerMesasDisponibles(idRestaurante));
         } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
             throw new ServicioException(e.getMessage());
         }
     }
 
     @Override
-    public void insertarMesas(TipoMesaDTO tipo, UbicacionMesaDTO ubicacion, int cantidad) throws ServicioException {
+    public List<MesaDTO> obtenerMesasPorTipo(Long idRestaurante, TipoMesaDTO tipo) throws ServicioException {
         try {
+            // Convierte el DTO de TipoMesa a entidad
             TipoMesa tipoMesa = tipoMesaConvertidor.convertFromDto(tipo);
+            // Obtiene las mesas de un tipo específico a través del DAO
+            List<Mesa> mesas = mesasDAO.obtenerMesasPorTipo(idRestaurante, tipoMesa);
+            // Convierte la lista de entidades a DTOs antes de devolverla
+            return mesaConvertidor.createFromEntities(mesas);
+        } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
+            throw new ServicioException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void insertarMesas(Long idRestaurante, TipoMesaDTO tipo, UbicacionMesaDTO ubicacion, int cantidad) throws ServicioException {
+        try {
+            // Convierte el DTO de TipoMesa a entidad
+            TipoMesa tipoMesa = tipoMesaConvertidor.convertFromDto(tipo);
+            // Convierte el DTO de UbicacionMesa a entidad
             UbicacionMesa ubicacionMesa = UbicacionMesa.valueOf(ubicacion.toString());
-            mesasDAO.insertarMesas(tipoMesa, ubicacionMesa, cantidad);
+            // Inserta las mesas a través del DAO
+            mesasDAO.insertarMesas(idRestaurante, tipoMesa, ubicacionMesa, cantidad);
         } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
             throw new ServicioException(e.getMessage());
         }
     }
 
     @Override
-    public void eliminarMesa(String codigo) throws ServicioException, NoEncontradoException {
+    public void eliminarMesa(Long idRestaurante, String codigo) throws ServicioException {
         try {
-            mesasDAO.eliminarMesa(codigo);
+            // Elimina una mesa específica a través del DAO
+            mesasDAO.eliminarMesa(idRestaurante, codigo);
         } catch (DAOException e) {
-            throw new ServicioException(e.getMessage());
-        }
-    }
-
-    @Override
-    public List<MesaDTO> obtenerMesasDisponibles() throws ServicioException {
-        try {
-            return this.mesaConvertidor.createFromEntities(mesasDAO.obtenerMesasDisponibles());
-        } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
             throw new ServicioException(e.getMessage());
         }
     }

@@ -4,6 +4,7 @@ package entidades;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -41,7 +42,7 @@ public class Reservacion implements Serializable {
     private EstadoReservacion estado;
     
     @ManyToOne
-    @JoinColumn(name="mesa_id", nullable=false, referencedColumnName = "id")
+    @JoinColumn(name="mesa_id", nullable=true, referencedColumnName = "id")
     private Mesa mesa;
     
     @ManyToOne
@@ -252,6 +253,7 @@ public class Reservacion implements Serializable {
     public LocalDateTime getFechaHoraRegistro() {
         return fechaHoraRegistro;
     }
+    
 
     /**
      * Asigna la fecha y hora exacta de cuando se registro la reservacion en el sistema

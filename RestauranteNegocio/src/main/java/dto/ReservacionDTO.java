@@ -5,30 +5,28 @@
 
 package dto;
 
-/**
- *
- * @author Saul Neri
- */
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Clase DTO (Data Transfer Object) que representa una reservación en el sistema.
  * Esta clase se utiliza para transferir datos de una reservación entre diferentes capas de la aplicación.
+ * 
+ * @author Saul Neri
  */
 public class ReservacionDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // Serialización de la clase
 
-    private Long id;
-    private LocalDateTime fechaHora;
-    private LocalDateTime fechaHoraRegistro;
-    private Integer numeroPersonas;
-    private EstadoReservacionDTO estado;
-    private MesaDTO mesa;
-    private ClienteDTO cliente;
-    private Float montoTotal;
-    private MultaDTO multa;
+    private Long id; // Identificador único de la reservación
+    private LocalDateTime fechaHora; // Fecha y hora de la reservación
+    private LocalDateTime fechaHoraRegistro; // Fecha y hora de registro de la reservación
+    private Integer numeroPersonas; // Número de personas para la reservación
+    private EstadoReservacionDTO estado; // Estado de la reservación
+    private MesaDTO mesa; // Mesa asociada a la reservación
+    private ClienteDTO cliente; // Cliente asociado a la reservación
+    private Float montoTotal; // Monto total de la reservación
+    private MultaDTO multa; // Multa asociada a la reservación
 
     /**
      * Constructor por defecto que inicializa una nueva instancia de ReservacionDTO.
@@ -38,6 +36,28 @@ public class ReservacionDTO implements Serializable {
         this.estado = EstadoReservacionDTO.PENDIENTE; 
     }
 
+    /**
+     * Constructor que inicializa una nueva instancia de ReservacionDTO con un identificador específico.
+     * 
+     * @param id El identificador único de la reservación.
+     */
+    public ReservacionDTO(Long id) {
+        this.id = id;
+        this.estado = EstadoReservacionDTO.PENDIENTE; 
+    }
+
+    /**
+     * Constructor que inicializa una nueva instancia de ReservacionDTO con todos los atributos.
+     * 
+     * @param id El identificador único de la reservación.
+     * @param fechaHora La fecha y hora de la reservación.
+     * @param numeroPersonas El número de personas para la reservación.
+     * @param estado El estado de la reservación.
+     * @param mesa La mesa asociada a la reservación.
+     * @param cliente El cliente asociado a la reservación.
+     * @param montoTotal El monto total de la reservación.
+     * @param multa La multa asociada a la reservación.
+     */
     public ReservacionDTO(Long id, LocalDateTime fechaHora, Integer numeroPersonas, EstadoReservacionDTO estado, MesaDTO mesa, ClienteDTO cliente, Float montoTotal, MultaDTO multa) {
         this.id = id;
         this.fechaHora = fechaHora;
@@ -49,6 +69,17 @@ public class ReservacionDTO implements Serializable {
         this.multa = multa;
     }
 
+    /**
+     * Constructor que inicializa una nueva instancia de ReservacionDTO sin el ID.
+     * 
+     * @param fechaHora La fecha y hora de la reservación.
+     * @param numeroPersonas El número de personas para la reservación.
+     * @param estado El estado de la reservación.
+     * @param mesa La mesa asociada a la reservación.
+     * @param cliente El cliente asociado a la reservación.
+     * @param montoTotal El monto total de la reservación.
+     * @param multa La multa asociada a la reservación.
+     */
     public ReservacionDTO(LocalDateTime fechaHora, Integer numeroPersonas, EstadoReservacionDTO estado, MesaDTO mesa, ClienteDTO cliente, Float montoTotal, MultaDTO multa) {
         this.fechaHora = fechaHora;
         this.numeroPersonas = numeroPersonas;
@@ -57,18 +88,6 @@ public class ReservacionDTO implements Serializable {
         this.cliente = cliente;
         this.montoTotal = montoTotal;
         this.multa = multa;
-    }
-    
-    
-
-    /**
-     * Constructor que inicializa una nueva instancia de ReservacionDTO con un identificador específico.
-     * 
-     * @param id El identificador único de la reservación.
-     */
-    public ReservacionDTO(Long id) {
-        this.id = id;
-        this.estado = EstadoReservacionDTO.PENDIENTE; 
     }
 
     /**
@@ -191,7 +210,7 @@ public class ReservacionDTO implements Serializable {
     /**
      * Establece el monto total de la reservación.
      * 
-     * @param montoTotal El monto total a establecer.
+     * @param montoTotal El monto total a establecer para la reservación.
      */
     public void setMontoTotal(Float montoTotal) {
         this.montoTotal = montoTotal;
@@ -200,7 +219,7 @@ public class ReservacionDTO implements Serializable {
     /**
      * Obtiene la multa asociada a la reservación.
      * 
-     * @return La multa asociada, representada como un DTO.
+     * @return La multa de la reservación, representada como un DTO.
      */
     public MultaDTO getMulta() {
         return multa;
@@ -209,23 +228,25 @@ public class ReservacionDTO implements Serializable {
     /**
      * Establece la multa asociada a la reservación.
      * 
-     * @param multa La multa a establecer, representada como un DTO.
+     * @param multa La multa a establecer para la reservación, representada como un DTO.
      */
     public void setMulta(MultaDTO multa) {
         this.multa = multa;
     }
 
-/**
-     * Regresa la fecha y hora exacta de cuando se registro la reservacion en el sistema
-     * @return Fecha y hora exacta
+    /**
+     * Obtiene la fecha y hora de registro de la reservación.
+     * 
+     * @return La fecha y hora de registro.
      */
     public LocalDateTime getFechaHoraRegistro() {
         return fechaHoraRegistro;
     }
 
     /**
-     * Asigna la fecha y hora exacta de cuando se registro la reservacion en el sistema
-     * @param fechaHoraRegistro Fecha y hora a asignar
+     * Establece la fecha y hora de registro de la reservación.
+     * 
+     * @param fechaHoraRegistro La fecha y hora de registro a establecer.
      */
     public void setFechaHoraRegistro(LocalDateTime fechaHoraRegistro) {
         this.fechaHoraRegistro = fechaHoraRegistro;

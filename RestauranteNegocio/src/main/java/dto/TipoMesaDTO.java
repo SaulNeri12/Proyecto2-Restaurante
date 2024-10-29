@@ -8,18 +8,21 @@ package dto;
 import java.io.Serializable;
 
 /**
- *
+ * Clase que representa un tipo de mesa en el sistema de reservas.
+ * Esta clase es un Data Transfer Object (DTO) que contiene 
+ * información relevante sobre los tipos de mesa disponibles en el restaurante.
+ * 
  * @author Saul Neri
  */
 public class TipoMesaDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    private Long id;
-    private String nombre;
-    private Integer maximoPersonas;
-    private Integer minimoPersonas;
-    private Float precio;
+    private Long id; // Identificador único del tipo de mesa.
+    private String nombre; // Nombre descriptivo del tipo de mesa.
+    private Integer maximoPersonas; // Número máximo de personas que pueden usar la mesa.
+    private Integer minimoPersonas; // Número mínimo de personas que pueden usar la mesa.
+    private Float precio; // Precio asociado al tipo de mesa.
 
     /**
      * Constructor por defecto que inicializa una nueva instancia de TipoMesaDTO.
@@ -29,14 +32,23 @@ public class TipoMesaDTO implements Serializable {
         
     }
     
+    /**
+     * Constructor que inicializa una nueva instancia de TipoMesaDTO con 
+     * los valores especificados.
+     *
+     * @param id El identificador único del tipo de mesa.
+     * @param nombre El nombre descriptivo del tipo de mesa.
+     * @param maximoPersonas El número máximo de personas que pueden usar la mesa.
+     * @param minimoPersonas El número mínimo de personas que pueden usar la mesa.
+     * @param precio El precio asociado al tipo de mesa.
+     */
     public TipoMesaDTO(Long id, String nombre, Integer maximoPersonas, Integer minimoPersonas, Float precio) {
-    this.id = id;
-    this.nombre = nombre;
-    this.maximoPersonas = maximoPersonas;
-    this.minimoPersonas = minimoPersonas;
-    this.precio = precio;
-}
-
+        this.id = id;
+        this.nombre = nombre;
+        this.maximoPersonas = maximoPersonas;
+        this.minimoPersonas = minimoPersonas;
+        this.precio = precio;
+    }
 
     /**
      * Obtiene el identificador único del tipo de mesa.
@@ -128,6 +140,13 @@ public class TipoMesaDTO implements Serializable {
         this.nombre = nombre;
     }
 
+    /**
+     * Calcula y devuelve el código hash para el objeto TipoMesaDTO.
+     * Este código se utiliza para comparar objetos y para la 
+     * inserción en estructuras de datos como HashMap.
+     *
+     * @return Código hash del objeto.
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -135,6 +154,13 @@ public class TipoMesaDTO implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara este objeto TipoMesaDTO con otro objeto para determinar 
+     * si son iguales.
+     *
+     * @param object El objeto con el que comparar.
+     * @return true si los objetos son iguales, false de lo contrario.
+     */
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof TipoMesaDTO)) {
@@ -147,9 +173,16 @@ public class TipoMesaDTO implements Serializable {
         return true;
     }
 
+    /**
+     * Devuelve una representación en cadena del objeto TipoMesaDTO.
+     * Esta representación incluye el nombre del tipo de mesa.
+     *
+     * @return Una cadena que representa el objeto.
+     */
     @Override
     public String toString() {
         return nombre;
     }
 }
+
 

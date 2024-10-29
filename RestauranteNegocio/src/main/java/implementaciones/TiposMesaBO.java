@@ -5,7 +5,6 @@
 
 package implementaciones;
 
-
 import dao.implementaciones.TiposMesaDAO;
 import dao.interfaces.ITiposMesaDAO;
 import dto.TipoMesaDTO;
@@ -21,34 +20,52 @@ import java.util.List;
 /**
  * Implementación de la interfaz ITiposMesaBO para manejar la lógica de negocio
  * relacionada con los tipos de mesa.
+ * Utiliza el patrón Singleton para asegurar que solo exista una instancia de esta clase.
+ * 
  * @author caarl
  */
 public class TiposMesaBO implements ITiposMesaBO {
 
+    // Instancia única de la clase
     private static TiposMesaBO instance;
     
+    // DAO para acceder a los datos de tipos de mesa
     private final ITiposMesaDAO tiposMesaDAO;
+
+    // Convertidor para transformar entidades de TipoMesa a DTOs y viceversa
     private final TipoMesaConvertidor tipoMesaConvertidor;
 
+    /**
+     * Constructor privado para implementar el patrón Singleton.
+     * Inicializa el DAO y el convertidor.
+     */
     private TiposMesaBO() {
-        this.tiposMesaDAO = TiposMesaDAO.getInstance();
-        this.tipoMesaConvertidor = new TipoMesaConvertidor();
+        this.tiposMesaDAO = TiposMesaDAO.getInstance(); // Obtiene la instancia del DAO
+        this.tipoMesaConvertidor = new TipoMesaConvertidor(); // Crea un nuevo convertidor
     }
     
+    /**
+     * Método para obtener la instancia única de TiposMesaBO.
+     * 
+     * @return instancia única de TiposMesaBO
+     */
     public static TiposMesaBO getInstance() {
         if (instance == null) {
-            instance = new TiposMesaBO();
+            instance = new TiposMesaBO(); // Crea una nueva instancia si no existe
         }
         
-        return instance;
+        return instance; // Retorna la instancia existente
     }
 
     @Override
     public List<TipoMesaDTO> obtenerTiposMesaTodos() throws ServicioException {
         try {
+            // Obtiene la lista de todos los tipos de mesa a través del DAO
             List<TipoMesa> tiposMesa = tiposMesaDAO.obtenerTiposMesaTodos();
+            // Convierte la lista de entidades a DTOs antes de devolverla
             return tipoMesaConvertidor.createFromEntities(tiposMesa);
         } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
             throw new ServicioException(e.getMessage());
         }
     }
@@ -56,9 +73,12 @@ public class TiposMesaBO implements ITiposMesaBO {
     @Override
     public void agregarTipoMesa(TipoMesaDTO tipoMesaDTO) throws ServicioException {
         try {
+            // Convierte el DTO a la entidad correspondiente
             TipoMesa tipoMesa = tipoMesaConvertidor.convertFromDto(tipoMesaDTO);
+            // Agrega el nuevo tipo de mesa a través del DAO
             tiposMesaDAO.agregarTipoMesa(tipoMesa);
         } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
             throw new ServicioException(e.getMessage());
         }
     }
@@ -66,8 +86,10 @@ public class TiposMesaBO implements ITiposMesaBO {
     @Override
     public void eliminarTipoMesa(Long id) throws ServicioException {
         try {
+            // Elimina el tipo de mesa especificado por su ID a través del DAO
             tiposMesaDAO.eliminarTipoMesa(id);
         } catch (DAOException e) {
+            // Captura la excepción del DAO y lanza una excepción de servicio
             throw new ServicioException(e.getMessage());
         }
     }
