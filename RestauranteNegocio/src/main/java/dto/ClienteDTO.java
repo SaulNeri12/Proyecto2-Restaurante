@@ -1,42 +1,58 @@
-
-
 package dto;
 
 import java.io.Serializable;
 
 /**
- * Representa un cliente en el sistema
+ * Representa un cliente en el sistema.
+ * Esta clase implementa la interfaz Serializable para permitir la
+ * serialización de objetos de cliente.
+ * 
  * @author Saul Neri
  */
 public class ClienteDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
+     /** El identificador único del cliente. */
     private Long id;
+
+    /** El nombre completo del cliente. */
     private String nombreCompleto;
+
+    /** El número de teléfono del cliente. */
     private String telefono;
-    
+
     /**
      * Constructor sin argumentos que inicializa un nuevo objeto ClienteDTO.
      */
-    
-    
-    
+    public ClienteDTO() {
+        // Constructor vacío
+    }
+
+    /**
+     * Constructor que inicializa un nuevo objeto ClienteDTO con el ID
+     * especificado, nombre completo y teléfono.
+     *
+     * @param id el identificador único del cliente
+     * @param nombreCompleto el nombre completo del cliente
+     * @param telefono el número de teléfono del cliente
+     */
     public ClienteDTO(Long id, String nombreCompleto, String telefono) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;
         this.telefono = telefono;
-
     }
 
+    /**
+     * Constructor que inicializa un nuevo objeto ClienteDTO con el nombre
+     * completo y el teléfono especificados.
+     *
+     * @param nombreCompleto el nombre completo del cliente
+     * @param telefono el número de teléfono del cliente
+     */
     public ClienteDTO(String nombreCompleto, String telefono) {
         this.nombreCompleto = nombreCompleto;
         this.telefono = telefono;
-    }
-    
-    
-
-    public ClienteDTO() {
     }
 
     /**
@@ -58,8 +74,6 @@ public class ClienteDTO implements Serializable {
     public ClienteDTO(String telefono) {
         this.telefono = telefono;
     }
-
-    
 
     /**
      * Obtiene el identificador único del cliente.
@@ -117,22 +131,16 @@ public class ClienteDTO implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+        return (id != null ? id.hashCode() : 0);
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ClienteDTO)) {
             return false;
         }
         ClienteDTO other = (ClienteDTO) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null && this.id.equals(other.id));
     }
 
     @Override

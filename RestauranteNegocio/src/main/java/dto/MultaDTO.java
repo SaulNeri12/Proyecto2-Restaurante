@@ -2,15 +2,16 @@
 
 package dto;
 
-import entidades.Multa;
 import java.io.Serializable;
 
 /**
- * Representa una multa de una reservacion en el sistema
- * @author Saul Neri
+ * Representa una multa de una reservación en el sistema.
+ * 
+ * Autor: Saul Neri
  */
 public class MultaDTO implements Serializable {
 
+    private static final long serialVersionUID = 1L; // Agregar serialVersionUID para serialización
     private Long id;
     private String descripcion;
     private Float porcentaje;
@@ -20,7 +21,7 @@ public class MultaDTO implements Serializable {
      * Este constructor no realiza ninguna acción adicional.
      */
     public MultaDTO() {
-        
+        // Constructor vacío
     }
 
     /**
@@ -32,8 +33,8 @@ public class MultaDTO implements Serializable {
      */
     public MultaDTO(Long id, String descripcion, Float porcentaje) {
         this.id = id;
-        this.descripcion = descripcion; 
-        this.porcentaje = porcentaje; 
+        this.descripcion = descripcion;
+        this.porcentaje = porcentaje;
     }
 
     /**
@@ -42,7 +43,7 @@ public class MultaDTO implements Serializable {
      * @return El identificador único de la multa.
      */
     public Long getId() {
-        return id; 
+        return id;
     }
 
     /**
@@ -51,7 +52,7 @@ public class MultaDTO implements Serializable {
      * @param id El identificador único de la multa a establecer.
      */
     public void setId(Long id) {
-        this.id = id; 
+        this.id = id;
     }
 
     /**
@@ -78,7 +79,7 @@ public class MultaDTO implements Serializable {
      * @return El porcentaje de la multa.
      */
     public Float getPorcentaje() {
-        return porcentaje; 
+        return porcentaje;
     }
 
     /**
@@ -87,6 +88,25 @@ public class MultaDTO implements Serializable {
      * @param porcentaje El porcentaje de la multa a establecer.
      */
     public void setPorcentaje(Float porcentaje) {
-        this.porcentaje = porcentaje; 
+        this.porcentaje = porcentaje;
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null ? id.hashCode() : 0);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof MultaDTO)) {
+            return false;
+        }
+        MultaDTO other = (MultaDTO) obj;
+        return (this.id != null && this.id.equals(other.id));
+    }
+
+    @Override
+    public String toString() {
+        return "MultaDTO{id=%d, descripcion='%s', porcentaje=%.2f}".formatted(id, descripcion, porcentaje);
     }
 }
