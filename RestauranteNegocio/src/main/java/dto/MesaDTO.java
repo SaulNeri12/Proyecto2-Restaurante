@@ -19,6 +19,7 @@ public class MesaDTO implements Serializable {
     private String codigo;
     private TipoMesaDTO tipoMesa;
     private UbicacionMesaDTO ubicacion;
+    private RestauranteDTO restaurante;
 
     /**
      * Constructor por defecto que inicializa una nueva instancia de MesaDTO.
@@ -28,11 +29,12 @@ public class MesaDTO implements Serializable {
         
     }
 
-    public MesaDTO(Long id, String codigo, TipoMesaDTO tipoMesa, UbicacionMesaDTO ubicacion) {
+    public MesaDTO(Long id, String codigo, TipoMesaDTO tipoMesa, UbicacionMesaDTO ubicacion, RestauranteDTO restaurante) {
         this.id = id;
         this.codigo = codigo;
         this.tipoMesa = tipoMesa;
         this.ubicacion = ubicacion;
+        this.restaurante = restaurante;
     }
 
     public MesaDTO(String codigo, TipoMesaDTO tipoMesa, UbicacionMesaDTO ubicacion) {
@@ -148,5 +150,20 @@ public class MesaDTO implements Serializable {
         return "MesaDTO[ id=" + id + " ]";
     }
 
+    /**
+     * Obtiene la informacion del restaurante al cual pertenece la mesa
+     * @return Restaurante de la mesa (sucursal)
+     */
+    public RestauranteDTO getRestaurante() {
+        return restaurante;
+    }
+
+    /**
+     * Asigna el restaurante el cual pertenecera la mesa
+     * @param restaurante Restaurante (sucursal)
+     */
+    public void setRestaurante(RestauranteDTO restaurante) {
+        this.restaurante = restaurante;
+    }
 }
 

@@ -27,11 +27,14 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import dto.RestauranteDTO;
 import excepciones.NoEncontradoException;
+import interfacesBO.IMesasBO;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -42,11 +45,15 @@ public class frmGenerarReportes extends javax.swing.JFrame {
 
     private final IReservacionesBO reservacionesBO;
 
+    private RestauranteDTO restaurante;
+
     /**
      * Creates new form frmGenerarReportes
+     *
+     * @param restaurante
      */
-    public frmGenerarReportes() {
-        
+    public frmGenerarReportes(RestauranteDTO restaurante) {
+        this.restaurante = restaurante;
         initComponents();
         this.setTitle("Historial");
         this.setResizable(false);
@@ -62,7 +69,7 @@ public class frmGenerarReportes extends javax.swing.JFrame {
     private void cargarReservaciones() {
         try {
             // Obtenemos todas las reservaciones existentes
-            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos();
+            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId());
             // Configuramos el modelo de la tabla si aún no lo tiene
             DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
             modeloTabla.setRowCount(0); // Limpiamos la tabla
@@ -101,7 +108,7 @@ public class frmGenerarReportes extends javax.swing.JFrame {
 
         try {
             MesasBO mesasBO = MesasBO.getInstance();
-            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
+            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas(this.restaurante.getId());
 
             for (MesaDTO mesa : mesas) {
                 cbxMesas.addItem(mesa.getCodigo());  // Aquí puedes usar `mesa.getCodigo()` o `mesa.getNombre()`, dependiendo de la información que prefieras mostrar
@@ -139,19 +146,19 @@ public class frmGenerarReportes extends javax.swing.JFrame {
 
     }
     // Método en el frame para obtener el ID de la reservación seleccionada
-private Long obtenerIdReservacionSeleccionada() {
-    int filaSeleccionada = tblResultado.getSelectedRow();
-    if (filaSeleccionada != -1) {
-        // Asumimos que la primera columna contiene el ID de la reservación
-        return (Long) tblResultado.getValueAt(filaSeleccionada, 0);
-    }
-    return null;
-}
 
+    private Long obtenerIdReservacionSeleccionada() {
+        int filaSeleccionada = tblResultado.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            // Asumimos que la primera columna contiene el ID de la reservación
+            return (Long) tblResultado.getValueAt(filaSeleccionada, 0);
+        }
+        return null;
+    }
 
     private void filtrarReservacionesPorEstado(String estado) {
         try {
-            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos();
+            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId());
             DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
             modeloTabla.setRowCount(0);
 
@@ -479,7 +486,7 @@ private Long obtenerIdReservacionSeleccionada() {
         } else {
             try {
                 ReservacionesBO reservacionesBO = ReservacionesBO.getInstance();
-                List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(mesaSeleccionada);
+                List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(this.restaurante.getId(), mesaSeleccionada);
 
                 // Lógica para cargar en la tabla `tblResultado`
                 DefaultTableModel modeloTabla = (DefaultTableModel) tblResultado.getModel();
@@ -513,20 +520,20 @@ private Long obtenerIdReservacionSeleccionada() {
 
             if ("Sí".equals(selectedItem)) {
                 // Si se selecciona "Sí", obtenemos reservaciones con multa
-                reservaciones = this.reservacionesBO.obtenerReservacionesTodos()
+                reservaciones = this.reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId())
                         .stream()
                         .filter(reservacion -> reservacion.getMulta() != null)
                         .collect(Collectors.toList());
             } else if ("No".equals(selectedItem)) {
                 // Si se selecciona "No", obtenemos reservaciones sin multa
 
-                reservaciones = this.reservacionesBO.obtenerReservacionesTodos()
+                reservaciones = this.reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId())
                         .stream()
                         .filter(reservacion -> reservacion.getMulta() == null)
                         .collect(Collectors.toList());
             } else {
                 // Si se selecciona "<None>", cargamos todas las reservaciones
-                reservaciones = reservacionesBO.obtenerReservacionesTodos();
+                reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId());
             }
 
             // Limpiar y cargar la tabla con las reservaciones filtradas
@@ -560,10 +567,10 @@ private Long obtenerIdReservacionSeleccionada() {
 
             if (telefonoSeleccionado.equals("<None>")) {
                 // Si no hay un teléfono seleccionado, cargamos todas las reservaciones
-                reservaciones = reservacionesBO.obtenerReservacionesTodos();
+                reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId());
             } else {
                 // Filtramos las reservaciones por el teléfono del cliente
-                reservaciones = reservacionesBO.obtenerReservacionesCliente(telefonoSeleccionado);
+                reservaciones = reservacionesBO.obtenerReservacionesCliente(this.restaurante.getId(), telefonoSeleccionado);
             }
 
             // Limpiar y cargar la tabla con las reservaciones filtradas
@@ -591,44 +598,50 @@ private Long obtenerIdReservacionSeleccionada() {
     }//GEN-LAST:event_cbxClientesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       // Cerrar el frame actual
-    this.dispose();
-    
-    // Abrir el nuevo frame
-    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); 
-    nuevoFrame.setVisible(true);
+        // Cerrar el frame actual
+        this.dispose();
+
+        // Abrir el nuevo frame
+        frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(this.restaurante);
+        nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnFinalizarEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarEstadoActionPerformed
         Long idReservacion = obtenerIdReservacionSeleccionada();
-    if (idReservacion != null) {
-        try {
-            // Obtener la reservación desde la capa BO
-            ReservacionDTO reservacion = reservacionesBO.obtenerReservacionPorID(idReservacion);
-
-            // Cambiar el estado de la reservación a FINALIZADA
-            reservacion.setEstado(EstadoReservacionDTO.FINALIZADA);
-
+        if (idReservacion != null) {
             try {
-                // Actualizar la reservación en la base de datos
-                reservacionesBO.actualizarReservacion(reservacion);
-            } catch (NoEncontradoException ex) {
-                Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+                // Obtener la reservación desde la capa BO
+                ReservacionDTO reservacion = reservacionesBO.obtenerReservacionPorID(idReservacion);
+
+                // Cambiar el estado de la reservación a FINALIZADA
+                reservacion.setEstado(EstadoReservacionDTO.FINALIZADA);
+
+                try {
+
+                    int opcion = JOptionPane.showConfirmDialog(this, "Desea finalizar la reservacion[ID: %d]?".formatted(reservacion.getId()), "Finalizar Reservacion", JOptionPane.YES_NO_OPTION);
+                    if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
+                        return;
+                    }
+
+                    // Actualizar la reservación en la base de datos
+                    reservacionesBO.actualizarReservacion(reservacion);
+                } catch (ServicioException ex) {
+                    Logger.getLogger(frmGenerarReportes.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                // Actualizar la interfaz o mostrar mensaje de éxito
+                JOptionPane.showMessageDialog(this, "Reservación finalizada exitosamente.");
+                cargarReservaciones();
+
+            } catch (ServicioException ex) {
+                JOptionPane.showMessageDialog(this, "Error al finalizar la reservación: " + ex.getMessage());
             }
-
-            // Actualizar la interfaz o mostrar mensaje de éxito
-            JOptionPane.showMessageDialog(this, "Reservación finalizada exitosamente.");
-            cargarReservaciones();
-
-        } catch (ServicioException ex) {
-            JOptionPane.showMessageDialog(this, "Error al finalizar la reservación: " + ex.getMessage());
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione una reservación para finalizar.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Seleccione una reservación para finalizar.");
-    }
     }//GEN-LAST:event_btnFinalizarEstadoActionPerformed
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinalizarEstado;
     private javax.swing.JButton btnGenerarRe;

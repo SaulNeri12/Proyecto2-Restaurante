@@ -7,6 +7,7 @@ package guis;
 import dto.ClienteDTO;
 import dto.MesaDTO;
 import dto.ReservacionDTO;
+import dto.RestauranteDTO;
 import excepciones.ServicioException;
 import implementaciones.ClientesBO;
 import implementaciones.MesasBO;
@@ -32,12 +33,14 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     private IMesasBO mesasBO = MesasBO.getInstance();
 
     private Long idReservacionSeleccionada;
+    private RestauranteDTO restaurante;
 
     /**
      * Creates new form frmCancelacionReserva
+     * @param restaurante Informacion del restaurante en cuestion
      */
-    public frmCancelacionReserva() {
-        
+    public frmCancelacionReserva(RestauranteDTO restaurante) {
+        this.restaurante = restaurante;
         initComponents();
         this.setTitle("Cancelar Reservacion");
         this.setResizable(false);
@@ -67,7 +70,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
             List<ClienteDTO> clientes = ClientesBO.getInstance().obtenerClientesTodos();
             for (ClienteDTO cliente : clientes) {
-                cbxClientes.addItem(cliente.getTelefono()); // Agregamos los teléfonos de los clientes
+                cbxClientes.addItem("%s,%s".formatted(cliente.getNombreCompleto(), cliente.getTelefono())); // Agregamos los teléfonos de los clientes
             }
         } catch (ServicioException ex) {
             // Manejo de excepciones
@@ -84,7 +87,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
         try {
 
-            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas();
+            List<MesaDTO> mesas = mesasBO.obtenerMesasTodas(this.restaurante.getId());
 
             for (MesaDTO mesa : mesas) {
                 cbxMesas.addItem(mesa.getCodigo());  // Aquí puedes usar `mesa.getCodigo()` o `mesa.getNombre()`, dependiendo de la información que prefieras mostrar
@@ -97,7 +100,11 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     private void cargarReservaciones() {
         try {
             // Obtenemos todas las reservaciones existentes
-            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos().stream().filter(r -> r.getMulta() == null).collect(Collectors.toList());;
+            List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId())
+                    .stream()
+                    .filter(r -> r.getMulta() == null)
+                    .collect(Collectors.toList());;
+                    
             // Configuramos el modelo de la tabla si aún no lo tiene
             DefaultTableModel modeloTabla = (DefaultTableModel) tblReservaciones.getModel();
             modeloTabla.setRowCount(0); // Limpiamos la tabla
@@ -146,7 +153,6 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         campoReservacionSeleccionada = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -247,8 +253,6 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel4.setText("Clientes");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -272,11 +276,6 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(509, 509, 509)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(509, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,11 +296,6 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(226, 226, 226)
-                    .addComponent(jLabel4)
-                    .addContainerGap(226, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -331,7 +325,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
         } else {
             try {
 
-                List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(mesaSeleccionada);
+                List<ReservacionDTO> reservaciones = reservacionesBO.obtenerReservacionesDeMesa(this.restaurante.getId(), mesaSeleccionada);
 
                 // Lógica para cargar en la tabla `tblResultado`
                 DefaultTableModel modeloTabla = (DefaultTableModel) this.tblReservaciones.getModel();
@@ -364,10 +358,16 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
             if (telefonoSeleccionado.equals("<None>")) {
                 // Si no hay un teléfono seleccionado, cargamos todas las reservaciones
-                reservaciones = reservacionesBO.obtenerReservacionesTodos().stream().filter(r -> r.getMulta() == null).collect(Collectors.toList());
+                reservaciones = reservacionesBO.obtenerReservacionesTodos(this.restaurante.getId())
+                        .stream()
+                        .filter(r -> r.getMulta() == null)
+                        .collect(Collectors.toList());
             } else {
                 // Filtramos las reservaciones por el teléfono del cliente
-                reservaciones = reservacionesBO.obtenerReservacionesCliente(telefonoSeleccionado).stream().filter(r -> r.getMulta() == null).collect(Collectors.toList());
+                reservaciones = reservacionesBO.obtenerReservacionesCliente(this.restaurante.getId(), telefonoSeleccionado)
+                        .stream()
+                        .filter(r -> r.getMulta() == null)
+                        .collect(Collectors.toList());
             }
 
             // Limpiar y cargar la tabla con las reservaciones filtradas
@@ -407,6 +407,10 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
 
         try {
             this.reservacionesBO.cancelarReservacion(idReservacionSeleccionada);
+            
+            JOptionPane.showMessageDialog(this, "Se cancelo la reservacion", "Cancelar Reservacion", JOptionPane.INFORMATION_MESSAGE);
+            
+            this.cargarReservaciones();
         } catch (ServicioException ex) {
             JOptionPane.showMessageDialog(
                     this, 
@@ -422,7 +426,7 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -438,7 +442,6 @@ public class frmCancelacionReserva extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;

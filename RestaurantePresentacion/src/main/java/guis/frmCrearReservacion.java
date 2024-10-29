@@ -3,10 +3,10 @@ package guis;
 import dto.ClienteDTO;
 import dto.MesaDTO;
 import dto.ReservacionDTO;
+import dto.RestauranteDTO;
 import dto.TipoMesaDTO;
 import dto.UbicacionMesaDTO;
 import excepciones.ServicioException;
-import horario.HorarioRestaurante;
 import implementaciones.ClientesBO;
 import implementaciones.MesasBO;
 import implementaciones.ReservacionesBO;
@@ -36,19 +36,21 @@ import javax.swing.table.DefaultTableModel;
  */
 public class frmCrearReservacion extends javax.swing.JFrame {
 
-    private HorarioRestaurante horario = HorarioRestaurante.getInstance();
     private IClientesBO clientesBO = ClientesBO.getInstance();
     private IMesasBO mesasBO = MesasBO.getInstance();
     private ITiposMesaBO tiposMesaBO = TiposMesaBO.getInstance();
     private IReservacionesBO reservacionesBO = ReservacionesBO.getInstance();
 
     private MesaDTO mesaSeleccionada = null;
-
+    
+    private RestauranteDTO restaurante;
+    
     /**
      * Creates new form frmCrearReservacion
+     * @param restaurante Informacion del restaurante en cuestion
      */
-    public frmCrearReservacion() {
-        
+    public frmCrearReservacion(RestauranteDTO restaurante) {
+        this.restaurante = restaurante;
         initComponents();
         this.setResizable(false);
         this.campoCantidadPersonas.setModel(new SpinnerNumberModel());
@@ -122,7 +124,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
 
     private void mostrarCantidadTotalMesas() {
         try {
-            Long totalMesas = this.mesasBO.obtenerMesasTodas().stream().count();
+            Long totalMesas = this.mesasBO.obtenerMesasTodas(this.restaurante.getId()).stream().count();
             this.lblCantidadTotalMesas.setText(totalMesas.toString());
         } catch (ServicioException ex) {
             Logger.getLogger(frmCrearReservacion.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,7 +136,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
      */
     private void actualizarTablaMesas() {
         try {
-            List<MesaDTO> mesas = mesasBO.obtenerMesasDisponibles();
+            List<MesaDTO> mesas = mesasBO.obtenerMesasDisponibles(this.restaurante.getId());
 
             DefaultTableModel modelo = new DefaultTableModel();
             modelo.addColumn("ID");
@@ -151,7 +153,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                     mesa.getTipoMesa(),
                     mesa.getUbicacion(),
                     mesa.getTipoMesa().getMinimoPersonas(),
-                    mesa.getTipoMesa().getMaximoPersonas()
+                    mesa.getTipoMesa().getMaximoPersonas(),
                 };
                 modelo.addRow(fila);
             }
@@ -175,7 +177,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
             return false;
         }
 
-        return !(horaReservacion.isBefore(horario.getHoraApertura()) || horaReservacion.isAfter(horario.getHoraCierre()));
+        return !(horaReservacion.isBefore(this.restaurante.getHoraApertura()) || horaReservacion.isAfter(this.restaurante.getHoraCierre()));
     }
 
     /**
@@ -211,7 +213,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
             this.cbxClientes.repaint();
             this.cbxClientes.validate();
         } catch (ServicioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Cargar Clientes", JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Cargar Clientes", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -506,7 +508,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
         this.dispose();
 
         // Abrir el nuevo frame
-        frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+        frmMenuPrincipal nuevoFrame = new frmMenuPrincipal(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
         nuevoFrame.setVisible(true);
     }
 
@@ -516,7 +518,7 @@ public class frmCrearReservacion extends javax.swing.JFrame {
             boolean horaValida = this.horaReservacionValida();
             if (!horaValida) {
                 throw new IllegalArgumentException("La reservacion solo puede hacerse entre %s y %s"
-                        .formatted(horario.getHoraApertura(), horario.getHoraCierre().minusHours(1))
+                        .formatted(this.restaurante.getHoraApertura(), this.restaurante.getHoraCierre().minusHours(1))
                 );
             }
 
@@ -543,12 +545,16 @@ public class frmCrearReservacion extends javax.swing.JFrame {
                 throw new IllegalArgumentException("Indique la cantidad de personas");
             }
 
+            // asignamos el restaurante a la mesa...
+            mesaSeleccionada.setRestaurante(this.restaurante);
+            
             // creamos la reservacion
             ReservacionDTO res = new ReservacionDTO();
             res.setCliente(cliente);
             LocalDateTime fechaHora = LocalDateTime.of(this.campoFecha.getDate(), this.campoHora.getTime());
             res.setFechaHora(fechaHora);
             res.setMesa(mesaSeleccionada);
+            
             res.setNumeroPersonas(cantidadPersonas);
 
             int opcion = JOptionPane.showConfirmDialog(this, "Desea completar la reservacion?", "Completar Reservacion", JOptionPane.YES_NO_OPTION);

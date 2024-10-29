@@ -6,17 +6,12 @@ package guis;
 
 import com.github.lgooddatepicker.components.TimePicker;
 import dto.MesaDTO;
+import dto.RestauranteDTO;
 import dto.UbicacionMesaDTO;
 import excepciones.ServicioException;
-import horario.HorarioRestaurante;
 import implementaciones.MesasBO;
 import interfacesBO.IMesasBO;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
@@ -27,13 +22,21 @@ import javax.swing.JOptionPane;
 public class frmMenuPrincipal extends javax.swing.JFrame {
     
     private IMesasBO mesasBO = MesasBO.getInstance();
-    private HorarioRestaurante horario = HorarioRestaurante.getInstance();
+    
+    private RestauranteDTO restaurante;
     
     /**
      * Creates new form frmMenuPrincipal
+     * @param restaurante
      */
-    public frmMenuPrincipal() {
+    public frmMenuPrincipal(RestauranteDTO restaurante) {
         initComponents();
+        this.restaurante = restaurante;
+        this.campoTelefono.setText(this.restaurante.getTelefono());
+        this.campoTelefono.setEnabled(false);
+        this.campoHoraApertura.setEnabled(false);
+        this.campoHoraCierre.setEnabled(false);
+        
         this.setLocationRelativeTo(null);
         this.cargarHorario();
         this.cargarEstadisticas();
@@ -43,8 +46,8 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
      * Carga el horario del restaurante en pantalla
      */
     private void cargarHorario() {
-        this.campoHoraApertura.setTime(horario.getHoraApertura());
-        this.campoHoraCierre.setTime(horario.getHoraCierre());
+        this.campoHoraApertura.setTime(this.restaurante.getHoraApertura());
+        this.campoHoraCierre.setTime(this.restaurante.getHoraCierre());
     }
     
     /**
@@ -54,7 +57,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         List<MesaDTO> mesasDisponibles = null;
         
         try {
-            mesasDisponibles = this.mesasBO.obtenerMesasDisponibles();
+            mesasDisponibles = this.mesasBO.obtenerMesasDisponibles(this.restaurante.getId());
         } catch (ServicioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Cargar Mesas Disponibles", JOptionPane.ERROR_MESSAGE);
         }
@@ -138,6 +141,8 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         lblCantidadMesasPequenias = new javax.swing.JLabel();
         campoHoraApertura = new com.github.lgooddatepicker.components.TimePicker();
         campoHoraCierre = new com.github.lgooddatepicker.components.TimePicker();
+        jLabel11 = new javax.swing.JLabel();
+        campoTelefono = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miAdministrar = new javax.swing.JMenuItem();
@@ -243,7 +248,6 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel9)
@@ -269,16 +273,19 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
                                             .addComponent(lblMesasGrandesGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(lblMesasGrandesTerraza, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblMesasMedianasGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblMesasMedianasTerraza, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblMesasMedianasVentana, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel12)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel10)
+                                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblMesasMedianasGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblMesasMedianasTerraza, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblMesasMedianasVentana, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(73, 73, 73)))))
                 .addContainerGap(163, Short.MAX_VALUE))
         );
@@ -342,6 +349,9 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap(63, Short.MAX_VALUE))
         );
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel11.setText("Telefono:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -353,7 +363,9 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
                     .addComponent(campoHoraApertura, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoHoraCierre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(campoHoraCierre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoTelefono))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -379,6 +391,10 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(campoHoraCierre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(campoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -466,7 +482,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmAdminMesas nuevoFrame = new frmAdminMesas(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmAdminMesas nuevoFrame = new frmAdminMesas(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_miAdministrarActionPerformed
 
@@ -475,7 +491,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmGenerarReportes nuevoFrame = new frmGenerarReportes(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmGenerarReportes nuevoFrame = new frmGenerarReportes(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
@@ -484,7 +500,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmCrearReservacion nuevoFrame = new frmCrearReservacion(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmCrearReservacion nuevoFrame = new frmCrearReservacion(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -493,7 +509,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     this.dispose();
     
     // Abrir el nuevo frame
-    frmCancelacionReserva nuevoFrame = new frmCancelacionReserva(); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
+    frmCancelacionReserva nuevoFrame = new frmCancelacionReserva(this.restaurante); // Reemplaza "NuevoFrame" con el nombre de tu frame de destino
     nuevoFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
@@ -506,7 +522,9 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.lgooddatepicker.components.TimePicker campoHoraApertura;
     private com.github.lgooddatepicker.components.TimePicker campoHoraCierre;
+    private javax.swing.JTextField campoTelefono;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;

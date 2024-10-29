@@ -6,9 +6,11 @@
 package dto.convertidores;
 
 import dto.MesaDTO;
+import dto.RestauranteDTO;
 import dto.TipoMesaDTO;
 import dto.UbicacionMesaDTO;
 import entidades.Mesa;
+import entidades.Restaurante;
 import entidades.TipoMesa;
 import entidades.UbicacionMesa;
 
@@ -23,8 +25,6 @@ public class MesaConvertidor extends Converter<MesaDTO, Mesa>{
         super(MesaConvertidor::convertirAEntidad, MesaConvertidor::convertirADTO);
     }
     
-
-    
     public static Mesa convertirAEntidad(MesaDTO dto) {
         Converter<TipoMesaDTO, TipoMesa> tipoMesaConvertidor = new TipoMesaConvertidor();
         Mesa mesa = new Mesa();
@@ -32,6 +32,18 @@ public class MesaConvertidor extends Converter<MesaDTO, Mesa>{
         mesa.setCodigo(dto.getCodigo());
         mesa.setTipoMesa(tipoMesaConvertidor.convertFromDto(dto.getTipoMesa()));
         mesa.setUbicacion(UbicacionMesa.valueOf(dto.getUbicacion().toString()));
+       
+        Restaurante r = new Restaurante(
+                dto.getRestaurante().getId(),
+                dto.getRestaurante().getNombre(),
+                dto.getRestaurante().getTelefono(),
+                dto.getRestaurante().getDireccion(),
+                dto.getRestaurante().getHoraApertura(),
+                dto.getRestaurante().getHoraCierre()
+        );
+        
+        mesa.setRestaurante(r);
+        
         return mesa;
     }
     
@@ -42,6 +54,15 @@ public class MesaConvertidor extends Converter<MesaDTO, Mesa>{
         mesa.setCodigo(entidad.getCodigo());
         mesa.setTipoMesa(tipoMesaConvertidor.convertFromEntity(entidad.getTipoMesa()));
         mesa.setUbicacion(UbicacionMesaDTO.valueOf(entidad.getUbicacion().toString()));
+        RestauranteDTO r = new RestauranteDTO(
+                entidad.getRestaurante().getId(),
+                entidad.getRestaurante().getNombre(),
+                entidad.getRestaurante().getTelefono(),
+                entidad.getRestaurante().getDireccion(),
+                entidad.getRestaurante().getHoraApertura(),
+                entidad.getRestaurante().getHoraCierre()
+        );
+        mesa.setRestaurante(r);
         return mesa;
     }
 

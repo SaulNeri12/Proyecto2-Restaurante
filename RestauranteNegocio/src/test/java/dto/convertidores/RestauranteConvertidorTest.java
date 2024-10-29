@@ -4,9 +4,13 @@
  */
 package dto.convertidores;
 
+import dto.MesaDTO;
 import dto.RestauranteDTO;
+import entidades.Mesa;
 import entidades.Restaurante;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,6 +60,10 @@ public class RestauranteConvertidorTest {
                 LocalTime.now().plusHours(10l)
         );
         
+        List<MesaDTO> mesas = new ArrayList<>();
+        dto.setMesas(mesas);
+                
+        
         // act
         Restaurante result = RestauranteConvertidor.convertirAEntidad(dto);
         
@@ -86,6 +94,8 @@ public class RestauranteConvertidorTest {
                 LocalTime.now(),
                 LocalTime.now().plusHours(10l)
         );
+        List<Mesa> mesas = new ArrayList<>();
+        entidad.setMesas(mesas);
         
         // act
         RestauranteDTO result = RestauranteConvertidor.convertirADTO(entidad);
