@@ -10,7 +10,6 @@ import dto.ReservacionDTO;
 import dto.convertidores.ReservacionConvertidor;
 import entidades.Reservacion;
 import excepciones.DAOException;
-import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import interfacesBO.IReservacionesBO;
 
@@ -27,10 +26,10 @@ public class ReservacionesBO implements IReservacionesBO {
 
     private final IReservacionesDAO reservacionesDAO;
     private final ReservacionConvertidor reservacionConvertidor;
-    
+
     // Instancia única de la clase
     private static ReservacionesBO instance;
-    
+
     /**
      * Constructor privado para implementar Singleton.
      */
@@ -38,7 +37,7 @@ public class ReservacionesBO implements IReservacionesBO {
         this.reservacionesDAO = ReservacionesDAO.getInstance();
         this.reservacionConvertidor = new ReservacionConvertidor();
     }
-    
+
     /**
      * Método para obtener la instancia única de ReservacionesBO.
      * @return instancia única de ReservacionesBO
@@ -51,9 +50,9 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public List<ReservacionDTO> obtenerReservacionesDeMesa(String codigoMesa) throws ServicioException {
+    public List<ReservacionDTO> obtenerReservacionesDeMesa(Long idRestaurante, String codigoMesa) throws ServicioException {
         try {
-            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesDeMesa(codigoMesa);
+            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesDeMesa(idRestaurante, codigoMesa);
             return reservacionConvertidor.createFromEntities(reservaciones);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
@@ -70,9 +69,9 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public List<ReservacionDTO> obtenerReservacionesTodos(Long idReservacion) throws ServicioException {
+    public List<ReservacionDTO> obtenerReservacionesTodos(Long idRestaurante) throws ServicioException {
         try {
-            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesTodos();
+            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesTodos(idRestaurante);
             return reservacionConvertidor.createFromEntities(reservaciones);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
@@ -80,9 +79,9 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public List<ReservacionDTO> obtenerReservacionesPorPeriodo(LocalDateTime fechaInicio, LocalDateTime fechaFin) throws ServicioException {
+    public List<ReservacionDTO> obtenerReservacionesPorPeriodo(Long idRestaurante, LocalDateTime fechaInicio, LocalDateTime fechaFin) throws ServicioException {
         try {
-            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesPorPeriodo(fechaInicio, fechaFin);
+            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesPorPeriodo(idRestaurante, fechaInicio, fechaFin);
             return reservacionConvertidor.createFromEntities(reservaciones);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
@@ -90,9 +89,9 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public List<ReservacionDTO> obtenerReservacionesCliente(String telefono) throws ServicioException {
+    public List<ReservacionDTO> obtenerReservacionesCliente(Long idRestaurante, String telefono) throws ServicioException {
         try {
-            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesCliente(telefono);
+            List<Reservacion> reservaciones = reservacionesDAO.obtenerReservacionesCliente(idRestaurante, telefono);
             return reservacionConvertidor.createFromEntities(reservaciones);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
@@ -113,7 +112,6 @@ public class ReservacionesBO implements IReservacionesBO {
     public void agregarReservacion(ReservacionDTO reservacion) throws ServicioException {
         try {
             Reservacion entidad = reservacionConvertidor.convertFromDto(reservacion);
-            // TODO: aqui tambien puedes evaluar si la reservacion se sale del horario del restaurante
             reservacionesDAO.agregarReservacion(entidad);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
@@ -121,7 +119,7 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public void actualizarReservacion(ReservacionDTO reservacion) throws ServicioException, NoEncontradoException {
+    public void actualizarReservacion(ReservacionDTO reservacion) throws ServicioException {
         try {
             Reservacion entidad = reservacionConvertidor.convertFromDto(reservacion);
             reservacionesDAO.actualizarReservacion(entidad);
@@ -131,7 +129,7 @@ public class ReservacionesBO implements IReservacionesBO {
     }
 
     @Override
-    public void eliminarReservacion(Long id) throws ServicioException, NoEncontradoException {
+    public void eliminarReservacion(Long id) throws ServicioException {
         try {
             reservacionesDAO.eliminarReservacion(id);
         } catch (DAOException e) {

@@ -8,7 +8,10 @@ package implementaciones;
 import dao.implementaciones.RestaurantesDAO;
 import dao.interfaces.IRestaurantesDAO;
 import dto.RestauranteDTO;
+import dto.convertidores.RestauranteConvertidor;
+import excepciones.DAOException;
 import excepciones.ServicioException;
+import entidades.Restaurante;
 import interfacesBO.IRestaurantesBO;
 import java.util.List;
 
@@ -19,37 +22,54 @@ import java.util.List;
  */
 public class RestaurantesBO implements IRestaurantesBO {
     
-    private static IRestaurantesBO instancia;
-
-    private IRestaurantesDAO restaurantesDAO = RestaurantesDAO.getInstance();
+   private final IRestaurantesDAO restaurantesDAO;
+    private final RestauranteConvertidor restauranteConvertidor;
+    
+    // Instancia única de la clase
+    private static RestaurantesBO instance;
+    
     
     private RestaurantesBO() {
-        
+      this.restaurantesDAO = RestaurantesDAO.getInstance();
+        this.restauranteConvertidor = new RestauranteConvertidor();   
     }
 
-    public static IRestaurantesBO getInstance() {
-        if (instancia == null) {
-            instancia = new RestaurantesBO();
+   public static synchronized RestaurantesBO getInstance() {
+        if (instance == null) {
+            instance = new RestaurantesBO();
         }
-        return instancia;
+        return instance;
     }
 
-    @Override
+ @Override
     public List<RestauranteDTO> obtenerRestaurantesTodos() throws ServicioException {
-        // TODO: IMPLEMENTAR ESTE
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            List<Restaurante> restaurantes = restaurantesDAO.obtenerRestaurantesTodos();
+            return restauranteConvertidor.createFromEntities(restaurantes); // Método para convertir a DTO
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
+        }
     }
+
 
     @Override
     public RestauranteDTO obtenerRestaurantePorID(Long id) throws ServicioException {
-        // TODO: IMPLEMENTAR ESTE
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            Restaurante restaurante = restaurantesDAO.obtenerRestaurantePorID(id);
+            return restauranteConvertidor.convertFromEntity(restaurante); // Método para convertir a DTO
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
+        }
     }
 
     @Override
     public RestauranteDTO obtenerRestaurantePorNumeroTelefono(String numeroTelefono) throws ServicioException {
-        // TODO: IMPLEMENTAR ESTE
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            Restaurante restaurante = restaurantesDAO.obtenerRestaurantePorNumeroTelefono(numeroTelefono);
+            return restauranteConvertidor.convertFromEntity(restaurante); // Método para convertir a DTO
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
+        }
     }
 
     @Override

@@ -7,7 +7,6 @@ package interfacesBO;
 import dto.MesaDTO;
 import dto.TipoMesaDTO;
 import dto.UbicacionMesaDTO;
-import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import java.util.List;
 

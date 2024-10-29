@@ -15,7 +15,6 @@ import entidades.Mesa;
 import entidades.TipoMesa;
 import entidades.UbicacionMesa;
 import excepciones.DAOException;
-import excepciones.NoEncontradoException;
 import excepciones.ServicioException;
 import interfacesBO.IMesasBO;
 import java.util.List;
@@ -23,8 +22,6 @@ import java.util.List;
 /**
  * Implementación de la interfaz IMesasBO para manejar la lógica de negocio
  * relacionada con las mesas. Implementa el patrón Singleton.
- *
- * @author caarl
  */
 public class MesasBO implements IMesasBO {
 
@@ -57,9 +54,9 @@ public class MesasBO implements IMesasBO {
     }
 
     @Override
-    public List<MesaDTO> obtenerMesasTodas() throws ServicioException {
+    public List<MesaDTO> obtenerMesasTodas(Long idRestaurante) throws ServicioException {
         try {
-            List<Mesa> mesas = mesasDAO.obtenerMesasTodas();
+            List<Mesa> mesas = mesasDAO.obtenerMesasTodas(idRestaurante);
             return mesaConvertidor.createFromEntities(mesas);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
@@ -67,10 +64,19 @@ public class MesasBO implements IMesasBO {
     }
 
     @Override
-    public List<MesaDTO> obtenerMesasPorTipo(TipoMesaDTO tipo) throws ServicioException {
+    public List<MesaDTO> obtenerMesasDisponibles(Long idRestaurante) throws ServicioException {
+        try {
+            return this.mesaConvertidor.createFromEntities(mesasDAO.obtenerMesasDisponibles(idRestaurante));
+        } catch (DAOException e) {
+            throw new ServicioException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<MesaDTO> obtenerMesasPorTipo(Long idRestaurante, TipoMesaDTO tipo) throws ServicioException {
         try {
             TipoMesa tipoMesa = tipoMesaConvertidor.convertFromDto(tipo);
-            List<Mesa> mesas = mesasDAO.obtenerMesasPorTipo(tipoMesa);
+            List<Mesa> mesas = mesasDAO.obtenerMesasPorTipo(idRestaurante, tipoMesa);
             return mesaConvertidor.createFromEntities(mesas);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
@@ -78,29 +84,20 @@ public class MesasBO implements IMesasBO {
     }
 
     @Override
-    public void insertarMesas(TipoMesaDTO tipo, UbicacionMesaDTO ubicacion, int cantidad) throws ServicioException {
+    public void insertarMesas(Long idRestaurante, TipoMesaDTO tipo, UbicacionMesaDTO ubicacion, int cantidad) throws ServicioException {
         try {
             TipoMesa tipoMesa = tipoMesaConvertidor.convertFromDto(tipo);
             UbicacionMesa ubicacionMesa = UbicacionMesa.valueOf(ubicacion.toString());
-            mesasDAO.insertarMesas(tipoMesa, ubicacionMesa, cantidad);
+            mesasDAO.insertarMesas(idRestaurante, tipoMesa, ubicacionMesa, cantidad);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
         }
     }
 
     @Override
-    public void eliminarMesa(String codigo) throws ServicioException, NoEncontradoException {
+    public void eliminarMesa(Long idRestaurante, String codigo) throws ServicioException {
         try {
-            mesasDAO.eliminarMesa(codigo);
-        } catch (DAOException e) {
-            throw new ServicioException(e.getMessage());
-        }
-    }
-
-    @Override
-    public List<MesaDTO> obtenerMesasDisponibles() throws ServicioException {
-        try {
-            return this.mesaConvertidor.createFromEntities(mesasDAO.obtenerMesasDisponibles());
+            mesasDAO.eliminarMesa(idRestaurante, codigo);
         } catch (DAOException e) {
             throw new ServicioException(e.getMessage());
         }
