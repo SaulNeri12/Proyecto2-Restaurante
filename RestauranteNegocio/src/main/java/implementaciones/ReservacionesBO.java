@@ -57,6 +57,14 @@ public class ReservacionesBO implements IReservacionesBO {
         return instance; // Retorna la instancia existente
     }
 
+    /**
+     * Obtiene las reservaciones asociadas a una mesa específica en un restaurante.
+     * 
+     * @param idRestaurante ID del restaurante
+     * @param codigoMesa Código de la mesa
+     * @return lista de ReservacionDTO correspondientes a la mesa especificada
+     * @throws ServicioException si ocurre un error al obtener las reservaciones
+     */
     @Override
     public List<ReservacionDTO> obtenerReservacionesDeMesa(Long idRestaurante, String codigoMesa) throws ServicioException {
         try {
@@ -70,6 +78,12 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Cancela una reservación dada su ID.
+     * 
+     * @param idReservacion ID de la reservación a cancelar
+     * @throws ServicioException si ocurre un error al cancelar la reservación
+     */
     @Override
     public void cancelarReservacion(Long idReservacion) throws ServicioException {
         try {
@@ -81,6 +95,13 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Obtiene todas las reservaciones de un restaurante específico.
+     * 
+     * @param idRestaurante ID del restaurante
+     * @return lista de ReservacionDTO de todas las reservaciones del restaurante
+     * @throws ServicioException si ocurre un error al obtener las reservaciones
+     */
     @Override
     public List<ReservacionDTO> obtenerReservacionesTodos(Long idRestaurante) throws ServicioException {
         try {
@@ -94,6 +115,15 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Obtiene las reservaciones de un restaurante dentro de un periodo específico.
+     * 
+     * @param idRestaurante ID del restaurante
+     * @param fechaInicio Fecha y hora de inicio del periodo
+     * @param fechaFin Fecha y hora de fin del periodo
+     * @return lista de ReservacionDTO dentro del periodo especificado
+     * @throws ServicioException si ocurre un error al obtener las reservaciones
+     */
     @Override
     public List<ReservacionDTO> obtenerReservacionesPorPeriodo(Long idRestaurante, LocalDateTime fechaInicio, LocalDateTime fechaFin) throws ServicioException {
         try {
@@ -107,6 +137,14 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Obtiene las reservaciones de un cliente específico basado en su número de teléfono.
+     * 
+     * @param idRestaurante ID del restaurante
+     * @param telefono Número de teléfono del cliente
+     * @return lista de ReservacionDTO del cliente especificado
+     * @throws ServicioException si ocurre un error al obtener las reservaciones
+     */
     @Override
     public List<ReservacionDTO> obtenerReservacionesCliente(Long idRestaurante, String telefono) throws ServicioException {
         try {
@@ -120,6 +158,13 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Obtiene una reservación específica a través de su ID.
+     * 
+     * @param id ID de la reservación
+     * @return ReservacionDTO de la reservación correspondiente al ID
+     * @throws ServicioException si ocurre un error al obtener la reservación
+     */
     @Override
     public ReservacionDTO obtenerReservacionPorID(Long id) throws ServicioException {
         try {
@@ -133,6 +178,12 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Agrega una nueva reservación al sistema.
+     * 
+     * @param reservacion DTO de la reservación a agregar
+     * @throws ServicioException si ocurre un error al agregar la reservación
+     */
     @Override
     public void agregarReservacion(ReservacionDTO reservacion) throws ServicioException {
         try {
@@ -146,6 +197,12 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Actualiza una reservación existente en el sistema.
+     * 
+     * @param reservacion DTO de la reservación a actualizar
+     * @throws ServicioException si ocurre un error al actualizar la reservación
+     */
     @Override
     public void actualizarReservacion(ReservacionDTO reservacion) throws ServicioException {
         try {
@@ -159,6 +216,12 @@ public class ReservacionesBO implements IReservacionesBO {
         }
     }
 
+    /**
+     * Elimina una reservación del sistema.
+     * 
+     * @param id ID de la reservación a eliminar
+     * @throws ServicioException si ocurre un error al eliminar la reservación
+     */
     @Override
     public void eliminarReservacion(Long id) throws ServicioException {
         try {

@@ -24,6 +24,7 @@ import java.util.List;
  * Implementación de la interfaz IMesasBO para manejar la lógica de negocio
  * relacionada con las mesas. Implementa el patrón Singleton para asegurar
  * que solo exista una instancia de esta clase.
+ * 
  */
 public class MesasBO implements IMesasBO {
 

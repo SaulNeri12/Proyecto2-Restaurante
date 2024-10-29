@@ -9,16 +9,31 @@ import dto.TipoMesaDTO;
 import entidades.TipoMesa;
 
 /**
- * Hace de convertidor para los distintos tipos de mesa en el sistema
+ * Clase de conversión para los distintos tipos de mesa en el sistema.
+ * Permite la transformación bidireccional entre TipoMesaDTO (Data Transfer Object)
+ * y TipoMesa (entidad de base de datos).
+ * 
  * @author Saul Neri
  */
 public class TipoMesaConvertidor extends Converter<TipoMesaDTO, TipoMesa> {
     
+    /**
+     * Constructor de TipoMesaConvertidor.
+     * Inicializa el convertidor especificando los métodos de conversión
+     * a través de referencias a métodos estáticos.
+     */
     public TipoMesaConvertidor() {
         super(TipoMesaConvertidor::convertirAEntidad, TipoMesaConvertidor::convertirADTO);
     }
     
+    /**
+     * Convierte un objeto TipoMesaDTO en un objeto TipoMesa.
+     * 
+     * @param dto el objeto TipoMesaDTO a convertir
+     * @return un objeto TipoMesa con los datos de dto
+     */
     public static TipoMesa convertirAEntidad(TipoMesaDTO dto) {
+        // Crear la entidad TipoMesa
         TipoMesa t = new TipoMesa();
         
         t.setId(dto.getId());
@@ -30,7 +45,14 @@ public class TipoMesaConvertidor extends Converter<TipoMesaDTO, TipoMesa> {
         return t;
     }
     
+    /**
+     * Convierte un objeto TipoMesa en un objeto TipoMesaDTO.
+     * 
+     * @param entidad el objeto TipoMesa a convertir
+     * @return un objeto TipoMesaDTO con los datos de la entidad
+     */
     public static TipoMesaDTO convertirADTO(TipoMesa entidad) {
+        // Crear el DTO TipoMesaDTO
         TipoMesaDTO t = new TipoMesaDTO();
         
         t.setId(entidad.getId());

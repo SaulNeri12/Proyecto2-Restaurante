@@ -9,14 +9,29 @@ import dto.MultaDTO;
 import entidades.Multa;
 
 /**
- * Hace de convertidor para las multas de reservaciones en el sistema
- * @author Saul Neri
+ * Clase de conversión para objetos Multa en el sistema.
+ * Permite la transformación bidireccional entre MultaDTO (Data Transfer Object)
+ * y Multa (entidad de base de datos).
+ * 
+ * @autor Saul Neri
  */
 public class MultaConvertidor extends Converter<MultaDTO, Multa> {
+    
+    /**
+     * Constructor de MultaConvertidor.
+     * Inicializa el convertidor especificando los métodos de conversión
+     * a través de referencias a métodos estáticos.
+     */
     public MultaConvertidor() {
         super(MultaConvertidor::convertirAEntidad, MultaConvertidor::convertirADTO);
     }
     
+    /**
+     * Convierte un objeto MultaDTO en un objeto Multa.
+     * 
+     * @param dto el objeto MultaDTO a convertir
+     * @return un objeto Multa con los datos de dto
+     */
     public static Multa convertirAEntidad(MultaDTO dto) {
         Multa m = new Multa();
         m.setId(dto.getId());
@@ -25,6 +40,12 @@ public class MultaConvertidor extends Converter<MultaDTO, Multa> {
         return m;
     }
     
+    /**
+     * Convierte un objeto Multa en un objeto MultaDTO.
+     * 
+     * @param entidad el objeto Multa a convertir
+     * @return un objeto MultaDTO con los datos de la entidad
+     */
     public static MultaDTO convertirADTO(Multa entidad) {
         MultaDTO m = new MultaDTO();
         m.setId(entidad.getId());
